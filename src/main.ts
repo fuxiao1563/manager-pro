@@ -9,6 +9,5 @@ import router from './router'
 // @ts-ignore
 import 'virtual:svg-icons-register'
 import globalComponent from '@/components/index.ts'
-
 // 注册并挂载应用
 createApp(App).use(router).use(globalComponent).mount('#app')

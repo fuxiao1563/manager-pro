@@ -1,5 +1,4 @@
 <template>
-  <div>一级路由</div>
 </template>
 
 <script setup lang="ts"></script>
