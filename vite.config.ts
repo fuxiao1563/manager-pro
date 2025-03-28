@@ -4,7 +4,7 @@ import path from 'path'
 // 启用mock
 import { UserConfigExport, ConfigEnv } from 'vite'
 import { viteMockServe } from 'vite-plugin-mock'
-// 按需导入 Element-plus 
+// 按需导入 Element-plus
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
@@ -14,8 +14,8 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 export default ({ command }: ConfigEnv): UserConfigExport => {
   return {
     server: {
-    //   host: '0.0.0.0',
-    //   port: 3200,
+      //   host: '0.0.0.0',
+      //   port: 3200,
       open: true,
     },
     plugins: [
@@ -39,8 +39,8 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
     ],
     resolve: {
       alias: {
-        // '@': path.resolve('./src'), 
-        "@": path.resolve(__dirname, "./src")// 相对路径别名配置，使用 @ 代替 src
+        // '@': path.resolve('./src'),
+        '@': path.resolve(__dirname, './src'), // 相对路径别名配置，使用 @ 代替 src
       },
     },
     css: {
