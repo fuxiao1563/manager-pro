@@ -1,5 +1,5 @@
 <template>
-  <div>404</div>
+  <div>tabbar</div>
 </template>
 
 <script setup lang="ts"></script>

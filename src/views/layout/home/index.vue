@@ -1,5 +1,5 @@
 <template>
-  <div>404</div>
+  <div>home组件</div>
 </template>
 
 <script setup lang="ts"></script>

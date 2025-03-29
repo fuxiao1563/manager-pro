@@ -41,12 +41,24 @@
                 登录
               </el-button>
             </div>
-            <div class="login_btn_group_item item2">
-              <el-button type="primary" @click="">验证码登录</el-button>
-              <el-button type="primary" @click="">注册账号</el-button>
+            <div class="login_btn_group_item">
+              <el-button
+                class="login_btn_group_item_children"
+                type="primary"
+                @click=""
+              >
+                验证码登录
+              </el-button>
+              <el-button
+                class="login_btn_group_item_children"
+                type="primary"
+                @click=""
+              >
+                注册账号
+              </el-button>
             </div>
             <hr />
-            <div class="login_btn_group_item item3">
+            <div class="login_btn_group_item login_btn_users">
               <el-button type="primary" @click="">超级管理员</el-button>
               <el-button type="primary" @click="">管理员</el-button>
               <el-button type="primary" @click="">普通用户</el-button>
@@ -172,12 +184,13 @@ const login = async () => {
         .login_btn {
           width: 100%;
         }
+
+        .login_btn_group_item_children {
+          width: 50%;
+        }
       }
-      .item2 {
+      .login_btn_users {
         justify-content: space-between;
-      }
-      .item3 {
-        justify-content: space-evenly;
       }
     }
   }
