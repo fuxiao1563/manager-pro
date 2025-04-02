@@ -2,14 +2,15 @@
 import { defineStore } from 'pinia'
 import { reqLogin } from '@/api/user/index'
 import type { LoginForm, LoginResponseData } from '@/api/user/type'
-import { SET_TOKEN } from '@/utils/token'
+import { GET_TOKEN, SET_TOKEN } from '@/utils/token'
+import constantRoutes from '@/router/routes'
+import type { UserState } from './types/types'
 //创建用户小仓库
 const useUserStore = defineStore('User', {
-  state: () => {
+  state: (): UserState => {
     return {
-      username: '',
-      password: '',
-      token: '',
+      token: GET_TOKEN(),
+      menuRoutes: constantRoutes,
     }
   },
   //处理异步|逻辑地方
