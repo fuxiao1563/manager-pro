@@ -1,14 +1,10 @@
 #app {
-    all: unset; /* 重置所有样式 */
-    /* 或者指定你想要重置的样式属性 */
-    margin: 0;
-    padding: 0;
-    /* 添加其他需要的样式重置 */
+    all: unset; /* 重置所有样式 */    
 }
 *,
  *:after,
  *:before {
-     box-sizing: border-box; 
+    //  box-sizing: border-box; 
      outline: none;
  }
  

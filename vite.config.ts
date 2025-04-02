@@ -14,9 +14,9 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 export default ({ command }: ConfigEnv): UserConfigExport => {
   return {
     server: {
-      //   host: '0.0.0.0',
-      //   port: 3200,
-      open: true,
+      // host: '0.0.0.0',
+      // port: 3200,
+      // open: true,
     },
     plugins: [
       vue(),
