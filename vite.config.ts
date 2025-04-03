@@ -1,9 +1,9 @@
+import { loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 // 别名配置
 import path from 'path'
 // 启用mock
 import { UserConfigExport, ConfigEnv } from 'vite'
-import { viteMockServe } from 'vite-plugin-mock'
 // 按需导入 Element-plus
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -11,12 +11,20 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 // 导入 svg-icons
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 // https://vite.dev/config/
-export default ({ command }: ConfigEnv): UserConfigExport => {
+export default ({ mode }: ConfigEnv): UserConfigExport => {
+  let env = loadEnv(mode, process.cwd())
   return {
     server: {
       // host: '0.0.0.0',
       // port: 3200,
       // open: true,
+      proxy: {
+        [env.VITE_APP_BASE_API]: {
+          target: env.VITE_SERVE, // 后端服务器地址
+          changeOrigin: true, // 允许跨域
+          rewrite: (path) => path.replace(/^\/api/, ''), // 将路径中的 /api 替换为空
+        },
+      },
     },
     plugins: [
       vue(),
@@ -26,10 +34,10 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       Components({
         resolvers: [ElementPlusResolver()],
       }),
-      viteMockServe({
-        mockPath: 'mock',
-        localEnabled: command === 'serve',
-      }),
+      // viteMockServe({
+      //   mockPath: 'mock',
+      //   localEnabled: command === 'serve',
+      // }),
       createSvgIconsPlugin({
         // Specify the icon folder to be cached
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],

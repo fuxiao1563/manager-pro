@@ -15,11 +15,13 @@ const useUserStore = defineStore('User', {
   },
   //处理异步|逻辑地方
   actions: {
+    //登录的方法
     async userLogin(data: LoginForm) {
       let result: LoginResponseData = await reqLogin(data)
+      console.log(result)
       if (result.code === 200) {
-        this.token = result.data.token
-        SET_TOKEN(this.token)
+        // this.token = result.data.token
+        // SET_TOKEN(this.token)
         return 'ok'
       } else {
         return Promise.reject(new Error(result.data.message))

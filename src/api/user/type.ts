@@ -10,7 +10,7 @@ export interface LoginForm {
 // 登录接口返回的数据
 export interface LoginResponseData extends ResponseData {
   data: {
-    token: string
+    token?: string
     message?: string
   }
 }

@@ -84,7 +84,7 @@ import type { FormRules } from 'element-plus'
 // 收集表单数据
 const loginForm = reactive({
   username: 'admin',
-  password: '111111',
+  password: '123456',
 })
 // 获取表单元素
 const loginForms = ref()
@@ -139,7 +139,7 @@ const login = async () => {
     $router.push('/')
   } catch (error: string) {
     // 捕获登录过程中的错误并显示错误通知
-    ElNotification.success({
+    ElNotification({
       type: 'error',
       message: error.message,
     })
