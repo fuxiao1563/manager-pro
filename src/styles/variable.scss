@@ -1,15 +1,18 @@
 //layout
-//左侧菜单宽度
-$layout-menu-width :260px;
-//左侧菜单背景颜色
+//menu的宽度
+$layout-menu-width :245px;
+$layout-menu-min-width :63px;
+//menu的背景颜色
 $layout-menu-background: #001529;
-//顶部导航的高度
+//tabbar的高度
 $layout-tabbar-height:50px;
-//页面内模块间的边距
+//页面内各模块间距
 $layout-space: 15px;
-// 背景颜色及印象
+// 背景颜色及阴影
 $layout-container-background: #F7FAFC;
 $layout-container-item-background: #FFFFFF;
 $layout-container-item-boxShadow: 0px 0px 10px 1px rgba(191, 191, 191, 0.5);
+// 过渡时间
+$layout-transition: all 0.5s;
 //logo
 // $layout-logo-height: 50px;

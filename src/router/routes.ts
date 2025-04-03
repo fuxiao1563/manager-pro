@@ -16,14 +16,14 @@ const constantRoutes = [
       },
     ],
   },
-  // 数据大屏
+  // 用户页
   {
-    path: '/banner',
-    name: 'banner',
-    component: () => import('@/views/banner/index.vue'),
+    path: '/user',
+    name: 'user',
+    component: () => import('@/views/layout/index.vue'),
     meta: {
-      title: '数据大屏',
-      icon: 'DataAnalysis',
+      title: '用户页',
+      icon: 'Key',
       hidden: false,
     },
   },
@@ -90,6 +90,28 @@ const constantRoutes = [
           icon: 'Bell',
           hidden: false,
         },
+        children: [
+          {
+            path: '/error/400/400',
+            name: '400/400',
+            component: () => import('@/views/error/500/index.vue'),
+            meta: {
+              title: '400/400',
+              icon: 'Bell',
+              hidden: false,
+            },
+          },
+          {
+            path: '/error/500/500',
+            name: '500/500',
+            component: () => import('@/views/error/500/index.vue'),
+            meta: {
+              title: '500/500',
+              icon: 'Bell',
+              hidden: false,
+            },
+          },
+        ],
       },
     ],
   },

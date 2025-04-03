@@ -1,36 +1,26 @@
 <template>
   <div class="layout_container">
     <!-- 左侧菜单 -->
-    <div class="layout_slider">
-      <!-- Logo -->
-      <Logo></Logo>
-      <!-- 展示菜单 -->
-      <!-- 滚动组件 -->
-      <el-scrollbar class="scrollbar">
-        <!-- 根据路由动态生成菜单 -->
-        <el-menu :default-active="$route.path">
-          <Menu :menuList="userStore.menuRoutes"></Menu>
-        </el-menu>
-      </el-scrollbar>
+    <div class="layout_slider" :class="{ fold: layoutStore.isCollapse }">
+      <Slider></Slider>
     </div>
     <!-- 顶部导航 -->
-    <div class="layout_tabbar">
+    <div class="layout_tabbar" :class="{ fold: layoutStore.isCollapse }">
       <Tabbar></Tabbar>
     </div>
     <!-- 内容展示区域 -->
-    <div class="layout_main">
+    <div class="layout_main" :class="{ fold: layoutStore.isCollapse }">
       <Main></Main>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Logo from './logo/index.vue'
-import Menu from './menu/index.vue'
+import Slider from './slider/index.vue'
 import Main from './main/index.vue'
 import Tabbar from './tabbar/index.vue'
-import useUserStore from '@/store/modules/user'
-const userStore = useUserStore()
+import useLayoutStore from '@/store/modules/layout'
+const layoutStore = useLayoutStore()
 </script>
 
 <style scoped lang="scss">
@@ -40,31 +30,50 @@ const userStore = useUserStore()
   background: $layout-container-background;
 
   .layout_slider {
-    width: $layout-menu-width - $layout-space;
+    position: fixed;
+    width: $layout-menu-width;
     height: 100%;
     background: $layout-menu-background;
     background: $layout-container-item-background;
     box-shadow: $layout-container-item-boxShadow;
+    left: 0;
+    transition: $layout-transition;
+
+    &.fold {
+      width: $layout-menu-min-width;
+    }
   }
 
   .layout_tabbar {
     position: fixed;
-    width: calc(100% - $layout-menu-width);
+    width: calc(100% - $layout-menu-width - $layout-space);
     height: $layout-tabbar-height;
     background: $layout-container-item-background;
     box-shadow: $layout-container-item-boxShadow;
     top: 0;
-    left: $layout-menu-width;
+    left: $layout-menu-width + $layout-space;
+    transition: $layout-transition;
+
+    &.fold {
+      width: calc(100% - $layout-menu-min-width - $layout-space);
+      left: $layout-menu-min-width + $layout-space;
+    }
   }
 
   .layout_main {
-    width: calc(100% - $layout-menu-width);
+    width: calc(100% - $layout-menu-width - $layout-space);
     height: calc(100% - $layout-tabbar-height - $layout-space);
     background: $layout-container-item-background;
     box-shadow: $layout-container-item-boxShadow;
     position: absolute;
     top: $layout-tabbar-height + $layout-space;
-    left: $layout-menu-width;
+    left: $layout-menu-width + $layout-space;
+    transition: $layout-transition;
+
+    &.fold {
+      width: calc(100% - $layout-menu-min-width - $layout-space);
+      left: $layout-menu-min-width + $layout-space;
+    }
   }
 }
 </style>
