@@ -1,4 +1,5 @@
 //layout
+//menu
 //menu的宽度
 $layout-menu-width :245px;
 $layout-menu-min-width :63px;
@@ -8,11 +9,13 @@ $layout-menu-background: #001529;
 $layout-tabbar-height:50px;
 //页面内各模块间距
 $layout-space: 15px;
-// 背景颜色及阴影
+//背景颜色及阴影
 $layout-container-background: #F7FAFC;
 $layout-container-item-background: #FFFFFF;
 $layout-container-item-boxShadow: 0px 0px 10px 1px rgba(191, 191, 191, 0.5);
-// 过渡时间
+//过渡时间
 $layout-transition: all 0.5s;
-//logo
-// $layout-logo-height: 50px;
+
+//home
+//home的边框
+$home-border-radius: 10px;

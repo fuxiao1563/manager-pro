@@ -53,6 +53,7 @@ const layoutStore = useLayoutStore()
     top: 0;
     left: $layout-menu-width + $layout-space;
     transition: $layout-transition;
+    z-index: 100;
 
     &.fold {
       width: calc(100% - $layout-menu-min-width - $layout-space);
@@ -63,8 +64,8 @@ const layoutStore = useLayoutStore()
   .layout_main {
     width: calc(100% - $layout-menu-width - $layout-space);
     height: calc(100% - $layout-tabbar-height - $layout-space);
-    background: $layout-container-item-background;
-    box-shadow: $layout-container-item-boxShadow;
+    // background: $layout-container-item-background;
+    // box-shadow: $layout-container-item-boxShadow;
     position: absolute;
     top: $layout-tabbar-height + $layout-space;
     left: $layout-menu-width + $layout-space;

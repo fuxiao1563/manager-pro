@@ -23,7 +23,7 @@ const constantRoutes = [
     component: () => import('@/views/layout/index.vue'),
     meta: {
       title: '用户页',
-      icon: 'Key',
+      icon: 'User',
       hidden: false,
     },
   },

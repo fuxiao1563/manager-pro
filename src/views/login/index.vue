@@ -1,8 +1,8 @@
 <template>
   <div class="login_container">
     <el-row>
-      <el-col :span="8" :xs="0"></el-col>
-      <el-col :span="8" :xs="24">
+      <el-col :span="6" :xs="2"></el-col>
+      <el-col :span="12" :xs="20">
         <el-form
           class="login_form"
           :model="loginForm"
@@ -66,7 +66,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="8" :xs="0"></el-col>
+      <el-col :span="6" :xs="2"></el-col>
     </el-row>
   </div>
 </template>
