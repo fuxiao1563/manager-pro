@@ -6,6 +6,7 @@
       @click="handleCollapse"
     ></component>
   </el-icon>
+
   <el-breadcrumb class="tabbar_breadcrumb" :separator-icon="ArrowRight">
     <!-- 动态展示路由图标与标题 -->
     <el-breadcrumb-item
@@ -14,7 +15,7 @@
       :to="{ path: item.path }"
     >
       <el-icon class="tabbar_breadcrumb_icon">
-        <component v-if="item.meta.icon" :is="item.meta.icon"></component>
+        <svg-icon v-if="item.meta.icon" :name="item.meta.icon"></svg-icon>
       </el-icon>
       <span>{{ item.meta.title }}</span>
     </el-breadcrumb-item>

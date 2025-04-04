@@ -10,7 +10,7 @@ const constantRoutes = [
         component: () => import('@/views/layout/home/index.vue'),
         meta: {
           title: '首页',
-          icon: 'House',
+          icon: 'home',
           hidden: false,
         },
       },
@@ -23,32 +23,42 @@ const constantRoutes = [
     component: () => import('@/views/layout/index.vue'),
     meta: {
       title: '用户页',
-      icon: 'User',
-      hidden: false,
-    },
-  },
-  // 用户页
-  {
-    path: '/user',
-    name: 'user',
-    component: () => import('@/views/layout/index.vue'),
-    meta: {
-      title: '用户页',
-      icon: 'Key',
+      icon: 'admin',
       hidden: false,
     },
     children: [
       {
-        path: '/login',
+        path: '/user/login',
         name: 'login',
         component: () => import('@/views/login/index.vue'),
         meta: {
           title: '登录页',
-          icon: 'Key',
+          icon: 'login',
+          hidden: false,
+        },
+      },
+      {
+        path: '/user/regist',
+        name: 'regist',
+        component: () => import('@/views/login/index.vue'),
+        meta: {
+          title: '注册页？',
+          icon: 'regist',
           hidden: false,
         },
       },
     ],
+  },
+  // 测试页
+  {
+    path: '/manager',
+    name: 'manager',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: '系统管理',
+      icon: 'manager',
+      hidden: false,
+    },
   },
   // 异常页
   {
@@ -57,7 +67,7 @@ const constantRoutes = [
     component: () => import('@/views/layout/index.vue'),
     meta: {
       title: '异常页',
-      icon: 'Bell',
+      icon: 'error',
       hidden: false,
     },
     children: [
@@ -67,7 +77,7 @@ const constantRoutes = [
         component: () => import('@/views/error/403/index.vue'),
         meta: {
           title: '403',
-          icon: 'Bell',
+          icon: '403',
           hidden: false,
         },
       },
@@ -77,7 +87,7 @@ const constantRoutes = [
         component: () => import('@/views/error/404/index.vue'),
         meta: {
           title: '404',
-          icon: 'Bell',
+          icon: '404',
           hidden: false,
         },
       },
@@ -87,17 +97,17 @@ const constantRoutes = [
         component: () => import('@/views/error/500/index.vue'),
         meta: {
           title: '500',
-          icon: 'Bell',
+          icon: '500',
           hidden: false,
         },
         children: [
           {
             path: '/error/400/400',
-            name: '400/400',
+            name: '500/400',
             component: () => import('@/views/error/500/index.vue'),
             meta: {
-              title: '400/400',
-              icon: 'Bell',
+              title: '500/400',
+              icon: '403',
               hidden: false,
             },
           },
@@ -107,7 +117,7 @@ const constantRoutes = [
             component: () => import('@/views/error/500/index.vue'),
             meta: {
               title: '500/500',
-              icon: 'Bell',
+              icon: '500',
               hidden: false,
             },
           },
@@ -118,7 +128,7 @@ const constantRoutes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'Any',
-    redirect: '/404',
+    redirect: '/error/404',
     meta: {
       hidden: true,
     },

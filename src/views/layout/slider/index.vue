@@ -5,7 +5,11 @@
   <!-- 滚动组件 -->
   <el-scrollbar class="scrollbar">
     <!-- 根据路由动态生成菜单 -->
-    <el-menu :default-active="$route.path" :collapse="layoutStore.isCollapse">
+    <el-menu
+      :default-active="$route.path"
+      :collapse="layoutStore.isCollapse"
+      unique-opened
+    >
       <Menu :menuList="userStore.menuRoutes"></Menu>
     </el-menu>
   </el-scrollbar>

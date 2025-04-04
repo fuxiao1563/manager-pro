@@ -8,7 +8,7 @@
         @click="goRoute"
       >
         <el-icon>
-          <component :is="item.meta.icon"></component>
+          <svg-icon :name="item.meta.icon"></svg-icon>
         </el-icon>
         <template #title>
           <span>{{ item.meta.title }}</span>
@@ -23,7 +23,7 @@
         @click="goRoute"
       >
         <el-icon>
-          <component :is="item.children[0].meta.icon"></component>
+          <svg-icon :name="item.children[0].meta.icon"></svg-icon>
         </el-icon>
         <template #title>
           <span>{{ item.children[0].meta.title }}</span>
@@ -37,7 +37,7 @@
     >
       <template #title>
         <el-icon>
-          <component :is="item.meta.icon"></component>
+          <svg-icon :name="item.meta.icon"></svg-icon>
         </el-icon>
         <span>{{ item.meta.title }}</span>
       </template>
@@ -60,4 +60,8 @@ export default {
   name: 'Menu',
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+svg-icon {
+  margin: 0 15px;
+}
+</style>
