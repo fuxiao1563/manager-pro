@@ -18,7 +18,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" :selectable="selectable" width="40" />
-      <el-table-column type="index" label="ID" width="50" align="center" />
+      <el-table-column type="index" label="序号" width="60" align="center" />
       <el-table-column label="菜单类型" width="120" align="center">
         <template #default="item">
           <el-tag type="primary">
@@ -29,7 +29,7 @@
       <el-table-column
         prop="meta.title"
         label="菜单名称"
-        width="100"
+        min-width="100"
         align="center"
       />
       <el-table-column prop="meta.icon" label="图标" width="60" align="center">
@@ -40,7 +40,7 @@
       <el-table-column
         prop="name"
         label="路由名称"
-        width="100"
+        min-width="100"
         align="center"
       />
       <el-table-column prop="path" label="路由路径" align="center" />
@@ -68,7 +68,7 @@
       </el-table-column>
       <!-- <el-table-column prop="parentId" label="父级菜单ID" width="100"  align="center" />
             <el-table-column prop="sort" label="排序" width="60"  align="center" /> -->
-      <el-table-column prop="ctrl" label="操作" align="center">
+      <el-table-column prop="ctrl" label="操作" min-width="200" align="center">
         <el-button type="success" size="small" plain @click="">新增</el-button>
         <el-button type="primary" size="small" plain @click="">编辑</el-button>
         <el-button type="danger" size="small" plain @click="">删除</el-button>

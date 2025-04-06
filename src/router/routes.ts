@@ -68,12 +68,12 @@ const constantRoutes = [
     },
     children: [
       {
-        path: '/manage/adminManage',
-        name: 'adminManage',
-        component: () => import('@/views/manage/adminManage/index.vue'),
+        path: '/manage/userManage',
+        name: 'userManage',
+        component: () => import('@/views/manage/userManage/index.vue'),
         meta: {
           title: '用户管理',
-          icon: 'adminManage',
+          icon: 'userManage',
           hidden: false,
         },
       },
