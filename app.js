@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/user', indexRouter);
+app.use('/', indexRouter);
 app.use(cors()); // 启用所有CORS请求
 // 或者指定允许的来源
 // app.use(cors({ origin: 'http://localhost:5173' }));

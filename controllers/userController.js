@@ -1,4 +1,3 @@
-const express = require('express');
 const UserModel = require('../models/UserModel');
 const bcryptjs = require('bcryptjs');
 
@@ -13,10 +12,10 @@ exports.userLogin = (req, res) => {
     // 查询用户
     UserModel.findOne(req.body).then(data => {
         if (data === null) {
-            res.json({ message: '账号或密码错误' });
+            res.json({ message: '账号或密码错误', data });
             return
         }
-        res.json({ message: '登录成功' });
+        res.json({ code: 200, message: '登录成功', data });
     }).catch(err => {
         res.json({ message: '账号或密码错误', err });
     })
@@ -35,14 +34,14 @@ exports.userRegist = (req, res) => {
             password = bcryptjs.hashSync(password, 10)
             // 创建用户
             UserModel.create({ username, password }).then(data => {
-                res.json({ message: '注册成功' });
+                res.json({ message: '注册成功', data });
             }).catch(err => {
                 res.json({ message: '注册失败', err });
             })
             return
         }
         // 账号已存在
-        res.json({ message: '账号已存在' });
+        res.json({ message: '账号已存在', data });
     }).catch(err => {
         res.json({ message: '注册失败', err });
     })
