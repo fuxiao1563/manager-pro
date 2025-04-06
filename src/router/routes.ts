@@ -2,7 +2,14 @@ const constantRoutes = [
   {
     path: '/',
     name: 'layout',
+    redirect: '/home',
     component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: 'layout',
+      icon: 'home',
+      use: true,
+      hidden: false,
+    },
     children: [
       {
         path: '/home',
@@ -49,16 +56,48 @@ const constantRoutes = [
       },
     ],
   },
-  // 测试页
+  // 系统管理
   {
-    path: '/manager',
-    name: 'manager',
+    path: '/manage',
+    name: 'manage',
     component: () => import('@/views/layout/index.vue'),
     meta: {
       title: '系统管理',
-      icon: 'manager',
+      icon: 'manage',
       hidden: false,
     },
+    children: [
+      {
+        path: '/manage/adminManage',
+        name: 'adminManage',
+        component: () => import('@/views/manage/adminManage/index.vue'),
+        meta: {
+          title: '用户管理',
+          icon: 'adminManage',
+          hidden: false,
+        },
+      },
+      {
+        path: '/manage/roleManage',
+        name: 'roleManage',
+        component: () => import('@/views/manage/roleManage/index.vue'),
+        meta: {
+          title: '角色管理',
+          icon: 'roleManage',
+          hidden: false,
+        },
+      },
+      {
+        path: '/manage/menuManage',
+        name: 'menuManage',
+        component: () => import('@/views/manage/menuManage/index.vue'),
+        meta: {
+          title: '菜单管理',
+          icon: 'menuManage',
+          hidden: false,
+        },
+      },
+    ],
   },
   // 异常页
   {
@@ -100,28 +139,6 @@ const constantRoutes = [
           icon: '500',
           hidden: false,
         },
-        children: [
-          {
-            path: '/error/400/400',
-            name: '500/400',
-            component: () => import('@/views/error/500/index.vue'),
-            meta: {
-              title: '500/400',
-              icon: '403',
-              hidden: false,
-            },
-          },
-          {
-            path: '/error/500/500',
-            name: '500/500',
-            component: () => import('@/views/error/500/index.vue'),
-            meta: {
-              title: '500/500',
-              icon: '500',
-              hidden: false,
-            },
-          },
-        ],
       },
     ],
   },
@@ -130,6 +147,7 @@ const constantRoutes = [
     name: 'Any',
     redirect: '/error/404',
     meta: {
+      title: 'any',
       hidden: true,
     },
   },

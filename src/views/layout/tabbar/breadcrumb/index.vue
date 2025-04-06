@@ -14,9 +14,9 @@
       :key="index"
       :to="{ path: item.path }"
     >
-      <el-icon class="tabbar_breadcrumb_icon">
+      <!-- <el-icon class="tabbar_breadcrumb_icon">
         <svg-icon v-if="item.meta.icon" :name="item.meta.icon"></svg-icon>
-      </el-icon>
+      </el-icon> -->
       <span>{{ item.meta.title }}</span>
     </el-breadcrumb-item>
   </el-breadcrumb>

@@ -38,7 +38,9 @@ watch(
   }
 
   p {
+    color: #409eff;
     font-size: 20px;
+    font-weight: 600;
     margin-left: 10px;
   }
 }
