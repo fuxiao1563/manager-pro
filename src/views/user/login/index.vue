@@ -10,7 +10,10 @@
           status-icon
           :rules="rules"
         >
-          <h1>Soybean 管理系统</h1>
+          <h1>
+            <img src="@/assets/images/logo.png" alt="" />
+            <span>管理系统</span>
+          </h1>
           <h2>密码登录</h2>
           <!-- 账号 -->
           <el-form-item prop="username">
@@ -151,8 +154,15 @@ const login = async () => {
     padding: 40px 40px 20px 40px;
 
     h1 {
+      display: flex;
       font-size: 30px;
-      text-align: center;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 50px;
+        margin-right: 10px;
+      }
     }
 
     h2 {

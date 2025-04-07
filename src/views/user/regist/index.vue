@@ -10,7 +10,10 @@
           status-icon
           :rules="rules"
         >
-          <h1>Soybean 管理系统</h1>
+          <h1>
+            <img src="@/assets/images/logo.png" alt="" />
+            <span>管理系统</span>
+          </h1>
           <h2>注册账号</h2>
           <!-- 手机号 -->
           <el-form-item prop="phone">
@@ -153,8 +156,15 @@ const rules = reactive<FormRules<typeof registForm>>({
     top: 20vh;
 
     h1 {
+      display: flex;
       font-size: 30px;
-      text-align: center;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 50px;
+        margin-right: 10px;
+      }
     }
 
     h2 {

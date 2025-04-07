@@ -120,6 +120,70 @@ const constantRoutes = [
       },
     ],
   },
+  // 文档
+  {
+    path: '/document',
+    name: 'document',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: '文档页',
+      icon: 'document',
+      hidden: false,
+    },
+    children: [
+      {
+        path: '/document/vue3',
+        name: 'vue3',
+        component: () => import('@/views/document/vue3/index.vue'),
+        meta: {
+          title: 'Vue 渐进式 JavaScript 框架',
+          icon: 'vue',
+          hidden: false,
+        },
+      },
+      {
+        path: '/document/vite',
+        name: 'vite3',
+        component: () => import('@/views/document/vite3/index.vue'),
+        meta: {
+          title: 'Vite 下一代的前端工具链',
+          icon: 'vite',
+          hidden: false,
+        },
+      },
+      {
+        path: '/document/pinia',
+        name: 'pinia',
+        component: () => import('@/views/document/pinia/index.vue'),
+        meta: {
+          title: 'Pinia 中文文档',
+          icon: 'pinia',
+          hidden: false,
+        },
+      },
+
+      {
+        path: '/document/axios',
+        name: 'axios',
+        component: () => import('@/views/document/axios/index.vue'),
+        meta: {
+          title: 'Axios 中文文档',
+          icon: 'axios',
+          hidden: false,
+        },
+      },
+      {
+        path: '/document/echarts',
+        name: 'echarts',
+        component: () => import('@/views/document/echarts/index.vue'),
+        meta: {
+          title: 'Apache ECharts',
+          icon: 'echarts',
+          hidden: false,
+        },
+      },
+    ],
+  },
   // 异常页
   {
     path: '/error',
