@@ -1,4 +1,5 @@
 const constantRoutes = [
+  // 首页
   {
     path: '/',
     name: 'layout',
@@ -37,7 +38,7 @@ const constantRoutes = [
       {
         path: '/user/login',
         name: 'login',
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/user/login/index.vue'),
         meta: {
           title: '登录页',
           icon: 'login',
@@ -47,10 +48,30 @@ const constantRoutes = [
       {
         path: '/user/regist',
         name: 'regist',
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/user/regist/index.vue'),
         meta: {
-          title: '注册页？',
+          title: '注册页',
           icon: 'regist',
+          hidden: false,
+        },
+      },
+      {
+        path: '/user/authcode',
+        name: 'authcode',
+        component: () => import('@/views/user/authcode/index.vue'),
+        meta: {
+          title: '验证登录页',
+          icon: 'authcode',
+          hidden: false,
+        },
+      },
+      {
+        path: '/user/reset',
+        name: 'reset',
+        component: () => import('@/views/user/reset/index.vue'),
+        meta: {
+          title: '重置页',
+          icon: 'reset',
           hidden: false,
         },
       },
@@ -142,6 +163,7 @@ const constantRoutes = [
       },
     ],
   },
+  // 任意路由
   {
     path: '/:pathMatch(.*)*',
     name: 'Any',
