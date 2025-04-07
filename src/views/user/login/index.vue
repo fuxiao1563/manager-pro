@@ -7,8 +7,8 @@
           class="login_form"
           :model="loginForm"
           ref="loginForms"
-          status-icon
           :rules="rules"
+          status-icon
         >
           <h1>
             <img src="@/assets/images/logo.png" alt="" />

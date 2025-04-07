@@ -1,7 +1,6 @@
 <template>
-  <!-- item-content需优化 -->
   <el-card class="item-content">
-    <div id="pieChart" class="charts">123</div>
+    <div id="pieChart" class="charts"></div>
   </el-card>
 </template>
 
@@ -46,11 +45,10 @@ onMounted(() => {
           show: false,
         },
         data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' },
+          { value: 20, name: '学习' },
+          { value: 10, name: '娱乐' },
+          { value: 40, name: '工作' },
+          { value: 30, name: '休息' },
         ],
       },
     ],

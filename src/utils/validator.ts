@@ -32,10 +32,20 @@ const validatorPassword = (_: any, value: any, callback: any) => {
     callback(new Error('密码长度为5-10位'))
   }
 }
+// 邮箱的校验规则
+const validatorEmail = (_: any, value: any, callback: any) => {
+  const regEmail = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+  if (value != '' && regEmail.test(value)) {
+    callback()
+  } else {
+    callback(new Error('请输入正确的邮箱格式'))
+  }
+}
 export {
   formatter_number,
   validatorUsername,
   validatorPhone,
   validatorAuthcode,
   validatorPassword,
+  validatorEmail,
 }

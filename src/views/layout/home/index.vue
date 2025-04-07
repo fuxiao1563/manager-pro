@@ -24,10 +24,10 @@
 <script lang="ts" setup>
 import Admin from './Admin/index.vue'
 import Data from './Data/index.vue'
-import LineChart from './cardGroup/LineChart/index.vue'
-import PieChart from './cardGroup/PieChart/index.vue'
-import Project from './cardGroup/Project/index.vue'
-import Creative from './cardGroup/Creative/index.vue'
+import LineChart from './CardGroup/LineChart/index.vue'
+import PieChart from './CardGroup/PieChart/index.vue'
+import Project from './CardGroup/Project/index.vue'
+import Creative from './CardGroup/Creative/index.vue'
 </script>
 
 <style scoped lang="scss">

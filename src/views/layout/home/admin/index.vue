@@ -1,32 +1,50 @@
 <template>
   <el-row class="admin-content" :gutter="20">
     <el-col class="card-admin-left" :span="18">
-      <el-avatar :size="70" src="../../../../public/soybean-JC38yUrs.png" />
+      <el-avatar :size="70">
+        <img src="../../../../assets/images/avator.png" alt="" />
+      </el-avatar>
       <div class="left-item">
-        <h3 class="left-title">早安，Soybean, 今天又是充满活力的一天!</h3>
-        <p class="left-subtitle">今日多云转晴，20℃ - 25℃!</p>
+        <h3 class="left-title">{{ adminTitleForm.title }}</h3>
+        <p class="left-subtitle">{{ adminTitleForm.subTitle }}</p>
       </div>
     </el-col>
     <el-col :span="6">
       <div class="card-admin-right">
-        <div class="right-item">
-          <div class="right-item-title">项目数</div>
-          <div class="right-item-content">25</div>
-        </div>
-        <div class="right-item">
-          <div class="right-item-title">代办</div>
-          <div class="right-item-content">1/16</div>
-        </div>
-        <div class="right-item">
-          <div class="right-item-title">消息</div>
-          <div class="right-item-content">12</div>
+        <div
+          class="right-item"
+          v-for="(item, index) in adminProInfoForm"
+          :key="index"
+        >
+          <div class="right-item-title">{{ item.title }}</div>
+          <div class="right-item-detail">{{ item.detail }}</div>
         </div>
       </div>
     </el-col>
   </el-row>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from 'vue'
+const adminTitleForm = reactive({
+  title: '早安，Soybean, 今天又是充满活力的一天!',
+  subTitle: '今日多云转晴，20℃ - 25℃!',
+})
+const adminProInfoForm = reactive([
+  {
+    title: '项目数',
+    detail: '25',
+  },
+  {
+    title: '代办',
+    detail: '1/16',
+  },
+  {
+    title: '消息',
+    detail: '12',
+  },
+])
+</script>
 
 <style scoped lang="scss">
 .admin-content {
@@ -67,7 +85,7 @@
       text-align: center;
     }
 
-    .right-item-content {
+    .right-item-detail {
       font-size: 25px;
       line-height: 40px;
       height: 40px;

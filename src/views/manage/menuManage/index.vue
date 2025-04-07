@@ -1,4 +1,5 @@
 <template>
+  <!-- 多选框优化 -->
   <el-card>
     <template #header>
       <div>
