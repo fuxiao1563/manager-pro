@@ -49,14 +49,14 @@
               <el-button
                 class="login_btn_group_item_children"
                 type="primary"
-                @click=""
+                @click="toAuthcode"
               >
                 验证码登录
               </el-button>
               <el-button
                 class="login_btn_group_item_children"
                 type="primary"
-                @click=""
+                @click="toRegist"
               >
                 注册账号
               </el-button>
@@ -64,9 +64,9 @@
             <!-- 分割线 -->
             <el-divider>其他方式登录</el-divider>
             <div class="login_btn_group_item login_btn_users">
-              <el-button type="primary" @click="">超级管理员</el-button>
-              <el-button type="primary" @click="">管理员</el-button>
-              <el-button type="primary" @click="">普通用户</el-button>
+              <el-button type="primary" @click="toAdmin">超级管理员</el-button>
+              <el-button type="primary" @click="toAdmin">管理员</el-button>
+              <el-button type="primary" @click="toAdmin">普通用户</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -84,13 +84,13 @@ const userStore = useUserStore()
 import { useRouter } from 'vue-router'
 const $router = useRouter()
 import { ElNotification } from 'element-plus'
-import { getTime } from '@/utils/time'
 import type { FormRules } from 'element-plus'
+import { getTime } from '@/utils/time'
 import { validatorUsername, validatorPassword } from '@/utils/validator'
 // 收集表单数据
 const loginForm = reactive({
   username: 'admin',
-  password: '123456',
+  password: 'admin',
 })
 // 获取表单元素
 const loginForms = ref()
@@ -111,7 +111,6 @@ const rules = reactive<FormRules<typeof loginForm>>({
     },
   ],
 })
-
 // 登录按钮的回调
 const login = async () => {
   if (!loginForm) return
@@ -125,8 +124,8 @@ const login = async () => {
       type: 'success',
       message: `Hi, ${timeMessage}`,
     })
-    $router.push('/')
-  } catch (error: string) {
+    $router.push('/home')
+  } catch (error: any) {
     // 捕获登录过程中的错误并显示错误通知
     ElNotification({
       type: 'error',
@@ -136,6 +135,18 @@ const login = async () => {
     // 无论登录是否成功，都重置加载状态为false
     loading.value = false
   }
+}
+// 验证码登录按钮的回调
+const toAuthcode = () => {
+  $router.push('/user/authcode')
+}
+// (超级管理员 + 管理员 + 普通用户)登录按钮的回调
+const toAdmin = () => {
+  $router.push('/home')
+}
+// 注册账号按钮的回调
+const toRegist = () => {
+  $router.push('/user/regist')
 }
 </script>
 

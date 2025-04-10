@@ -43,7 +43,7 @@
               class="regist_button"
               :loading="loading"
               type="primary"
-              @click=""
+              @click="authcodeLogin"
             >
               确认
             </el-button>
@@ -63,12 +63,14 @@
 <script setup lang="ts">
 import { Iphone, ChatDotSquare } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
-import type { FormRules } from 'element-plus'
+import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
   validatorPhone,
   validatorAuthcode,
 } from '@/utils/validator'
+import router from '@/router'
+const $router = router
 // 收集表单数据
 const authcodeForm = reactive({
   phone: '',
@@ -93,6 +95,11 @@ const rules = reactive<FormRules<typeof authcodeForm>>({
     },
   ],
 })
+// 验证码登录
+const authcodeLogin = () => {
+  ElMessage.success('敬请期待')
+  $router.push('/home')
+}
 </script>
 
 <style lang="scss" scoped>

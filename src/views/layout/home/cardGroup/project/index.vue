@@ -3,7 +3,7 @@
     <template #header>
       <div class="pro-header">
         <span>项目动态</span>
-        <el-link type="primary">更多动态</el-link>
+        <el-link type="primary" @click="toForward">更多动态</el-link>
       </div>
     </template>
     <el-timeline style="max-width: 600px">
@@ -16,7 +16,7 @@
       >
         <div class="pro-content">
           <el-avatar :size="50">
-            <img src="../../../../../assets/images/avator.png" />
+            <img src="../../../../../assets/images/avatar.png" />
           </el-avatar>
           <h4 class="pro-msg">{{ item.content }}</h4>
         </div>
@@ -24,9 +24,11 @@
     </el-timeline>
   </el-card>
 </template>
-
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+const $router = useRouter()
 import { reactive } from 'vue'
+// 项目动态数据
 const proForm = reactive([
   {
     avatar: '../../../../../assets/images/avator.png',
@@ -54,6 +56,10 @@ const proForm = reactive([
     time: '2018/4/2',
   },
 ])
+// 更多动态按钮
+const toForward = () => {
+  $router.push('error/forward')
+}
 </script>
 
 <style scoped lang="scss">

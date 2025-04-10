@@ -16,6 +16,8 @@ import globalComponent from './components/index.ts'
 // 引入store
 import pinia from './store'
 import { zhCn } from 'element-plus/es/locales.mjs'
+// 解决echarts中非被动事件监听警告，提升滚动性能
+import 'default-passive-events'
 // 注册并挂载应用
 createApp(App)
   .use(router)

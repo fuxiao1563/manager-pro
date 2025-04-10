@@ -60,7 +60,7 @@ const constantRoutes = [
         name: 'authcode',
         component: () => import('@/views/user/authcode/index.vue'),
         meta: {
-          title: '验证登录页',
+          title: '验证登录页???',
           icon: 'authcode',
           hidden: false,
         },
@@ -70,8 +70,31 @@ const constantRoutes = [
         name: 'reset',
         component: () => import('@/views/user/reset/index.vue'),
         meta: {
-          title: '重置页',
+          title: '重置页???',
           icon: 'reset',
+          hidden: false,
+        },
+      },
+    ],
+  },
+  // 用户中心
+  {
+    path: '/userCenter_layout',
+    name: 'userCenter_layout',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: 'userCenter_layout',
+      icon: 'home',
+      hidden: false,
+    },
+    children: [
+      {
+        path: '/userCenter',
+        name: 'userCenter',
+        component: () => import('@/views/userCenter/index.vue'),
+        meta: {
+          title: '用户中心',
+          icon: 'login',
           hidden: false,
         },
       },
@@ -136,7 +159,7 @@ const constantRoutes = [
         name: 'vue3',
         component: () => import('@/views/document/vue3/index.vue'),
         meta: {
-          title: 'Vue 渐进式 JavaScript 框架',
+          title: 'Vue 渐进式 JS 框架',
           icon: 'vue',
           hidden: false,
         },
@@ -146,7 +169,7 @@ const constantRoutes = [
         name: 'vite3',
         component: () => import('@/views/document/vite3/index.vue'),
         meta: {
-          title: 'Vite 下一代的前端工具链',
+          title: 'Vite 下一代前端工具链',
           icon: 'vite',
           hidden: false,
         },
@@ -222,6 +245,17 @@ const constantRoutes = [
         meta: {
           title: '500',
           icon: '500',
+          hidden: false,
+        },
+      },
+      // 敬请期待
+      {
+        path: '/error/forward',
+        name: 'forward',
+        component: () => import('@/views/error/forward/index.vue'),
+        meta: {
+          title: '敬请期待',
+          icon: 'forward',
           hidden: false,
         },
       },

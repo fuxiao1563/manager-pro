@@ -5,7 +5,7 @@
   <el-card class="card-data">
     <Data></Data>
   </el-card>
-  <el-row class="card-groups" gutter="15">
+  <el-row class="card-groups" :gutter="15">
     <el-col class="group-item" :md="24" :lg="14">
       <LineChart></LineChart>
     </el-col>

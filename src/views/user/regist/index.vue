@@ -15,27 +15,13 @@
             <span>管理系统</span>
           </h1>
           <h2>注册账号</h2>
-          <!-- 手机号 -->
-          <el-form-item prop="phone">
+          <!-- 账号 -->
+          <el-form-item prop="username">
             <el-input
-              :prefix-icon="Iphone"
-              v-model="registForm.phone"
-              placeholder="请输入手机号"
-              :formatter="formatter_number"
+              :prefix-icon="User"
+              v-model="registForm.username"
+              placeholder="请输入账号"
             ></el-input>
-          </el-form-item>
-          <!-- 验证码 -->
-          <el-form-item prop="authcode">
-            <el-input
-              :prefix-icon="ChatDotSquare"
-              v-model="registForm.authcode"
-              placeholder="请输入验证码"
-              :formatter="formatter_number"
-            >
-              <template #append>
-                <el-button type="primary" @click="">发送验证码</el-button>
-              </template>
-            </el-input>
           </el-form-item>
           <!-- 密码 -->
           <el-form-item prop="password">
@@ -63,7 +49,7 @@
               class="regist_button"
               :loading="loading"
               type="primary"
-              @click=""
+              @click="regist"
             >
               确认
             </el-button>
@@ -81,21 +67,19 @@
 </template>
 
 <script setup lang="ts">
-import { Iphone, ChatDotSquare, Lock } from '@element-plus/icons-vue'
+import { User, Lock } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
-import type { FormRules } from 'element-plus'
-import {
-  formatter_number,
-  validatorPhone,
-  validatorAuthcode,
-  validatorPassword,
-} from '@/utils/validator'
+import { ElMessage, type FormRules } from 'element-plus'
+import { validatorUsername, validatorPassword } from '@/utils/validator'
+import useUserStore from '@/store/modules/user'
+import router from '@/router'
+const $router = router
+const userStore = useUserStore()
 // 收集表单数据
 const registForm = reactive({
-  phone: '',
-  authcode: '',
-  password: '',
-  confir_password: '',
+  username: 'admin',
+  password: 'admin',
+  confir_password: 'admin',
 })
 // 获取表单元素
 const registForms = ref()
@@ -114,15 +98,9 @@ const validatorConfirPassword = (_: any, value: any, callback: any) => {
 }
 // 自定义表单校验
 const rules = reactive<FormRules<typeof registForm>>({
-  phone: [
+  username: [
     {
-      validator: validatorPhone,
-      trigger: 'change',
-    },
-  ],
-  authcode: [
-    {
-      validator: validatorAuthcode,
+      validator: validatorUsername,
       trigger: 'change',
     },
   ],
@@ -139,6 +117,16 @@ const rules = reactive<FormRules<typeof registForm>>({
     },
   ],
 })
+// 注册账号
+const regist = async () => {
+  try {
+    await userStore.userRegist(registForm)
+    $router.push('/user/login')
+    ElMessage.success({ message: '注册成功' })
+  } catch (error) {
+    ElMessage.error({ message: '注册失败' })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

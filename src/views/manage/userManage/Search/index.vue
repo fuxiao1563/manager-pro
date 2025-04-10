@@ -1,10 +1,15 @@
 <template>
-  <!-- 表单验证bug + 邮箱验证 -->
-  <el-form :inline="true" :model="searchFrom" ref="searchRef" :rules="rules">
-    <el-row :gutter="20" justify="end" align="center">
+  <el-form
+    :inline="true"
+    :model="searchFrom"
+    ref="searchRef"
+    :rules="rules"
+    label-width="auto"
+  >
+    <el-row :gutter="15">
       <!-- 用户名 -->
       <el-col :span="6">
-        <el-form-item label="&nbsp;&nbsp;&nbsp;用户名" prop="username">
+        <el-form-item label="用户名" prop="username">
           <el-input
             v-model="searchFrom.username"
             placeholder="请输入用户名"
@@ -14,10 +19,7 @@
       </el-col>
       <!-- 性别 -->
       <el-col :span="6">
-        <el-form-item
-          label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;性别"
-          prop="gender"
-        >
+        <el-form-item label="性别" prop="gender">
           <el-select
             v-model="searchFrom.gender"
             placeholder="请选择性别"
@@ -34,10 +36,7 @@
       </el-col>
       <!-- 昵称 -->
       <el-col :span="6">
-        <el-form-item
-          label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;昵称"
-          prop="pieName"
-        >
+        <el-form-item label="昵称" prop="pieName">
           <el-input
             v-model="searchFrom.pieName"
             placeholder="请输入昵称"
@@ -47,7 +46,7 @@
       </el-col>
       <!-- 手机号 -->
       <el-col :span="6">
-        <el-form-item label="&nbsp;&nbsp;&nbsp;手机号" prop="phone">
+        <el-form-item label="手机号" prop="phone">
           <el-input
             v-model="searchFrom.phone"
             placeholder="请输入手机号"
@@ -58,10 +57,7 @@
       </el-col>
       <!-- 邮箱 -->
       <el-col :span="6">
-        <el-form-item
-          label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;邮箱"
-          prop="email"
-        >
+        <el-form-item label="邮箱" prop="email">
           <el-input
             v-model="searchFrom.email"
             placeholder="请输入邮箱"
@@ -152,13 +148,7 @@ const rules = reactive<FormRules<typeof searchFrom>>({
   ],
 })
 // 表单重置
-const resetForm = () => {
-  if (searchRef.value) {
-    searchRef.value.resetFields()
-  } else {
-    console.error('searchForms is not properly mounted')
-  }
-}
+const resetForm = () => searchRef.value.resetFields()
 </script>
 
 <style scoped lang="scss">

@@ -22,7 +22,7 @@
     <!-- 分页器 -->
     <el-pagination
       class="pagination"
-      :page-size="[5, 10, 15, 20]"
+      :page-sizes="[5, 10, 15, 20]"
       :pager-count="7"
       layout="total, prev, pager, next, sizes, jumper"
       :total="100"

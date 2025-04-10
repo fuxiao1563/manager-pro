@@ -2,7 +2,7 @@
   <el-row class="admin-content" :gutter="20">
     <el-col class="card-admin-left" :span="18">
       <el-avatar :size="70">
-        <img src="../../../../assets/images/avator.png" alt="" />
+        <img :src="userStore.userInfo.avatar" alt="" />
       </el-avatar>
       <div class="left-item">
         <h3 class="left-title">{{ adminTitleForm.title }}</h3>
@@ -26,6 +26,8 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
 const adminTitleForm = reactive({
   title: '早安，Soybean, 今天又是充满活力的一天!',
   subTitle: '今日多云转晴，20℃ - 25℃!',
@@ -36,7 +38,7 @@ const adminProInfoForm = reactive([
     detail: '25',
   },
   {
-    title: '代办',
+    title: '待办',
     detail: '1/16',
   },
   {

@@ -105,7 +105,6 @@ onMounted(() => {
       },
     ],
   }
-
   option && myChart.setOption(option)
 })
 </script>

@@ -1,14 +1,18 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { GET_TOKEN } from '../utils/token'
 // 创建 axios 实例
 const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 5000,
+  // headers: { 'Content-Type': 'application/json;charset=UTF-8' },
 })
 // 请求拦截器
 request.interceptors.request.use(
   (config) => {
-    // 在请求发出之前做某事
+    if (GET_TOKEN()) {
+      config.headers.Authorization = `${GET_TOKEN()}`
+    }
     return config
   },
   (error) => {
