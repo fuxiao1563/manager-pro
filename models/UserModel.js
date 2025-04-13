@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['common', 'admin', 'superAdmin'],
+        enum: ['common', 'admin', 'super'],
         default: 'common'
     },
     avatar: {
@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['online', 'outline', 'hidden'],
         default: 'outline'
+    },
+    signature: {
+        type: String,
+        default: '这个人很懒，什么都没有留下。'
     }
 })
 let UserModel = mongoose.model('User', userSchema)

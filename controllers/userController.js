@@ -1,3 +1,4 @@
+const { Types } = require('mongoose');
 const UserModel = require('../models/UserModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -7,7 +8,6 @@ const jwtConfig = require('../jwtConfig/index');
 exports.userRegist = async (req, res) => {
     let { username, password } = req.body
     if (!username || !password) return res.err('账号或密码不能为空')
-
     await UserModel.findOne({ username }).then(data => {
         if (data === null) {
             password = bcryptjs.hashSync(password, 10)
@@ -51,7 +51,7 @@ exports.userLogin = async (req, res) => {
 }
 // 退出登录
 exports.userLogout = async (req, res) => {
-    const { username } = req.body;
+    const { username } = req.params;
     await UserModel.findOneAndUpdate({ username }, { status: 'outline' }).then(data => {
         console.log(data);
         if (data === null) return res.err('账号不存在')
@@ -62,8 +62,9 @@ exports.userLogout = async (req, res) => {
     })
 }
 // 查询用户信息
-exports.userInfoList = async (req, res) => {
-    let username = req.query.username;
+exports.userInfo = async (req, res) => {
+    let { username } = req.params;
+    console.log(req.params);
     await UserModel.findOne({ username }).then(data => {
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '查询成功', data })
@@ -71,7 +72,7 @@ exports.userInfoList = async (req, res) => {
         res.json({ message: '查询失败', err });
     })
 }
-//修改用户信息
+// 修改用户信息
 exports.updataUserInfo = async (req, res) => {
     // status暂不考虑
     let { username, phone, gender, email, role, avatar } = req.body
@@ -83,8 +84,50 @@ exports.updataUserInfo = async (req, res) => {
         res.err('服务器内部错误')
     })
 }
+// 用户管理
+exports.userInfoList = (req, res) => {
+    let { skip, limit } = req.body
+    const data = UserModel.find().select({ username: 1, gender: 1, phone: 1, email: 1, status: 1, role: 1 }).skip(skip).limit(limit)
+    const total = UserModel.find().countDocuments()
+    Promise.all([data, total]).then(data => {
+        // 返回字段优化
+        res.json({ code: 200, message: '查询成功', data })
+    }).catch(err => {
+        res.err('服务器内部错误')
+    })
+}
+// 删除用户
+exports.deleteUserInfo = (req, res) => {
+    let { _id } = req.params
+    _id = new Types.ObjectId(_id);
+    UserModel.findOneAndDelete({ _id }).then(data => {
+        if (data === null) return res.err('账号不存在')
+        res.json({ code: 200, message: '删除成功', data });
+    }).catch(err => {
+        res.err('服务器内部错误')
+    })
+}
+// 添加用户 ??  注册用户
+exports.addUserInfo = async (req, res) => {
+    let { username, gender, phone, email } = req.body
+    await UserModel.findOne({ username }).then(data => {
+        if (data === null) {
+            let password = bcryptjs.hashSync('admin', 10)
+            UserModel.create({ username, password, gender, phone, email }).then(data => {
+                res.json({ code: 200, message: '账号注册成功' });
+            }).catch(err => {
+                res.err(err)
+            })
+            return
+        }
+        res.err('账号已存在')
+    }).catch(err => {
+        res.err('服务器内部错误')
+    })
+}
+
 
 // 上传头像
-exports.uploadAvatar = (req, res) => {
-    res.json({ message: '上传成功', data: req.file });
-}
+// exports.uploadAvatar = (req, res) => {
+//     res.json({ message: '上传成功', data: req.file });
+// }
