@@ -8,7 +8,7 @@
         <h3 class="data-item-title">访问量</h3>
         <div class="data-item-box">
           <el-icon :size="30">
-            <component is="Pointer"></component>
+            <Pointer />
           </el-icon>
           <span class="data-item-content">9,725</span>
         </div>
@@ -22,7 +22,7 @@
         <h3 class="data-item-title">成交额</h3>
         <div class="data-item-box">
           <el-icon :size="30">
-            <component is="Money"></component>
+            <Money />
           </el-icon>
           <span class="data-item-content">$1,026</span>
         </div>
@@ -36,7 +36,7 @@
         <h3 class="data-item-title">下载量</h3>
         <div class="data-item-box">
           <el-icon :size="30">
-            <component is="Files"></component>
+            <Files />
           </el-icon>
           <span class="data-item-content">970,925</span>
         </div>
@@ -50,7 +50,7 @@
         <h3 class="data-item-title">成交量</h3>
         <div class="data-item-box">
           <el-icon :size="30">
-            <component is="SoldOut"></component>
+            <SoldOut />
           </el-icon>
           <span class="data-item-content">9,527</span>
         </div>
@@ -59,7 +59,9 @@
   </el-row>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Pointer, Money, Files, SoldOut } from '@element-plus/icons-vue'
+</script>
 
 <style scoped lang="scss">
 .data-content {

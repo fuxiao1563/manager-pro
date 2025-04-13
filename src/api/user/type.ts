@@ -5,6 +5,7 @@ export interface ResponseData {
 }
 // 用户信息类型
 export interface UserInfo {
+  _id: string
   username: string
   password: string
   phone: string
@@ -13,6 +14,7 @@ export interface UserInfo {
   role: string
   avatar: string
   status: string
+  signature: string
 }
 // 登录接口携带的数据
 export interface LoginForm {
@@ -26,5 +28,9 @@ export interface LoginResponseData extends ResponseData, UserInfo {
 }
 // 获取用户信息返回的接口
 export interface UserInfoListResponseData extends ResponseData {
+  data: UserInfo
+}
+// 删除用户的接口
+export interface DeleteUserInfoResponseData extends ResponseData {
   data: UserInfo
 }

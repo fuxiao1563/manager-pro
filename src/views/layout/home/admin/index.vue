@@ -29,7 +29,7 @@ import { reactive } from 'vue'
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
 const adminTitleForm = reactive({
-  title: '早安，Soybean, 今天又是充满活力的一天!',
+  title: userStore.userInfo.signature,
   subTitle: '今日多云转晴，20℃ - 25℃!',
 })
 const adminProInfoForm = reactive([

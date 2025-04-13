@@ -4,8 +4,11 @@ import {
   reqLogin,
   reqRegist,
   reqLogout,
+  reqUserInfo,
   reqUserInfoList,
   reqUpdateUserInfo,
+  reqDeleteUserInfo,
+  reqAddUserInfo,
 } from '@/api/user/index'
 import type {
   ResponseData,
@@ -13,6 +16,7 @@ import type {
   LoginResponseData,
   UserInfoListResponseData,
   UserInfo,
+  DeleteUserInfoResponseData,
 } from '@/api/user/type'
 import { GET_TOKEN, SET_TOKEN } from '@/utils/token'
 import constantRoutes from '@/router/routes'
@@ -22,6 +26,7 @@ const useUserStore = defineStore('User', {
   state: (): UserState => {
     return {
       userInfo: {
+        _id: '',
         username: '',
         password: '',
         phone: '',
@@ -30,6 +35,7 @@ const useUserStore = defineStore('User', {
         role: '',
         avatar: '',
         status: '',
+        signature: '',
       },
       token: GET_TOKEN(),
       menuRoutes: constantRoutes,
@@ -39,7 +45,7 @@ const useUserStore = defineStore('User', {
   actions: {
     //登录的方法
     async userLogin(data: LoginForm) {
-      let result: LoginResponseData = await reqLogin(data)
+      const result: LoginResponseData = await reqLogin(data)
       if (result.code === 200) {
         this.userInfo = result.data
         this.token = result.token
@@ -51,8 +57,7 @@ const useUserStore = defineStore('User', {
     },
     // 注册的方法
     async userRegist(data: LoginForm) {
-      let result: ResponseData = await reqRegist(data)
-      console.log(result)
+      const result: ResponseData = await reqRegist(data)
       if (result.code === 200) {
         return 'ok'
       } else {
@@ -60,9 +65,8 @@ const useUserStore = defineStore('User', {
       }
     },
     // 退出登录的方法
-    async userLogout({ username }: { username: String }) {
-      let result: ResponseData = await reqLogout({ username })
-      console.log(result)
+    async userLogout(username: string) {
+      const result: ResponseData = await reqLogout(username)
       if (result.code === 200) {
         return 'ok'
       } else {
@@ -70,10 +74,9 @@ const useUserStore = defineStore('User', {
       }
     },
     // 获取用户信息的方法
-    async getUserInfoList({ username }: { username: String }) {
-      let result: UserInfoListResponseData = await reqUserInfoList({ username })
+    async getUserInfo(username: string) {
+      const result: UserInfoListResponseData = await reqUserInfo(username)
       if (result.code === 200) {
-        console.log(result.data)
         this.userInfo = result.data
         return 'ok'
       } else {
@@ -82,7 +85,48 @@ const useUserStore = defineStore('User', {
     },
     // 修改用户信息的方法
     async updateUserInfo(data: UserInfo) {
-      let result: ResponseData = await reqUpdateUserInfo(data)
+      const result: ResponseData = await reqUpdateUserInfo(data)
+      if (result.code === 200) {
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(result.message))
+      }
+    },
+    // 用户管理的方法
+    async getUserInfoList(data: any) {
+      const result: any = await reqUserInfoList(data)
+      if (result.code === 200) {
+        return result.data
+      } else {
+        return Promise.reject(new Error(result.message))
+      }
+    },
+    // 删除用户信息的方法
+    async deleteUserInfo(_id: string) {
+      const result: DeleteUserInfoResponseData = await reqDeleteUserInfo(_id)
+      if (result.code === 200) {
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(result.message))
+      }
+    },
+    // 批量删除用户信息的方法
+    async deleteUserInfoList(ids: { _id: string }[]) {
+      ids.forEach(async (item: any) => {
+        const result: DeleteUserInfoResponseData = await reqDeleteUserInfo(
+          item._id,
+        )
+        if (result.code === 200) {
+          return 'ok'
+        } else {
+          return Promise.reject(new Error(result.message))
+        }
+      })
+    },
+    // 添加用户的方法
+    async addUserInfo(data: UserInfo) {
+      const result: ResponseData = await reqAddUserInfo(data)
+      console.log(result)
       if (result.code === 200) {
         return 'ok'
       } else {

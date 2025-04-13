@@ -18,6 +18,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       // host: '0.0.0.0',
       // port: 3200,
       // open: true,
+      hmr: true,
       proxy: {
         [env.VITE_APP_BASE_API]: {
           target: env.VITE_SERVE, // 后端服务器地址

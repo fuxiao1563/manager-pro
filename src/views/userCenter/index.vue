@@ -8,18 +8,14 @@
     <el-form
       ref="formRef"
       style="max-width: 600px"
-      :model="userInfoList"
+      :model="userInfo"
       label-width="auto"
       status-icon
     >
       <!-- 上传头像 -->
       <el-form-item label="上传头像" prop="avatar">
         <el-upload class="avatar-uploader" action="" :show-file-list="false">
-          <img
-            v-if="userInfoList.avatar"
-            :src="userInfoList.avatar"
-            class="avatar"
-          />
+          <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
@@ -27,35 +23,31 @@
       </el-form-item>
       <!-- 用户名 -->
       <el-form-item label="用户名" prop="username">
-        <el-input v-model="userInfoList.username" />
+        <el-input v-model="userInfo.username" />
       </el-form-item>
       <!-- 性别  -->
       <el-form-item label="性别" prop="gender">
-        <el-segmented v-model="userInfoList.gender" :options="genderOptions" />
+        <el-segmented v-model="userInfo.gender" :options="genderOptions" />
       </el-form-item>
       <!-- 手机号 -->
       <el-form-item label="手机号" prop="phone" required>
-        <el-input v-model="userInfoList.phone" placeholder="请输入手机号码" />
+        <el-input v-model="userInfo.phone" placeholder="请输入手机号码" />
       </el-form-item>
       <!-- 邮箱 -->
       <el-form-item label="邮箱" prop="email" required>
-        <el-input v-model="userInfoList.email" placeholder="请输入邮箱" />
+        <el-input v-model="userInfo.email" placeholder="请输入邮箱" />
       </el-form-item>
       <!-- 状态 -->
       <el-form-item label="状态" prop="status">
-        <el-select v-model="userInfoList.status" placeholder="请选择在线状态">
+        <el-select v-model="userInfo.status" placeholder="请选择在线状态">
           <el-option label="在线" value="online" />
           <el-option label="离线" value="outline" />
           <el-option label="隐身" value="hidden" />
         </el-select>
       </el-form-item>
       <!-- 个性签名 -->
-      <el-form-item label="个性签名" prop="username">
-        <el-input
-          v-model="userInfoList.username"
-          show-word-limit
-          maxlength="20"
-        />
+      <el-form-item label="个性签名" prop="signature">
+        <el-input v-model="userInfo.signature" show-word-limit maxlength="20" />
       </el-form-item>
       <!-- 重置和提交按钮 -->
       <el-form-item>
@@ -73,20 +65,19 @@ import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 // import type { UploadProps } from 'element-plus'
 import useUserStore from '@/store/modules/user'
-import useStore from 'element-plus/es/components/table/src/store/index.mjs'
+import type { UserInfo } from '@/api/user/type'
 const userStore = useUserStore()
 onMounted(async () => {
-  if (userStore.userInfo) return
   const { username } = userStore.userInfo
   try {
-    await userStore.getUserInfoList({ username })
+    await userStore.getUserInfo(username)
     ElMessage.success({ message: '获取用户信息成功' })
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })
   }
 })
 // 用户信息列表
-let userInfoList = reactive<any>({ ...userStore.userInfo })
+let userInfo = reactive<UserInfo>({ ...userStore.userInfo })
 // 获取表单ref
 const formRef = ref()
 // 性别选项
@@ -121,7 +112,7 @@ const genderOptions = ['男', '女', '未知']
 // 提交按钮
 const submitForm = async () => {
   try {
-    await userStore.updateUserInfo(userInfoList)
+    await userStore.updateUserInfo(userInfo)
     ElMessage.success({ message: '提交成功' })
   } catch (error) {
     ElMessage.error({ message: '提交失败' })
@@ -131,14 +122,18 @@ const submitForm = async () => {
 const resetForm = () => formRef.value.resetFields()
 // 清空按钮
 const clearForm = () => {
-  ;(userInfoList.username = ''),
-    (userInfoList.phone = ''),
-    (userInfoList.gender = ''),
-    (userInfoList.email = ''),
-    (userInfoList.role = ''),
-    (userInfoList.avatar = ''),
-    (userInfoList.status = ''),
-    (userInfoList.signature = '')
+  userInfo = {
+    _id: userStore.userInfo._id,
+    username: '',
+    password: userStore.userInfo.password,
+    phone: '',
+    gender: '',
+    email: '',
+    role: '',
+    avatar: '',
+    status: '',
+    signature: '',
+  }
 }
 </script>
 

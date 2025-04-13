@@ -9,7 +9,7 @@ import 'element-plus/dist/index.css'
 // 引入路由
 import router from './router'
 // 引入svg-icon
-// @ts-ignore
+// @ts-expect-error
 import 'virtual:svg-icons-register'
 // 引入组件库
 import globalComponent from './components/index.ts'

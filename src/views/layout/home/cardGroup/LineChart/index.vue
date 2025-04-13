@@ -10,9 +10,9 @@ import { onMounted } from 'vue'
 import * as echarts from 'echarts'
 onMounted(() => {
   type EChartsOption = echarts.EChartsOption
-  var chartDom = document.getElementById('lineChart')!
-  var myChart = echarts.init(chartDom)
-  var option: EChartsOption
+  let chartDom = document.getElementById('lineChart')!
+  let myChart = echarts.init(chartDom)
+  let option: EChartsOption
   option = {
     color: ['rgb(123, 100, 252)', 'rgb(30, 237, 199)'],
     title: {
@@ -105,7 +105,7 @@ onMounted(() => {
       },
     ],
   }
-  option && myChart.setOption(option)
+  myChart.setOption(option)
 })
 </script>
 

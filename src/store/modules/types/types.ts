@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
 export interface UserState {
   userInfo: {
+    _id: string
     username: string
     password: string
     phone: string
@@ -9,6 +10,7 @@ export interface UserState {
     role: string
     avatar: string
     status: string
+    signature: string
   }
   token: string | null
   menuRoutes: RouteRecordRaw[]
