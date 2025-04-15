@@ -23,9 +23,7 @@ app.use(cors());
 // app.use(cors({ origin: 'http://localhost:5173' }));
 // 新建一个upload文件夹用于存储上传图片的请求
 
-const multer = require('multer');
-const upload = multer({ dest: './public/upload' });
-app.use(upload.any())
+
 // 静态资源托管
 app.use(express.static('./public'))
 // 引入jwt配置用于加密和解密

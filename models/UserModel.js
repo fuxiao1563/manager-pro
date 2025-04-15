@@ -10,37 +10,29 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    phone: {
-        type: String,
-        // unique: true,
-        minlength: [11, '要求手机号长度为11位'],
-        maxlength: [11, '要求手机号长度为11位'],
-        // validate: {
-        //     validator: function (value) {
-        //         return /^1[3-9]\d{9}$/.test(value)
-        //     },
-        //     message: '手机号格式不正确'
-        // },
-        default: 'xxxxxxxxxxx'
-    },
-    gender: {
-        type: String,
-        enum: ['男', '女', '未知'],
-        default: '未知'
-    },
-    email: {
-        type: String,
-        // unique: true,
-        default: '未知'
-    },
     role: {
         type: String,
         enum: ['common', 'admin', 'super'],
         default: 'common'
     },
+    phone: {
+        type: String,
+        minlength: [11, '要求手机号长度为11位'],
+        maxlength: [11, '要求手机号长度为11位'],
+        default: 'xxxxxxxxxxx'
+    },
+    email: {
+        type: String,
+        default: '未知'
+    },
     avatar: {
         type: String,
         default: 'https://img.yzcdn.cn/vant/cat.jpeg'
+    },
+    gender: {
+        type: String,
+        enum: ['男', '女', '未知'],
+        default: '未知'
     },
     status: {
         type: String,
