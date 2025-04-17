@@ -3,7 +3,45 @@ const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../jwtConfig/index');
 
-// 账号注册
+
+/**
+ * 登录
+ * @returns data token
+ */
+exports.userLogin = async (req, res) => {
+    const { username, password } = req.body
+    if (!username || !password) return res.err('账号或密码不能为空')
+    try {
+        let data = await UserModel.findOneAndUpdate(
+            { username },
+            { status: 'online' },
+            { new: true, projection: { username: 1, password: 1, role: 1 } })
+        if (data === null) return res.err('账号不存在')
+        const passwordValid = bcryptjs.compareSync(password, data.password);
+        if (!passwordValid) return res.err('密码错误')
+        // if (data.status === 'online') return res.err('账号已登录')    
+        // 返回data
+        data = {
+            username: data.username,
+            role: data.role
+        }
+        // 返回token
+        const user = {
+            ...data,
+            password: '',
+        }
+        const tokenStr = jwt.sign(user, jwtConfig.jwtSecretKey); 
+        res.json({
+            code: 200,
+            message: '账号登录成功',
+            data,
+            token: 'Bearer ' + tokenStr
+        });
+    } catch (error) {
+        res.err('服务器内部错误')
+    }
+}
+// 注册
 exports.userRegist = async (req, res) => {
     let { username, password } = req.body
     if (!username || !password) return res.err('账号或密码不能为空')
@@ -17,60 +55,35 @@ exports.userRegist = async (req, res) => {
         res.err('服务器内部错误')
     }
 }
-// 账号登录
-exports.userLogin = async (req, res) => {
-    const { username, password } = req.body
-    if (!username || !password) return res.err('账号或密码不能为空')
-    try {
-        let data = await UserModel.findOneAndUpdate(
-            { username },
-            { status: 'online' },
-            { new: true, projection: { username: 1, password: 1, role: 1 } })
-        if (data === null) return res.err('账号不存在')
-        const passwordValid = bcryptjs.compareSync(password, data.password);
-        if (!passwordValid) return res.err('密码错误')
-        // if (data.status === 'online') return res.err('账号已登录')
-        // 返回token
-        const user = {
-            ...data,
-            password: '',
-            avatar: '',
-        }
-        // 返回data
-        const userData = data.toObject();
-        data = {
-            username: userData.username,
-            role: userData.role
-        }
-        const tokenStr = jwt.sign(user, jwtConfig.jwtSecretKey,); // { expiresIn: '3h' }
-        res.json({
-            code: 200,
-            message: '账号登录成功',
-            data,
-            token: 'Bearer ' + tokenStr
-        });
-    } catch (error) {
-        console.log(error);
-        res.err('服务器内部错误')
-    }
-}
 // 退出登录
 exports.userLogout = async (req, res) => {
-    const { username } = req.params;
-    if (!username) return res.err('账号不存在')
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) return res.err('token不存在')
+    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
+    const { username } = decoded
+    if (!username) return res.err('无效的认证信息')
     try {
         const data = await UserModel.findOneAndUpdate({ username }, { status: 'outline' })
         if (data === null) return res.err('账号不存在')
-        if (data.status === 'outline') return res.err('账号已退出')
-        res.json({ code: 200, message: '账号退出成功' });
+        // if (data.status === 'outline') return res.err('账号已退出')
+        res.json({ code: 200, message: '账号退出成功' })
     } catch (error) {
         res.err('服务器内部错误')
     }
 }
-// 主页
-exports.userHome = async (req, res) => {
-    const { username } = req.params;
-    if (!username) return res.err('账号不存在')
+
+
+
+/**
+ * 主页
+ * @returns data
+ */
+exports.userHome = async (req, res) => {    
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) return res.err('token不存在')
+    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
+    const { username } = decoded
+    if (!username) return res.err('无效的认证信息')
     try {
         const data = await UserModel
             .findOne({ username })

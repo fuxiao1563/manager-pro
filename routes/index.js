@@ -16,15 +16,16 @@ router.post('/user/login', userController.userLogin)
 // 注册接口
 router.post('/user/regist', userController.userRegist)
 // 退出登录接口
-router.post('/user/logout/:username', userController.userLogout)
+router.post('/user/logout', userController.userLogout)
+
 
 // 首页接口
-router.get('/home/:username', userController.userHome)
+router.get('/userHome', userController.userHome)
 
 
 
 // 查询用户信息接口
-router.get('/userCenter/userInfo/:username', manageController.userInfo)
+router.get('/userCenter/getUserInfo', manageController.userInfo)
 // 修改用户信息接口
 router.patch('/userCenter/updataUserInfo', manageController.updataUserInfo)
 // 修改密码接口
@@ -35,15 +36,15 @@ router.post('/userCenter/uploadUserAvatar', upload.single('file'), manageControl
 
 
 // 用户管理接口
-router.post('/manage/userInfoList', manageController.userInfoList)
-// 删除用户接口
-router.delete('/manage/deleteUserInfo/:_id', manageController.deleteUserInfo)
-// 批量删除用户接口
-router.delete('/manage/deleteUserInfoList', manageController.deleteUserInfoList)
+router.post('/manage/getUserInfoList', manageController.userInfoList)
 // 添加用户接口
 router.post('/manage/addUserInfo', manageController.addUserInfo)
 // 编辑用户接口
-router.patch('/manage/editUserInfo', manageController.editUserInfo)
+router.patch('/manage/updataUserInfo', manageController.editUserInfo)
+// 删除用户接口
+router.delete('/manage/deleteUserInfo/:_id', manageController.deleteUserInfo)
+// 批量删除用户接口
+router.post('/manage/deleteUserInfoList', manageController.deleteUserInfoList)
 
 
 
