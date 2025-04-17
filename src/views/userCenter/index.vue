@@ -64,13 +64,12 @@ import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 // import type { UploadProps } from 'element-plus'
-import useUserStore from '@/store/modules/user'
+import useUserCenterStore from '@/store/modules/userCenter'
+const userCenterStore = useUserCenterStore()
 import type { UserInfo } from '@/api/user/type'
-const userStore = useUserStore()
 onMounted(async () => {
-  const { username } = userStore.userInfo
   try {
-    await userStore.getUserInfo(username)
+    await userCenterStore.getUserCenterInfo()
     ElMessage.success({ message: '获取用户信息成功' })
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })

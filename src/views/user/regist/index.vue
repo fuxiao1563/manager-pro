@@ -55,7 +55,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button class="regist_button" :loading="loading" @click="">
+            <el-button class="regist_button" :loading="loading" @click="goBack">
               返回
             </el-button>
           </el-form-item>
@@ -126,6 +126,10 @@ const regist = async () => {
   } catch (error) {
     ElMessage.error({ message: '注册失败' })
   }
+}
+// 返回按钮
+const goBack = () => {
+  $router.back()
 }
 </script>
 

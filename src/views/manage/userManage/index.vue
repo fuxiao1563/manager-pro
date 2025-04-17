@@ -11,9 +11,16 @@
         </div>
         <div>
           <el-button type="primary" plain @click="handledrawer">新增</el-button>
-          <el-button type="danger" plain @click="deleteUserInfoList">
-            批量删除
-          </el-button>
+          <el-popconfirm
+            confirm-button-text="Yes"
+            cancel-button-text="No"
+            title="你确定要删除吗？"
+            @confirm="deleteUserInfoList"
+          >
+            <template #reference>
+              <el-button type="danger" plain>批量删除</el-button>
+            </template>
+          </el-popconfirm>
           <el-button plain @click="refresh">刷新</el-button>
           <el-button plain>列设置</el-button>
         </div>
@@ -86,18 +93,22 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column prop="_id" label="操作" min-width="150" align="center">
-        <template #ctrl="{ row }">
+        <template #="{ row }">
+          <!-- 编辑 -->
           <el-button type="primary" size="small" plain @click="handledrawer">
             编辑
           </el-button>
-          <el-button
-            type="danger"
-            size="small"
-            plain
-            @click="deleteUserInfo(row._id)"
+          <!-- 删除 -->
+          <el-popconfirm
+            confirm-button-text="Yes"
+            cancel-button-text="No"
+            title="你确定要删除吗？"
+            @confirm="deleteUserInfo(row._id)"
           >
-            删除
-          </el-button>
+            <template #reference>
+              <el-button type="danger" size="small" plain>删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -113,78 +124,24 @@
     />
   </el-card>
   <!-- 抽屉 -->
-  <el-drawer v-model="drawer" :direction="direction">
-    <template #header>
-      <h4>新增 & 编辑用户</h4>
-    </template>
-    <template #default>
-      <div>
-        <el-form ref="formRef" :model="userInfo" label-width="auto" status-icon>
-          <!-- 用户名 -->
-          <el-form-item label="用户名" prop="username" required>
-            <el-input v-model="userInfo.username" />
-          </el-form-item>
-          <!-- 性别  -->
-          <el-form-item label="性别" prop="gender">
-            <el-segmented v-model="userInfo.gender" :options="genderOptions" />
-          </el-form-item>
-          <!-- 手机号 -->
-          <el-form-item label="手机号" prop="phone" required>
-            <el-input v-model="userInfo.phone" placeholder="请输入手机号码" />
-          </el-form-item>
-          <!-- 邮箱 -->
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="userInfo.email" placeholder="请输入邮箱" />
-          </el-form-item>
-        </el-form>
-      </div>
-    </template>
-    <template #footer>
-      <div style="flex: auto">
-        <el-button @click="cancelClick">取消</el-button>
-        <el-button type="primary" @click="confirmClick">确认</el-button>
-      </div>
-    </template>
-  </el-drawer>
+  <Drawer />
 </template>
 
 <script setup lang="ts">
 import Search from './Search/index.vue'
+import Drawer from './Drawer/index.vue'
 import { ref, onMounted, nextTick, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { DrawerProps, TableInstance } from 'element-plus'
+import type { TableInstance } from 'element-plus'
 import type { UserInfo } from '@/api/user/type'
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
-// 用户信息列表
-let userInfo = reactive<UserInfo>({ ...userStore.userInfo })
-// 获取表单ref
-const formRef = ref()
-// 性别选项
-const genderOptions = ['男', '女', '未知']
+import useUserManage from '@/store/modules/userManage'
+const userManage = useUserManage()
 // 抽屉开关
-const drawer = ref(false)
 const handledrawer = () => {
-  drawer.value = !drawer.value
+  userManage.drawerSwitch = !userManage.drawerSwitch
 }
-// 抽屉参数
-const direction = ref<DrawerProps['direction']>('rtl')
-// 抽屉取消按钮
-function cancelClick() {
-  drawer.value = false
-}
-// 抽屉确认按钮
-const confirmClick = async () => {
-  try {
-    await userStore.addUserInfo(userInfo)
-    nextTick(() => {
-      ElMessage.success({ message: '添加用户成功' })
-    })
-  } catch (error) {
-    ElMessage.error({ message: '添加用户失败' })
-  }
-}
-
 const multipleTableRef = ref<TableInstance>()
 let userInfoList = ref<UserInfo>()
 // 数据总量
@@ -197,7 +154,7 @@ const formList = reactive({
 // 获取用户信息列表
 const getUserInfoList = async (formList: any) => {
   try {
-    const result = await userStore.getUserInfoList(formList)
+    const result = await userManage.getUserInfoList(formList)
     userInfoList.value = result[0]
     total.value = result[1]
     ElMessage.success({ message: '获取用户信息成功' })
@@ -215,10 +172,10 @@ const handleSelectionChange = (val: UserInfo[]) => {
   multipleSelection.value = val
 }
 // 编辑按钮
-// 删除按钮
+// 删除的确认按钮
 const deleteUserInfo = async (_id: string) => {
   try {
-    await userStore.deleteUserInfo(_id)
+    await userManage.deleteUserInfo(_id)
     getUserInfoList(formList)
     nextTick(() => {
       ElMessage.success({ message: '删除成功' })
@@ -231,7 +188,7 @@ const deleteUserInfo = async (_id: string) => {
 const deleteUserInfoList = async () => {
   const ids = multipleSelection.value.map((item) => ({ _id: item._id }))
   try {
-    await userStore.deleteUserInfoList(ids)
+    await userManage.deleteUserInfoList(ids)
     await getUserInfoList(formList)
     nextTick(() => {
       ElMessage.success({ message: '删除成功' })

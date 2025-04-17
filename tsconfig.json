@@ -5,6 +5,7 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "strict": true,
     "types": ["vite-plugin-svg-icons/client"],
     "baseUrl": ".", // 解析非相对模块的基地址，默认是当前目录
     "paths": {

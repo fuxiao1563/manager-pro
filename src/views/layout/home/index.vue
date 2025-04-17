@@ -28,6 +28,12 @@ import LineChart from './CardGroup/LineChart/index.vue'
 import PieChart from './CardGroup/PieChart/index.vue'
 import Project from './CardGroup/Project/index.vue'
 import Creative from './CardGroup/Creative/index.vue'
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
+import { onMounted } from 'vue'
+onMounted(async () => {
+  await userStore.getUserHome()
+})
 </script>
 
 <style scoped lang="scss">

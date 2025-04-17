@@ -49,7 +49,7 @@
             </el-button>
           </el-form-item>
           <el-form-item>
-            <el-button class="regist_button" :loading="loading" @click="">
+            <el-button class="regist_button" :loading="loading" @click="goBack">
               返回
             </el-button>
           </el-form-item>
@@ -99,6 +99,10 @@ const rules = reactive<FormRules<typeof authcodeForm>>({
 const authcodeLogin = () => {
   ElMessage.success('敬请期待')
   $router.push('/home')
+}
+// 返回按钮
+const goBack = () => {
+  $router.back()
 }
 </script>
 
