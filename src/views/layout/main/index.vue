@@ -25,16 +25,4 @@ watch(
   },
 )
 </script>
-<style lang="scss" scoped>
-.fade-enter-from {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  transition: all 0.3s;
-}
-
-.fade-enter-to {
-  opacity: 1;
-}
-</style>
+<style lang="scss" scoped></style>

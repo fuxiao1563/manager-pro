@@ -1,35 +1,56 @@
 // 管理相关仓库
 import { defineStore } from 'pinia'
 import {
-  reqUserInfoList,
   reqDeleteUserInfo,
   reqDeleteUserInfoList,
   reqAddUserInfo,
   reqUpdataUserInfo,
-} from '@/api/userManage'
+  reqSearchUserInfo,
+} from '@/api/userManage/index'
 import type {
   ResponseData,
-  SubUserManageInfoList,
   SubDetailUserInfo,
   UserManageInfoListResponseData,
   UserManageDeleteUserInfoListResponseData,
   SubUserManageDeleteUserInfoList,
-} from '@/api/user/type'
+  SubUserManageSearchUserInfo,
+} from '@/api/userManage/type'
 import type { ManageState } from './types/types'
 
-const useUserManageStore = defineStore('manage', {
+const useUserManageStore = defineStore('UserManage', {
   state: (): ManageState => {
     return {
       userInfoList: [],
-      deleteResults: [],
       total: 0,
+      searchSwitch: false,
+      searchFrom: {
+        username: '',
+        role: '',
+        status: '',
+        phone: '',
+        email: '',
+        gender: '',
+        skip: 0,
+        limit: 5,
+      },
       drawerSwitch: false,
+      drawerTitle: '',
+      userInfo: {
+        username: '',
+        role: '',
+        status: '',
+        phone: '',
+        email: '',
+        gender: '',
+      },
+      deleteResults: [],
     }
   },
   actions: {
-    // 用户管理的方法
-    async getUserInfoList(data: SubUserManageInfoList) {
-      const result: UserManageInfoListResponseData = await reqUserInfoList(data)
+    // 搜索用户信息的方法
+    async searchUserInfo(data: SubUserManageSearchUserInfo) {
+      const result: UserManageInfoListResponseData =
+        await reqSearchUserInfo(data)
       if (result.code === 200) {
         this.userInfoList = result.data.userInfoList
         this.total = result.data.total
@@ -37,7 +58,7 @@ const useUserManageStore = defineStore('manage', {
       } else return Promise.reject(new Error(result.message))
     },
 
-    // 添加用户的方法
+    // 新增用户的方法
     async addUserInfo(data: SubDetailUserInfo) {
       const result: ResponseData = await reqAddUserInfo(data)
       if (result.code === 200) return 'ok'
@@ -52,10 +73,11 @@ const useUserManageStore = defineStore('manage', {
     // 删除用户信息的方法
     async deleteUserInfo(_id: string) {
       const result: ResponseData = await reqDeleteUserInfo(_id)
+      console.log(result)
       if (result.code === 200) return 'ok'
       else return Promise.reject(new Error(result.message))
     },
-    // 批量删除用户信息的方法???????
+    // 批量删除用户信息的方法
     async deleteUserInfoList(ids: SubUserManageDeleteUserInfoList) {
       const result: UserManageDeleteUserInfoListResponseData =
         await reqDeleteUserInfoList(ids)

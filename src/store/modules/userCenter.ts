@@ -5,13 +5,13 @@ import {
   reqUserCenterInfo,
   reqUpdateUserCenterInfo,
   reqUpdateUserCenterPassword,
-} from '@/api/userCenter'
+} from '@/api/userCenter/index'
 import type {
   ResponseData,
   UserCenterInfoResponseData,
   SubUserCenterInfo,
   SubUserCenterPassword,
-} from '@/api/user/type'
+} from '@/api/userCenter/type'
 import { GET_TOKEN, SET_TOKEN } from '@/utils/token'
 const useUserCenterStore = defineStore('userCenter', {
   state: (): UserCenterState => {

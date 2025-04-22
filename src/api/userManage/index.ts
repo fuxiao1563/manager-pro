@@ -5,20 +5,21 @@ import type {
   SubDetailUserInfo,
   SubUserManageDeleteUserInfoList,
   UserManageDeleteUserInfoListResponseData,
+  SubUserManageSearchUserInfo,
 } from './type'
 
 enum API {
-  getUserInfoList_URL = '/manage/getUserInfoList',
   addUserInfo_URL = '/manage/addUserInfo',
   updataUserInfo_URL = '/manage/updataUserInfo',
   deleteUserInfo_URL = '/manage/deleteUserInfo/',
   deleteUserInfoList_URL = '/manage/deleteUserInfoList',
+  searchUserInfo_URL = '/userManage/searchUserInfo',
 }
 
-// 用户管理接口
-export const reqUserInfoList = (data: any) =>
+// 搜索接口
+export const reqSearchUserInfo = (data: SubUserManageSearchUserInfo) =>
   request.post<any, UserManageInfoListResponseData>(
-    API.getUserInfoList_URL,
+    API.searchUserInfo_URL,
     data,
   )
 // 添加用户接口

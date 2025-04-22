@@ -6,4 +6,5 @@ enum API {
 }
 
 // 主页
-export const reqUserHome = () => request.get<any, UserHome>(API.getUserHome_URL)
+export const reqGetUserHome = () =>
+  request.get<any, UserHome>(API.getUserHome_URL)

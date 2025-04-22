@@ -1,18 +1,20 @@
 <template>
-  <div class="layout_container">
+  <el-container class="container">
     <!-- 左侧菜单 -->
-    <div class="layout_slider" :class="{ fold: layoutStore.isCollapse }">
+    <div class="slider" :class="{ fold: layoutStore.isCollapse }">
       <Slider></Slider>
     </div>
-    <!-- 顶部导航 -->
-    <div class="layout_tabbar" :class="{ fold: layoutStore.isCollapse }">
-      <Tabbar></Tabbar>
-    </div>
-    <!-- 内容展示区域 -->
-    <div class="layout_main" :class="{ fold: layoutStore.isCollapse }">
-      <Main></Main>
-    </div>
-  </div>
+    <el-container class="inner">
+      <!-- 顶部导航 -->
+      <el-header class="data_tabbar" :class="{ fold: layoutStore.isCollapse }">
+        <Tabbar />
+      </el-header>
+      <!-- 内容展示区域 -->
+      <el-main class="main" :class="{ fold: layoutStore.isCollapse }">
+        <Main></Main>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script setup lang="ts">
@@ -24,12 +26,12 @@ const layoutStore = useLayoutStore()
 </script>
 
 <style scoped lang="scss">
-.layout_container {
+.container {
   width: 100%;
   height: 100vh;
   background: $layout-container-background;
 
-  .layout_slider {
+  .slider {
     position: fixed;
     width: $layout-menu-width;
     height: 100%;
@@ -43,37 +45,36 @@ const layoutStore = useLayoutStore()
       width: $layout-menu-min-width;
     }
   }
+  .inner {
+    .data_tabbar {
+      position: fixed;
+      width: calc(100% - $layout-menu-width - $layout-space);
+      height: $layout-tabbar-height;
+      background: $layout-container-item-background;
+      box-shadow: $layout-container-item-boxShadow;
+      top: 0;
+      left: $layout-menu-width + $layout-space;
+      transition: $layout-transition;
+      z-index: 100;
 
-  .layout_tabbar {
-    position: fixed;
-    width: calc(100% - $layout-menu-width - $layout-space);
-    height: $layout-tabbar-height;
-    background: $layout-container-item-background;
-    box-shadow: $layout-container-item-boxShadow;
-    top: 0;
-    left: $layout-menu-width + $layout-space;
-    transition: $layout-transition;
-    z-index: 100;
-
-    &.fold {
-      width: calc(100% - $layout-menu-min-width - $layout-space);
-      left: $layout-menu-min-width + $layout-space;
+      &.fold {
+        width: calc(100% - $layout-menu-min-width - $layout-space);
+        left: $layout-menu-min-width + $layout-space;
+      }
     }
-  }
 
-  .layout_main {
-    width: calc(100% - $layout-menu-width - $layout-space);
-    height: calc(100% - $layout-tabbar-height - $layout-space);
-    // background: $layout-container-item-background;
-    // box-shadow: $layout-container-item-boxShadow;
-    position: absolute;
-    top: $layout-tabbar-height + $layout-space;
-    left: $layout-menu-width + $layout-space;
-    transition: $layout-transition;
+    .main {
+      width: calc(100% - $layout-menu-width - $layout-space);
+      height: calc(100% - $layout-tabbar-height - $layout-space);
+      position: absolute;
+      top: $layout-tabbar-height + $layout-space;
+      left: $layout-menu-width + $layout-space;
+      transition: $layout-transition;
 
-    &.fold {
-      width: calc(100% - $layout-menu-min-width - $layout-space);
-      left: $layout-menu-min-width + $layout-space;
+      &.fold {
+        width: calc(100% - $layout-menu-min-width - $layout-space);
+        left: $layout-menu-min-width + $layout-space;
+      }
     }
   }
 }

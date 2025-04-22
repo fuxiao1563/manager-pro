@@ -28,7 +28,7 @@ watch(
 <style scoped lang="scss">
 .logo {
   width: 100%;
-  height: $layout-tabbar-height;
+  height: 50px;
   align-items: center;
   display: flex;
 

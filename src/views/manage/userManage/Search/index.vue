@@ -34,16 +34,6 @@
           </el-select>
         </el-form-item>
       </el-col>
-      <!-- 昵称 -->
-      <el-col :span="6">
-        <el-form-item label="昵称" prop="pieName">
-          <el-input
-            v-model="searchFrom.pieName"
-            placeholder="请输入昵称"
-            clearable
-          />
-        </el-form-item>
-      </el-col>
       <!-- 手机号 -->
       <el-col :span="6">
         <el-form-item label="手机号" prop="phone">
@@ -65,16 +55,17 @@
           />
         </el-form-item>
       </el-col>
-      <!-- 用户状态 -->
+
+      <!-- 角色 -->
       <el-col :span="6">
-        <el-form-item label="用户状态" prop="state">
+        <el-form-item label="角色" prop="role">
           <el-select
-            v-model="searchFrom.state"
-            placeholder="请选择用户状态"
+            v-model="searchFrom.role"
+            placeholder="请选择角色"
             clearable
           >
             <el-option
-              v-for="item in stateOpts"
+              v-for="item in roleOpts"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -82,54 +73,84 @@
           </el-select>
         </el-form-item>
       </el-col>
+      <!-- 用户状态 -->
+      <el-col :span="6">
+        <el-form-item label="用户状态" prop="status">
+          <el-select
+            v-model="searchFrom.status"
+            placeholder="请选择用户状态"
+            clearable
+          >
+            <el-option
+              v-for="item in statusOpts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="6"></el-col>
       <!-- 重置和搜索按钮 -->
-      <el-col :span="12">
-        <el-button plain @click="resetForm">重置</el-button>
-        <el-button type="primary" plain @click="">搜索</el-button>
+      <el-col :span="6">
+        <el-button plain @click="resetForm">
+          <el-icon>
+            <svg-icon name="refresh"></svg-icon>
+          </el-icon>
+          重置
+        </el-button>
+        <el-button type="primary" plain @click="search">
+          <el-icon>
+            <svg-icon name="search"></svg-icon>
+          </el-icon>
+          搜索
+        </el-button>
       </el-col>
     </el-row>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import type { FormRules } from 'element-plus'
+import { ref, reactive, toRefs } from 'vue'
+import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
   validatorPhone,
   validatorEmail,
 } from '@/utils/validator'
-// 收集搜索条件的数据
-const searchFrom = reactive({
-  username: '',
-  gender: '',
-  pieName: '',
-  phone: '',
-  email: '',
-  state: '',
-})
-// 性别选项
-const genderOpts = [
-  {
-    value: '男',
-    label: '男',
-  },
-  {
-    value: '女',
-    label: '女',
-  },
-]
-// 用户状态选项
-const stateOpts = [
-  {
-    value: '在线',
-    label: '在线',
-  },
-  {
-    value: '离线',
-    label: '离线',
-  },
-]
+import useUserManageStore from '@/store/modules/userManage'
+const userManage = useUserManageStore()
+// 搜索所需提交的表单
+const { searchFrom } = toRefs(userManage)
+const porps = defineProps<{
+  getUserInfoList: any
+}>()
+// 搜索按钮
+const search = async () => {
+  try {
+    await porps.getUserInfoList()
+    ElMessage.success({ message: '搜索成功' })
+  } catch (error) {
+    ElMessage.error({ message: '搜索失败' })
+  }
+}
+
+// 搜索重置按钮
+const resetForm = async () => {
+  try {
+    searchFrom.value.username = ''
+    searchFrom.value.gender = ''
+    searchFrom.value.phone = ''
+    searchFrom.value.email = ''
+    searchFrom.value.role = ''
+    searchFrom.value.status = ''
+    await porps.getUserInfoList()
+    ElMessage.success({ message: '重置成功' })
+  } catch (error) {
+    ElMessage.error({ message: '重置失败' })
+  }
+}
+
 // 获取表单元素
 const searchRef = ref()
 // 自定义表单校验
@@ -147,12 +168,52 @@ const rules = reactive<FormRules<typeof searchFrom>>({
     },
   ],
 })
-// 表单重置
-const resetForm = () => searchRef.value.resetFields()
+
+// 性别选项
+const genderOpts = [
+  {
+    value: '男',
+    label: '男',
+  },
+  {
+    value: '女',
+    label: '女',
+  },
+  {
+    value: '未知',
+    label: '未知',
+  },
+]
+// 状态选项
+const statusOpts = [
+  {
+    label: 'online',
+    value: 'online',
+  },
+  {
+    label: 'outline',
+    value: 'outline',
+  },
+  {
+    label: 'hidden',
+    value: 'hidden',
+  },
+]
+// 角色选项
+const roleOpts = [
+  {
+    label: 'common',
+    value: 'common',
+  },
+  {
+    label: 'admin',
+    value: 'admin',
+  },
+  {
+    label: 'super',
+    value: 'super',
+  },
+]
 </script>
 
-<style scoped lang="scss">
-.el-form-item {
-  width: 100%;
-}
-</style>
+<style scoped lang="scss"></style>

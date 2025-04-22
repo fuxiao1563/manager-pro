@@ -1,7 +1,7 @@
 <template>
-  <el-drawer v-model="userManage.drawerSwitch" :direction="direction">
+  <el-drawer ref="drawerRef" v-model="userManage.drawerSwitch">
     <template #header>
-      <h4>新增 & 编辑用户</h4>
+      <h4>{{ userManage.drawerTitle }}</h4>
     </template>
     <template #default>
       <div>
@@ -9,6 +9,10 @@
           <!-- 用户名 -->
           <el-form-item label="用户名" prop="username" required>
             <el-input v-model="userInfo.username" />
+          </el-form-item>
+          <!-- 角色 -->
+          <el-form-item label="角色" prop="role">
+            <el-segmented v-model="userInfo.role" :options="roleOptions" />
           </el-form-item>
           <!-- 性别  -->
           <el-form-item label="性别" prop="gender">
@@ -21,6 +25,10 @@
           <!-- 邮箱 -->
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="userInfo.email" placeholder="请输入邮箱" />
+          </el-form-item>
+          <!-- 状态 -->
+          <el-form-item label="状态" prop="status">
+            <el-segmented v-model="userInfo.status" :options="statusOptions" />
           </el-form-item>
         </el-form>
       </div>
@@ -35,37 +43,49 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, nextTick } from 'vue'
-import type { DrawerProps } from 'element-plus'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UserInfo } from '@/api/user/type'
-import useUserStore from '@/store/modules/user'
-const userStore = useUserStore()
+import { ref, toRefs } from 'vue'
+import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
-// 用户信息列表
-let userInfo = reactive<UserInfo>({ ...userStore.userInfo })
-// 获取表单ref
-const formRef = ref()
-// 性别选项
-const genderOptions = ['男', '女', '未知']
-// 抽屉参数
-const direction = ref<DrawerProps['direction']>('rtl')
+// 表单数据
+const { userInfo } = toRefs(userManage)
+// 抽屉相关方法
+const props = defineProps<{
+  getUserInfoList: any
+}>()
+
+// 抽屉确认按钮
+const confirmClick = async () => {
+  try {
+    if (userManage.drawerTitle === '新增用户') {
+      await userManage.addUserInfo(userManage.userInfo)
+    } else {
+      await userManage.updataUserInfo(userManage.userInfo)
+    }
+    userManage.drawerSwitch = false
+    await props.getUserInfoList()
+    ElMessage.success({
+      message:
+        userManage.drawerTitle === '新增用户' ? '新增用户成功' : '修改用户成功',
+    })
+  } catch (error) {
+    ElMessage.error({
+      message:
+        userManage.drawerTitle === '新增用户' ? '新增用户失败' : '修改用户失败',
+    })
+  }
+}
 // 抽屉取消按钮
 function cancelClick() {
   userManage.drawerSwitch = false
 }
-// 抽屉确认按钮
-const confirmClick = async () => {
-  try {
-    await userManage.addUserInfo(userInfo)
-    nextTick(() => {
-      ElMessage.success({ message: '添加用户成功' })
-    })
-  } catch (error) {
-    ElMessage.error({ message: '添加用户失败' })
-  }
-}
+
+// 获取表单ref
+const formRef = ref()
+// 选项
+const genderOptions = ['男', '女', '未知']
+const roleOptions = ['common', 'admin', 'super']
+const statusOptions = ['online', 'outline', 'hidden']
 </script>
 
 <style scoped lang="scss"></style>

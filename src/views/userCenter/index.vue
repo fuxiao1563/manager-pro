@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="userCenter">
     <template #header>
       <div>
         <span>用户中心</span>
@@ -66,21 +66,60 @@ import { Plus } from '@element-plus/icons-vue'
 // import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
-import type { UserInfo } from '@/api/user/type'
+import type { DetailUserInfoResponseData } from '@/api/userCenter/type'
 onMounted(async () => {
   try {
     await userCenterStore.getUserCenterInfo()
+    Object.assign(userInfo, userCenterStore.userInfo)
     ElMessage.success({ message: '获取用户信息成功' })
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })
   }
 })
 // 用户信息列表
-let userInfo = reactive<UserInfo>({ ...userStore.userInfo })
+let userInfo = reactive<DetailUserInfoResponseData>({
+  _id: '',
+  username: '',
+  role: '',
+  status: '',
+  avatar: '',
+  phone: '',
+  email: '',
+  gender: '',
+  signature: '',
+})
 // 获取表单ref
 const formRef = ref()
 // 性别选项
 const genderOptions = ['男', '女', '未知']
+// 提交按钮
+const submitForm = async () => {
+  try {
+    await userCenterStore.updateUserCenterInfo(userInfo)
+    ElMessage.success({ message: '提交成功' })
+    await userCenterStore.getUserCenterInfo()
+    Object.assign(userInfo, userCenterStore.userInfo)
+  } catch (error) {
+    ElMessage.error({ message: '提交失败' })
+  }
+}
+// 重置按钮 重置为初始值。未完成
+const resetForm = () => formRef.value.resetFields()
+// 清空按钮
+const clearForm = () => {
+  userInfo = {
+    _id: userCenterStore.userInfo._id,
+    username: '',
+    role: '',
+    status: '',
+    avatar: '',
+    phone: '',
+    email: '',
+    gender: '',
+    signature: '',
+  }
+}
+
 /**
  * 处理头像上传成功的回调函数
  * @param response 服务器返回的响应数据
@@ -108,32 +147,6 @@ const genderOptions = ['男', '女', '未知']
 //   }
 //   return true
 // }
-// 提交按钮
-const submitForm = async () => {
-  try {
-    await userStore.updateUserInfo(userInfo)
-    ElMessage.success({ message: '提交成功' })
-  } catch (error) {
-    ElMessage.error({ message: '提交失败' })
-  }
-}
-// 重置按钮
-const resetForm = () => formRef.value.resetFields()
-// 清空按钮
-const clearForm = () => {
-  userInfo = {
-    _id: userStore.userInfo._id,
-    username: '',
-    password: userStore.userInfo.password,
-    phone: '',
-    gender: '',
-    email: '',
-    role: '',
-    avatar: '',
-    status: '',
-    signature: '',
-  }
-}
 </script>
 
 <style scoped lang="scss">

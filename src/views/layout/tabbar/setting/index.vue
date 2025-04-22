@@ -43,9 +43,8 @@ const handleFullScreen = () => {
 }
 // 退出登录按钮的回调
 const logout = async () => {
-  const username = 'admin'
   try {
-    await userStore.userLogout(username)
+    await userStore.userLogout()
     $router.push('/user/login')
     ElMessage.success({ message: '退出登录成功' })
   } catch (error) {

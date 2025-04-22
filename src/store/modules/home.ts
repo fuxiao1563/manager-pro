@@ -1,9 +1,9 @@
 //创建主页相关的小仓库
 import { defineStore } from 'pinia'
-import { reqUserHome } from '@/api/home'
+import { reqGetUserHome } from '@/api/home/index'
 import type { UserHome } from '@/api/home/type'
 import type { HomeState } from './types/types'
-const useHomeStore = defineStore('User', {
+const useHomeStore = defineStore('Home', {
   state: (): HomeState => {
     return {
       userInfo: {
@@ -17,7 +17,7 @@ const useHomeStore = defineStore('User', {
   actions: {
     // 主页
     async getUserHome() {
-      const result: UserHome = await reqUserHome()
+      const result: UserHome = await reqGetUserHome()
       if (result.code === 200) {
         this.userInfo.username = result.data.username
         this.userInfo.avatar = result.data.avatar

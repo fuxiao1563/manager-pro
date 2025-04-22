@@ -2,7 +2,7 @@
   <el-row class="admin-content" :gutter="20">
     <el-col class="card-admin-left" :span="18">
       <el-avatar :size="70">
-        <img :src="userStore.userInfo.avatar" alt="" />
+        <img :src="avatar" alt="" />
       </el-avatar>
       <div class="left-item">
         <h3 class="left-title">{{ adminTitleForm.title }}</h3>
@@ -25,11 +25,23 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import useUserStore from '@/store/modules/user'
-const userStore = useUserStore()
+import { reactive, ref } from 'vue'
+import useHomeStore from '@/store/modules/home'
+const homeStore = useHomeStore()
+import { onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+onMounted(async () => {
+  try {
+    await homeStore.getUserHome()
+    avatar.value = homeStore.userInfo.avatar
+    adminTitleForm.title = homeStore.userInfo.signature
+  } catch (error) {
+    ElMessage.error({ message: '用户信息获取失败' })
+  }
+})
+const avatar = ref('')
 const adminTitleForm = reactive({
-  title: userStore.userInfo.signature,
+  title: '',
   subTitle: '今日多云转晴，20℃ - 25℃!',
 })
 const adminProInfoForm = reactive([
