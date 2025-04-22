@@ -20,7 +20,7 @@ router.post('/user/logout', userController.userLogout)
 
 
 // 首页接口
-router.get('/userHome', userController.userHome)
+router.get('/userHome', userController.getUserHome)
 
 
 
@@ -35,16 +35,17 @@ router.post('/userCenter/uploadUserAvatar', upload.single('file'), manageControl
 
 
 
-// 用户管理接口
-router.post('/manage/getUserInfoList', manageController.userInfoList)
+// 搜索接口
+router.post('/userManage/searchUserInfo', manageController.searchUserInfo)
 // 添加用户接口
 router.post('/manage/addUserInfo', manageController.addUserInfo)
-// 编辑用户接口
+// 修改用户接口
 router.patch('/manage/updataUserInfo', manageController.editUserInfo)
 // 删除用户接口
 router.delete('/manage/deleteUserInfo/:_id', manageController.deleteUserInfo)
 // 批量删除用户接口
 router.post('/manage/deleteUserInfoList', manageController.deleteUserInfoList)
+
 
 
 

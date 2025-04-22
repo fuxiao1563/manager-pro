@@ -78,7 +78,7 @@ exports.userLogout = async (req, res) => {
  * 主页
  * @returns data
  */
-exports.userHome = async (req, res) => {    
+exports.getUserHome = async (req, res) => {    
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
