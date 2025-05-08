@@ -1,4 +1,5 @@
 const UserModel = require('../models/UserModel');
+const UserAvatarModel = require('../models/UserAvatarModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../jwtConfig/index');
@@ -30,7 +31,7 @@ exports.userLogin = async (req, res) => {
             ...data,
             password: '',
         }
-        const tokenStr = jwt.sign(user, jwtConfig.jwtSecretKey); 
+        const tokenStr = jwt.sign(user, jwtConfig.jwtSecretKey);
         res.json({
             code: 200,
             message: '账号登录成功',
@@ -71,14 +72,29 @@ exports.userLogout = async (req, res) => {
         res.err('服务器内部错误')
     }
 }
-
+// 获取头像
+exports.getUserAvatar = async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) return res.err('token不存在')
+    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
+    const { username } = decoded
+    if (!username) return res.err('无效的认证信息')
+    try {
+        const data = await UserAvatarModel
+            .findOne({ username })
+            .select({ avatarUrl: 1 })
+        res.json({ code: 200, message: '获取头像成功', data });
+    } catch (error) {
+        res.err('服务器内部错误')
+    }
+}
 
 
 /**
  * 主页
  * @returns data
  */
-exports.getUserHome = async (req, res) => {    
+exports.getUserHome = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
@@ -87,7 +103,7 @@ exports.getUserHome = async (req, res) => {
     try {
         const data = await UserModel
             .findOne({ username })
-            .select({ username: 1, avatar: 1, signature: 1 })
+            .select({ username: 1, signature: 1 })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '获取成功', data });
     } catch (error) {

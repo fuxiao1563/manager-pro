@@ -17,7 +17,8 @@ router.post('/user/login', userController.userLogin)
 router.post('/user/regist', userController.userRegist)
 // 退出登录接口
 router.post('/user/logout', userController.userLogout)
-
+// 获取头像接口
+router.get('/user/getUserAvatar', userController.getUserAvatar)
 
 // 首页接口
 router.get('/userHome', userController.getUserHome)

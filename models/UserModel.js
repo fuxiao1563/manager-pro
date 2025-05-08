@@ -25,10 +25,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '未知'
     },
-    avatar: {
-        type: String,
-        default: 'https://img.yzcdn.cn/vant/cat.jpeg'
-    },
     gender: {
         type: String,
         enum: ['男', '女', '未知'],

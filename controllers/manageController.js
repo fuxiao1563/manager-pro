@@ -22,7 +22,7 @@ exports.userInfo = async (req, res) => {
     try {
         const data = await UserModel
             .findOne({ username })
-            .select({ username: 1, phone: 1, email: 1, avatar: 1, gender: 1, status: 1, signature: 1 })
+            .select({ username: 1, phone: 1, email: 1, gender: 1, status: 1, signature: 1 })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
@@ -34,32 +34,27 @@ exports.userInfo = async (req, res) => {
  * @returns data token
  */
 exports.updataUserInfo = async (req, res) => {
+    console.log(req.body)
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { username: oldUsername } = decoded
     if (!oldUsername) return res.err('无效的认证信息')
-    // status暂不考虑
-    const { avatar, username: newUsername, gender, phone, email, status, signature } = req.body
+    const { username: newUsername, gender, phone, email, status, signature } = req.body
     try {
         const data = await UserModel.findOneAndUpdate(
             { username: oldUsername },
-            { username: avatar, newUsername, gender, phone, email, status, signature },
+            { username: newUsername, gender, phone, email, status, signature },
             { new: true })
         if (data === null) return res.err('账号不存在')
-        const user = {
-            ...data,
-            password: '',
-            avatar: '',
-        }
-        const tokenStr = jwt.sign(user, jwtConfig.jwtSecretKey);
+        const tokenStr = jwt.sign(data.toObject(), jwtConfig.jwtSecretKey);
         res.json({
             code: 200,
             message: '信息修改成功',
             token: 'Bearer ' + tokenStr
         });
     } catch (error) {
-        res.err('服务器内部错误')
+        res.err(error)
     }
 }
 // 修改密码
@@ -84,29 +79,32 @@ exports.updataPassword = async (req, res) => {
 }
 // 上传头像
 exports.uploadUserAvatar = async (req, res) => {
-    const { username } = req.body;
-    if (!username) return res.err('账号不能为空')
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) return res.err('token不存在')
+    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
+    const { username } = decoded
+    if (!username) return res.err('无效的认证信息')
     if (!req.file) return res.err('头像未上传')
     const { filename: oldName, originalname: newName } = req.file
-    // 文件名可能重复
-    fs.renameSync('./public/upload/' + oldName, './public/upload/' + newName)
+    fs.renameSync(`./public/upload/${oldName}`, `./public/upload/${username}-${newName}`)
     try {
-        const imageId = crypto.randomUUID()
-        const imageUrl = `http://127.0.0.1:3007/upload/${newName}`
+        const avatarId = crypto.randomUUID()
+        const avatarUrl = `http://localhost:27017/upload/${username}-${newName}`
         const reuslt = await UserAvatarModel.findOne({ username })
         let data;
         if (reuslt) {
             data = await UserAvatarModel
                 .findOneAndUpdate(
                     { username },
-                    { username, imageUrl, imageId })
+                    { avatarUrl, avatarId },
+                    { new: true })
         } else {
-            data = await UserAvatarModel.create({ username, imageUrl, imageId })
+            data = await UserAvatarModel.create({ username, avatarUrl, avatarId })
         }
         if (data === null) return res.err('上传失败')
         res.json({ code: 200, message: '上传成功', data })
     } catch (error) {
-        res.err('服务器内部错误')
+        res.err(error)
     }
 }
 
@@ -153,11 +151,18 @@ exports.addUserInfo = async (req, res) => {
     if (CtrlRole !== 'super' && CtrlRole !== 'admin' && CtrlRole !== 'common') return res.err('角色无权限')
     let { username, role, status, phone, email, gender } = req.body
     if (!username) return res.err('账号不能为空')
+    const query = {}
+    if (username) query.username = username
+    if (role) query.role = role
+    if (status) query.status = status
+    if (phone) query.phone = phone
+    if (email) query.email = email
+    if (gender) query.gender = gender
     try {
         const result = await UserModel.findOne({ username })
         if (result) return res.err('账号已存在')
-        const password = bcryptjs.hashSync('admin', 10)
-        await UserModel.create({ username, password, role, status, phone, email, gender })
+        query.password = bcryptjs.hashSync('admin', 10)
+        await UserModel.create(query)
         res.json({ code: 200, message: '用户添加成功, 默认密码为admin' })
     } catch (error) {
         res.err('服务器内部错误')
