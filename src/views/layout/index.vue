@@ -12,6 +12,15 @@
       <!-- 内容展示区域 -->
       <el-main class="main" :class="{ fold: layoutStore.isCollapse }">
         <Main></Main>
+        <el-footer class="footer">
+          <el-link
+            type="primary"
+            href="https://github.com/fuxiao1563/manager-pro"
+            target="_blank"
+          >
+            Copyright MIT © 2025 manager
+          </el-link>
+        </el-footer>
       </el-main>
     </el-container>
   </el-container>
@@ -45,6 +54,7 @@ const layoutStore = useLayoutStore()
       width: $layout-menu-min-width;
     }
   }
+
   .inner {
     .data_tabbar {
       position: fixed;
@@ -74,6 +84,11 @@ const layoutStore = useLayoutStore()
       &.fold {
         width: calc(100% - $layout-menu-min-width - $layout-space);
         left: $layout-menu-min-width + $layout-space;
+      }
+
+      .footer {
+        padding-top: 20px;
+        text-align: center;
       }
     }
   }

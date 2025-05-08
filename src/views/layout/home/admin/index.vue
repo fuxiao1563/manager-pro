@@ -5,7 +5,7 @@
         <img :src="avatar" alt="" />
       </el-avatar>
       <div class="left-item">
-        <h3 class="left-title">{{ adminTitleForm.title }}</h3>
+        <h3 class="left-title">{{ userInfo.signature }}</h3>
         <p class="left-subtitle">{{ adminTitleForm.subTitle }}</p>
       </div>
     </el-col>
@@ -25,23 +25,21 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, toRefs } from 'vue'
 import useHomeStore from '@/store/modules/home'
 const homeStore = useHomeStore()
 import { onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
+const { userInfo, avatar } = toRefs(homeStore)
 onMounted(async () => {
   try {
     await homeStore.getUserHome()
-    avatar.value = homeStore.userInfo.avatar
-    adminTitleForm.title = homeStore.userInfo.signature
+    await homeStore.getUserAvatar()
   } catch (error) {
     ElMessage.error({ message: '用户信息获取失败' })
   }
 })
-const avatar = ref('')
 const adminTitleForm = reactive({
-  title: '',
   subTitle: '今日多云转晴，20℃ - 25℃!',
 })
 const adminProInfoForm = reactive([

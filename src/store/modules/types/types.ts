@@ -3,6 +3,7 @@ import type {
   DetailUserInfoResponseData,
   SubDetailUserInfo,
 } from '@/api/userManage/type'
+import type { DetailUserCenterInfo } from '@/api/userCenter/type'
 export interface UserState {
   userInfo: {
     username: string
@@ -15,13 +16,14 @@ export interface UserState {
 export interface HomeState {
   userInfo: {
     username: string
-    avatar: string
     signature: string
   }
+  avatar: string
 }
 
 export interface UserCenterState {
-  userInfo: DetailUserInfoResponseData
+  userInfo: DetailUserCenterInfo
+  avatar: string
   token: string | null
 }
 

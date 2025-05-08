@@ -17,3 +17,10 @@ export interface LoginResponseData extends ResponseData {
     role: string
   }
 }
+
+// 获取头像返回的数据
+export interface UserAvatarResponseData extends ResponseData {
+  data: {
+    avatarUrl: string
+  }
+}

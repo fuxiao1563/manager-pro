@@ -2,7 +2,11 @@
   <el-button icon="Refresh" size="small" circle @click="handleRefresh" />
   <el-button icon="FullScreen" size="small" circle @click="handleFullScreen" />
   <el-dropdown class="tabbar_admin">
-    <span class="el-dropdown-link">{{ userStore.userInfo.username }}</span>
+    <template #default>
+      <el-avatar :size="30">
+        <img :src="avatar" />
+      </el-avatar>
+    </template>
     <template #dropdown>
       <el-dropdown-menu>
         <!-- 用户中心 -->
@@ -32,6 +36,10 @@ const $router = useRouter()
 import { ElMessage } from 'element-plus'
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
+import useUserCenterStore from '@/store/modules/userCenter'
+import { toRefs } from 'vue'
+const userCenterStore = useUserCenterStore()
+const { avatar } = toRefs(userCenterStore)
 // 刷新页面按钮的回调
 const handleRefresh = () => {
   layoutStore.refresh = !layoutStore.refresh

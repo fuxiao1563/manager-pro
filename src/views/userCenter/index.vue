@@ -14,8 +14,19 @@
     >
       <!-- 上传头像 -->
       <el-form-item label="上传头像" prop="avatar">
-        <el-upload class="avatar-uploader" action="" :show-file-list="false">
-          <img v-if="userInfo.avatar" :src="userInfo.avatar" class="avatar" />
+        <el-upload
+          class="avatar-uploader"
+          :headers="headerAuthor"
+          action="http://localhost:27017/userCenter/uploadUserAvatar"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload"
+        >
+          <img
+            v-if="userCenterStore.avatar"
+            :src="userCenterStore.avatar"
+            class="avatar"
+          />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
@@ -60,34 +71,46 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-// import type { UploadProps } from 'element-plus'
+import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
-import type { DetailUserInfoResponseData } from '@/api/userCenter/type'
+import { GET_TOKEN } from '@/utils/token'
+
+//处理头像上传成功的回调函数
+const headerAuthor = ref({ Authorization: GET_TOKEN() })
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  userCenterStore.avatar = response.data.avatarUrl
+}
+//在头像上传之前的钩子函数
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (
+    rawFile.type !== 'image/jpeg' &&
+    rawFile.type !== 'image/jpg' &&
+    rawFile.type !== 'image/png' &&
+    rawFile.type !== 'image/PNG'
+  ) {
+    ElMessage.error('图片格式错误，请重新上传')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 5) {
+    ElMessage.error('图片尺寸超过5MB，请重新上传')
+    return false
+  }
+  return true
+}
 onMounted(async () => {
   try {
     await userCenterStore.getUserCenterInfo()
-    Object.assign(userInfo, userCenterStore.userInfo)
+    await userCenterStore.getUserAvatar()
     ElMessage.success({ message: '获取用户信息成功' })
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })
   }
 })
 // 用户信息列表
-let userInfo = reactive<DetailUserInfoResponseData>({
-  _id: '',
-  username: '',
-  role: '',
-  status: '',
-  avatar: '',
-  phone: '',
-  email: '',
-  gender: '',
-  signature: '',
-})
+const { userInfo } = toRefs(userCenterStore)
 // 获取表单ref
 const formRef = ref()
 // 性别选项
@@ -95,64 +118,35 @@ const genderOptions = ['男', '女', '未知']
 // 提交按钮
 const submitForm = async () => {
   try {
-    await userCenterStore.updateUserCenterInfo(userInfo)
-    ElMessage.success({ message: '提交成功' })
+    await userCenterStore.updateUserCenterInfo(userInfo.value)
     await userCenterStore.getUserCenterInfo()
-    Object.assign(userInfo, userCenterStore.userInfo)
+    ElMessage.success({ message: '修改成功' })
   } catch (error) {
-    ElMessage.error({ message: '提交失败' })
+    console.log(error)
+    ElMessage.error({ message: '修改失败' })
   }
 }
 // 重置按钮 重置为初始值。未完成
 const resetForm = () => formRef.value.resetFields()
 // 清空按钮
 const clearForm = () => {
-  userInfo = {
-    _id: userCenterStore.userInfo._id,
+  userInfo.value = {
+    _id: userInfo.value._id,
     username: '',
-    role: '',
     status: '',
-    avatar: '',
     phone: '',
     email: '',
     gender: '',
     signature: '',
   }
 }
-
-/**
- * 处理头像上传成功的回调函数
- * @param response 服务器返回的响应数据
- * @param uploadFile 上传的文件对象
- */
-// const handleAvatarSuccess: UploadProps['onSuccess'] = (
-//   response,
-//   uploadFile
-// ) => {
-//   imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-// }
-/**
- * 在头像上传之前的钩子函数
- * 用于检查上传文件的类型和大小
- * @param rawFile 原始文件对象
- * @returns 如果文件类型或大小不符合要求，则返回false，否则返回true
- */
-// const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-//   if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/jpg' && rawFile.type !== 'image/png' && rawFile.type !== 'image/PNG') {
-//     ElMessage.error('Avatar picture must be JPG format!')
-//     return false
-//   } else if (rawFile.size / 1024 / 1024 > 5) {
-//     ElMessage.error('Avatar picture size can not exceed 2MB!')
-//     return false
-//   }
-//   return true
-// }
 </script>
 
 <style scoped lang="scss">
 .avatar-uploader .avatar {
   width: 178px;
   height: 178px;
+  border-radius: 10px;
   display: block;
 }
 

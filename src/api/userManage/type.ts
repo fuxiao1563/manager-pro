@@ -16,6 +16,7 @@ export interface SubDetailUserInfo {
 // 返回的完整用户信息类型
 export interface DetailUserInfoResponseData extends SubDetailUserInfo {
   _id: string
+  signature: string
 }
 
 // 搜索用户所需提交的数据

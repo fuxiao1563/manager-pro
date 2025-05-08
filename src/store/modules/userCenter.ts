@@ -8,11 +8,14 @@ import {
 } from '@/api/userCenter/index'
 import type {
   ResponseData,
+  DetailUserCenterInfo,
   UserCenterInfoResponseData,
-  SubUserCenterInfo,
+  UpdataUserCenterInfoResponseData,
   SubUserCenterPassword,
 } from '@/api/userCenter/type'
 import { GET_TOKEN, SET_TOKEN } from '@/utils/token'
+import { reqUserAvatar } from '@/api/user'
+import type { UserAvatarResponseData } from '@/api/user/type'
 const useUserCenterStore = defineStore('userCenter', {
   state: (): UserCenterState => {
     return {
@@ -22,11 +25,10 @@ const useUserCenterStore = defineStore('userCenter', {
         phone: '',
         gender: '',
         email: '',
-        role: '',
-        avatar: '',
         status: '',
         signature: '',
       },
+      avatar: '',
       token: GET_TOKEN(),
     }
   },
@@ -37,18 +39,25 @@ const useUserCenterStore = defineStore('userCenter', {
       if (result.code === 200) {
         this.userInfo = result.data
         return 'ok'
-      } else {
-        return Promise.reject(new Error(result.message))
-      }
+      } else return Promise.reject(new Error(result.message))
+    },
+    // 获取头像
+    async getUserAvatar() {
+      const result: UserAvatarResponseData = await reqUserAvatar()
+      if (result.code === 200) {
+        this.avatar = result.data.avatarUrl
+        return 'ok'
+      } else return Promise.reject(new Error(result.message))
     },
     // 修改用户信息的方法
-    async updateUserCenterInfo(data: SubUserCenterInfo) {
-      const result: UserCenterInfoResponseData =
+    async updateUserCenterInfo(data: DetailUserCenterInfo) {
+      const result: UpdataUserCenterInfoResponseData =
         await reqUpdateUserCenterInfo(data)
-      this.token = result.token
-      SET_TOKEN(result.token)
-      if (result.code === 200) return 'ok'
-      else return Promise.reject(new Error(result.message))
+      if (result.code === 200) {
+        this.token = result.token
+        SET_TOKEN(result.token)
+        return 'ok'
+      } else return Promise.reject(new Error(result.message))
     },
     // 修改密码
     async updateUserCenterPassword(data: SubUserCenterPassword) {
@@ -56,7 +65,6 @@ const useUserCenterStore = defineStore('userCenter', {
       if (result.code === 200) return 'ok'
       else return Promise.reject(new Error(result.message))
     },
-    // 上传头像
   },
 })
 export default useUserCenterStore

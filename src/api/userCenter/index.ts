@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 import type {
   ResponseData,
+  DetailUserCenterInfo,
   UserCenterInfoResponseData,
-  SubUserCenterInfo,
+  UpdataUserCenterInfoResponseData,
   SubUserCenterPassword,
 } from './type'
 
@@ -15,8 +16,8 @@ enum API {
 export const reqUserCenterInfo = () =>
   request.get<any, UserCenterInfoResponseData>(API.getUserCenterInfo_URL)
 // 修改用户信息接口
-export const reqUpdateUserCenterInfo = (data: SubUserCenterInfo) =>
-  request.patch<any, UserCenterInfoResponseData>(
+export const reqUpdateUserCenterInfo = (data: DetailUserCenterInfo) =>
+  request.patch<any, UpdataUserCenterInfoResponseData>(
     API.updataUserCenterInfo_URL,
     data,
   )

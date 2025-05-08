@@ -7,7 +7,6 @@ export interface ResponseData {
 export interface UserHome extends ResponseData {
   data: {
     username: string
-    avatar: string
     signature: string
   }
 }
