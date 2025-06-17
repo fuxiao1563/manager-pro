@@ -1,4 +1,13 @@
 <template>
+  <el-button type="danger" size="small" @click="">主题??</el-button>
+  <el-button type="danger" size="small" @click="">语言??</el-button>
+  <el-badge :is-dot="true" class="item" style="margin: 0 12px">
+    <el-button type="danger" size="small" @click="">
+      <el-icon>
+        <Message />
+      </el-icon>
+    </el-button>
+  </el-badge>
   <el-button icon="Refresh" size="small" circle @click="handleRefresh" />
   <el-button icon="FullScreen" size="small" circle @click="handleFullScreen" />
   <el-dropdown class="tabbar_admin">

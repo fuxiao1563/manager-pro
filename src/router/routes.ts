@@ -77,6 +77,39 @@ const constantRoutes = [
       },
     ],
   },
+  // 公告管理
+  {
+    path: '/notice',
+    name: 'notice',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: '公告管理',
+      icon: 'notice',
+      hidden: false,
+    },
+    children: [
+      {
+        path: '/notice/board',
+        name: 'board',
+        component: () => import('@/views/notice/board/index.vue'),
+        meta: {
+          title: '公告栏？',
+          icon: 'board',
+          hidden: false,
+        },
+      },
+      {
+        path: '/notice/bin',
+        name: 'bin',
+        component: () => import('@/views/notice/bin/index.vue'),
+        meta: {
+          title: '回收站？',
+          icon: 'bin',
+          hidden: false,
+        },
+      },
+    ],
+  },
   // 用户中心
   {
     path: '/userCenter_layout',
@@ -94,7 +127,7 @@ const constantRoutes = [
         component: () => import('@/views/userCenter/index.vue'),
         meta: {
           title: '用户中心',
-          icon: 'login',
+          icon: 'userCenter',
           hidden: false,
         },
       },
@@ -102,19 +135,19 @@ const constantRoutes = [
   },
   // 系统管理
   {
-    path: '/manage',
-    name: 'manage',
+    path: '/system',
+    name: 'system',
     component: () => import('@/views/layout/index.vue'),
     meta: {
       title: '系统管理',
-      icon: 'manage',
+      icon: 'system',
       hidden: false,
     },
     children: [
       {
-        path: '/manage/userManage',
+        path: '/system/userManage',
         name: 'userManage',
-        component: () => import('@/views/manage/userManage/index.vue'),
+        component: () => import('@/views/system/userManage/index.vue'),
         meta: {
           title: '用户管理',
           icon: 'userManage',
@@ -122,22 +155,88 @@ const constantRoutes = [
         },
       },
       {
-        path: '/manage/roleManage',
+        path: '/system/roleManage',
         name: 'roleManage',
-        component: () => import('@/views/manage/roleManage/index.vue'),
+        component: () => import('@/views/system/roleManage/index.vue'),
         meta: {
-          title: '角色管理??',
+          title: '角色管理',
           icon: 'roleManage',
           hidden: false,
         },
       },
       {
-        path: '/manage/menuManage',
+        path: '/system/companyManage',
+        name: 'companyManage',
+        component: () => import('@/views/system/companyManage/index.vue'),
+        meta: {
+          title: '公司管理？',
+          icon: 'companyManage',
+          hidden: false,
+        },
+      },
+      {
+        path: '/system/menuManage',
         name: 'menuManage',
-        component: () => import('@/views/manage/menuManage/index.vue'),
+        component: () => import('@/views/system/menuManage/index.vue'),
         meta: {
           title: '菜单管理',
           icon: 'menuManage',
+          hidden: false,
+        },
+      },
+    ],
+  },
+  // 文件管理
+  {
+    path: '/file',
+    name: 'file',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: '文件管理',
+      icon: 'file',
+      hidden: false,
+    },
+    children: [
+      {
+        path: '/file/fileManage',
+        name: 'fileManage',
+        component: () => import('@/views/file/fileManage/index.vue'),
+        meta: {
+          title: '文件管理？',
+          icon: 'file',
+          hidden: false,
+        },
+      },
+    ],
+  },
+  // 日志管理
+  {
+    path: '/log',
+    name: 'log',
+    component: () => import('@/views/layout/index.vue'),
+    meta: {
+      title: '日志管理',
+      icon: 'log',
+      hidden: false,
+    },
+    children: [
+      {
+        path: '/log/ctrLog',
+        name: 'ctrLog',
+        component: () => import('@/views/log/ctrLog/index.vue'),
+        meta: {
+          title: '操作日志？',
+          icon: 'ctrLog',
+          hidden: false,
+        },
+      },
+      {
+        path: '/log/loginLog',
+        name: 'loginLog',
+        component: () => import('@/views/log/loginLog/index.vue'),
+        meta: {
+          title: '登录日志？',
+          icon: 'loginLog',
           hidden: false,
         },
       },

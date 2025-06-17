@@ -3,7 +3,7 @@
     <template #header>
       <div class="header">
         <div>
-          <span>用户管理</span>
+          <span>角色管理</span>
         </div>
         <div>
           <el-button type="primary" plain @click="handleAddUserInfo">
@@ -72,63 +72,35 @@
         width="60"
         align="center"
       />
-      <!-- 用户名 -->
-      <el-table-column
-        v-if="colSetting.username"
-        prop="username"
-        label="用户名"
-        min-width="100"
-        align="center"
-      />
-      <!-- 性别 -->
-      <el-table-column
-        v-if="colSetting.gender"
-        prop="gender"
-        label="性别"
-        width="60"
-        align="center"
-      />
-      <!-- 手机号 -->
-      <el-table-column
-        v-if="colSetting.phone"
-        prop="phone"
-        label="手机号"
-        min-width="120"
-        align="center"
-      />
-      <!-- 邮箱 -->
-      <el-table-column
-        v-if="colSetting.email"
-        prop="email"
-        label="邮箱"
-        min-width="180"
-        align="center"
-      />
-      <!-- 角色 -->
+      <!-- 角色名称 -->
       <el-table-column
         v-if="colSetting.role"
         prop="role"
-        label="角色"
+        label="角色名称"
         min-width="100"
         align="center"
       />
-      <!-- 用户状态 -->
+      <!-- 角色描述 -->
+      <el-table-column
+        v-if="colSetting.role"
+        prop="role"
+        label="角色描述"
+        min-width="100"
+        align="center"
+      />
+      <!-- 角色状态 -->
       <el-table-column
         v-if="colSetting.status"
-        label="用户状态"
+        label="角色状态"
         width="100"
         align="center"
       >
         <template #default="item">
-          <el-tag
-            v-if="item.row.status === 'online'"
-            type="success"
-            size="small"
-          >
+          <el-tag v-if="item.row.status === 'on'" type="success" size="small">
             {{ item.row.status }}
           </el-tag>
           <el-tag
-            v-else-if="item.row.status === 'outline'"
+            v-else-if="item.row.status === 'off'"
             type="danger"
             size="small"
           >
@@ -142,7 +114,7 @@
         v-if="colSetting.ctrl"
         prop="_id"
         label="操作"
-        min-width="150"
+        width="150"
         align="center"
       >
         <template #="{ row }">
@@ -175,14 +147,31 @@
 
 <script setup lang="ts">
 import { ElMessage, type TableInstance } from 'element-plus'
-import { ref, nextTick, toRefs } from 'vue'
+import { ref, nextTick } from 'vue'
 import type {
   DetailUserInfoResponseData,
   SubDetailUserInfo,
 } from '@/api/userManage/type'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
-const { userInfoList } = toRefs(userManage)
+// const { userInfoList } = toRefs(userManage)
+let userInfoList = ref([
+  {
+    role: 'admin',
+    descripte: '这是角色描述',
+    status: 'on',
+  },
+  {
+    role: 'common',
+    descripte: '这是角色描述',
+    status: 'off',
+  },
+  {
+    role: 'super',
+    descripte: '这是角色描述',
+    status: 'on',
+  },
+])
 // 表格ref
 const flag = ref(true)
 // 多选框ref
@@ -194,28 +183,24 @@ const handleSelectionChange = (val: DetailUserInfoResponseData[]) => {
 }
 const props = defineProps<{
   colSetting: any
-  getUserInfoList: () => void
+  // getUserInfoList: () => void
 }>()
-// 新增用户按钮
+// 新增角色按钮
 const handleAddUserInfo = () => {
   userManage.drawerSwitch = true
-  userManage.drawerTitle = '新增用户'
+  userManage.drawerTitle = '新增角色'
   Object.assign(userManage.userInfo, {
-    username: '',
     role: '',
-    avatar: '',
+    descripte: '',
     status: '',
-    phone: '',
-    email: '',
-    gender: '',
   })
 }
 // 批量删除按钮
 const deleteUserInfoList = async () => {
-  const ids = multipleSelection.value.map((item: any) => ({ _id: item._id }))
+  // const ids = multipleSelection.value.map((item: any) => ({ _id: item._id }))
   try {
-    await userManage.deleteUserInfoList(ids as any)
-    await props.getUserInfoList()
+    // await userManage.deleteUserInfoList(ids as any)
+    // await props.getUserInfoList()
     ElMessage.success({ message: '删除成功' })
   } catch (error) {
     ElMessage.error({ message: '删除失败' })
@@ -226,7 +211,7 @@ const refresh = async () => {
   flag.value = false
   nextTick(async () => {
     flag.value = true
-    await props.getUserInfoList()
+    // await props.getUserInfoList()
     ElMessage.success({ message: '刷新成功' })
   })
 }
@@ -234,25 +219,22 @@ const refresh = async () => {
 const checkboxOptions = ref({
   check: { label: '勾选' },
   index: { label: '序号' },
-  username: { label: '用户名' },
-  gender: { label: '性别' },
-  phone: { label: '手机号' },
-  email: { label: '邮箱' },
-  role: { label: '角色' },
-  status: { label: '状态' },
+  role: { label: '角色名称' },
+  descript: { label: '角色描述' },
+  status: { label: '角色状态' },
   ctrl: { label: '操作' },
 })
-// 编辑用户按钮
+// 编辑角色按钮
 const handleUpdataUserInfo = (row: SubDetailUserInfo) => {
-  userManage.drawerTitle = '编辑用户'
+  userManage.drawerTitle = '编辑角色'
   userManage.drawerSwitch = true
   Object.assign(userManage.userInfo, row)
 }
 // 删除的确认按钮
 const deleteUserInfo = async (_id: string) => {
   try {
-    await userManage.deleteUserInfo(_id)
-    await props.getUserInfoList()
+    // await userManage.deleteUserInfo(_id)
+    // await props.getUserInfoList()
     ElMessage.success({ message: '删除成功' })
   } catch (error) {
     ElMessage.error({ message: '删除失败' })

@@ -63,7 +63,8 @@
       <!-- 重置和提交按钮 -->
       <el-form-item>
         <el-button type="primary" @click="submitForm">提交</el-button>
-        <el-button @click="resetForm">重置</el-button>
+        <el-button type="danger" @click="">修改密码???</el-button>
+        <el-button @click="resetForm">重置???</el-button>
         <el-button @click="clearForm">清空</el-button>
       </el-form-item>
     </el-form>
@@ -78,7 +79,6 @@ import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
 import { GET_TOKEN } from '@/utils/token'
-
 //处理头像上传成功的回调函数
 const headerAuthor = ref({ Authorization: GET_TOKEN() })
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
@@ -109,6 +109,8 @@ onMounted(async () => {
     ElMessage.error({ message: '获取用户信息失败' })
   }
 })
+// 修改密码
+const changePassword = ref('')
 // 用户信息列表
 const { userInfo } = toRefs(userCenterStore)
 // 获取表单ref
