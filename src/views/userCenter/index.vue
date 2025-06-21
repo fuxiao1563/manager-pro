@@ -41,17 +41,17 @@
         <el-segmented v-model="userInfo.gender" :options="genderOpts" />
       </el-form-item>
       <!-- 角色 -->
-      <el-form-item label="性别" prop="gender">
+      <el-form-item label="角色" prop="role">
         <span>{{ userInfo.role }}</span>
       </el-form-item>
       <!-- 部门 -->
       <el-form-item label="部门" prop="department" required>
         <el-select v-model="userInfo.department" placeholder="请选择所在部门">
           <el-option
-            v-for="item in departmentOpts"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="(item, index) in departmentOpts"
+            :key="index"
+            :label="item"
+            :value="item"
           />
         </el-select>
       </el-form-item>
@@ -93,17 +93,40 @@
 import { onMounted, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { genderOpts, departmentOpts, statusOpts } from '@/constants/options'
+import { genderOpts, getDepartmentOpts, statusOpts } from '@/constants/options'
 import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
 import { GET_TOKEN } from '@/utils/token'
-//处理头像上传成功的回调函数
+
+onMounted(async () => {
+  try {
+    await Promise.all([
+      userCenterStore.getUserCenterInfo(),
+      userCenterStore.getUserAvatar(),
+    ])
+    ElMessage.success({ message: '获取用户信息成功' })
+  } catch (error) {
+    ElMessage.error({ message: '获取用户信息失败' })
+  }
+  try {
+    const result = await getDepartmentOpts()
+    departmentOpts.value = result
+  } catch (error) {
+    ElMessage.error({ message: '获取部门列表失败' })
+  }
+})
+
+// 部门选项
+const departmentOpts = ref<string[]>([])
+
+// 处理头像上传成功的回调函数
 const headerAuthor = ref({ Authorization: GET_TOKEN() })
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
   userCenterStore.avatar = response.data.avatarUrl
 }
-//在头像上传之前的钩子函数
+
+// 在头像上传之前的钩子函数
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (
     rawFile.type !== 'image/jpeg' &&
@@ -119,21 +142,15 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   }
   return true
 }
-onMounted(async () => {
-  try {
-    await userCenterStore.getUserCenterInfo()
-    await userCenterStore.getUserAvatar()
-    ElMessage.success({ message: '获取用户信息成功' })
-  } catch (error) {
-    ElMessage.error({ message: '获取用户信息失败' })
-  }
-})
+
 // 修改密码
 // const changePassword = ref('')
 // 用户信息列表
 const { userInfo } = toRefs(userCenterStore)
+
 // 获取表单ref
 const formRef = ref()
+
 // 提交按钮
 const submitForm = async () => {
   try {
@@ -141,12 +158,19 @@ const submitForm = async () => {
     await userCenterStore.getUserCenterInfo()
     ElMessage.success({ message: '修改成功' })
   } catch (error) {
-    console.log(error)
-    ElMessage.error({ message: '修改失败' })
+    ElMessage.error('修改失败，请稍后重试')
   }
 }
-// 重置按钮 重置为初始值。未完成
-const resetForm = () => formRef.value.resetFields()
+
+// 重置按钮 重置为初始值
+const resetForm = () => {
+  if (formRef.value) {
+    formRef.value.resetFields()
+  } else {
+    console.warn('表单实例未挂载，无法执行重置操作')
+  }
+}
+
 // 清空按钮
 const clearForm = () => {
   userInfo.value = {

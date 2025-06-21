@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <!-- 搜索 -->
-    <Search :getUserInfoList />
+    <Search :getUserInfoList :opts />
   </el-card>
   <!-- 管理表格 -->
   <DataTabel :getUserInfoList :colSetting>
@@ -10,7 +10,7 @@
       <Pagenation class="pagination" :getUserInfoList />
     </template>
   </DataTabel>
-  <Drawer :getUserInfoList />
+  <Drawer :getUserInfoList :opts />
 </template>
 
 <script setup lang="ts">
@@ -18,12 +18,34 @@ import Search from './Search/index.vue'
 import DataTabel from './DataTable/index.vue'
 import Pagenation from './Pagenation/index.vue'
 import Drawer from './Drawer/index.vue'
-import { ref, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
+import {
+  genderOpts,
+  roleOpts,
+  getDepartmentOpts,
+  statusOpts,
+} from '@/constants/options'
+
 const userManage = useUserManage()
-// 初始化获取用户信息列表
-onMounted(() => {
+// 所有选项
+const opts = reactive({
+  genderOpts,
+  roleOpts,
+  departmentOpts: [] as string[],
+  statusOpts,
+})
+
+onMounted(async () => {
+  try {
+    const result = await getDepartmentOpts()
+    opts.departmentOpts = result as string[]
+  } catch (error) {
+    ElMessage.error({ message: '获取部门信息失败' })
+  }
+
+  // 初始化获取用户信息列表
   getUserInfoList()
 })
 // 获取用户信息列表
@@ -32,7 +54,6 @@ const getUserInfoList = async () => {
   try {
     await userManage.searchUserInfo(searchFrom)
   } catch (error) {
-    console.log(error)
     ElMessage.error({ message: '获取用户信息失败' })
   }
 }

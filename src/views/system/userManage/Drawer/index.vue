@@ -25,10 +25,10 @@
               placeholder="请选择所在部门"
             >
               <el-option
-                v-for="item in departmentOpts"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                v-for="(item, index) in departmentOpts"
+                :key="index"
+                :label="item"
+                :value="item"
               />
             </el-select>
           </el-form-item>
@@ -57,14 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import {
-  genderOpts,
-  roleOpts,
-  departmentOpts,
-  statusOpts,
-} from '@/constants/options'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
 // 表单数据
@@ -72,8 +66,10 @@ const { userInfo } = toRefs(userManage)
 // 抽屉相关方法
 const props = defineProps<{
   getUserInfoList: any
+  opts: any
 }>()
-
+const { genderOpts, roleOpts, statusOpts } = props.opts
+const departmentOpts = computed(() => props.opts.departmentOpts || [])
 // 抽屉确认按钮
 const confirmClick = async () => {
   try {

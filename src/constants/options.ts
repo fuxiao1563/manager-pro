@@ -1,3 +1,4 @@
+import { reqGetCompanyInfoList } from '@/api/companyInfo'
 // 性别
 const genderOpts = [
   {
@@ -28,37 +29,6 @@ const roleOpts = [
     value: '超级管理员',
   },
 ]
-// 部门
-const departmentOpts = [
-  {
-    label: '‌行政管理部',
-    value: '‌行政管理部',
-  },
-  {
-    label: '‌人力资源部',
-    value: '‌人力资源部',
-  },
-  {
-    label: '‌财务管理部',
-    value: '‌财务管理部',
-  },
-  {
-    label: '‌市场与销售部',
-    value: '‌市场与销售部',
-  },
-  {
-    label: '‌技术研发部',
-    value: '‌技术研发部',
-  },
-  {
-    label: '‌生产运营部',
-    value: '‌生产运营部',
-  },
-  {
-    label: '‌客户服务部',
-    value: '‌客户服务部',
-  },
-]
 // 状态
 const statusOpts = [
   {
@@ -74,5 +44,11 @@ const statusOpts = [
     value: '隐身',
   },
 ]
+// 部门
+const getDepartmentOpts = async () => {
+  const result = await reqGetCompanyInfoList()
+  if (result.code === 200) return result.data.department || []
+  return Promise.reject(new Error(result.message))
+}
 
-export { genderOpts, roleOpts, departmentOpts, statusOpts }
+export { genderOpts, roleOpts, getDepartmentOpts, statusOpts }

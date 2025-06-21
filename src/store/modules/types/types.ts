@@ -59,6 +59,6 @@ export interface CompanyInfoState {
     name: string
     address: string
     introduce: string
-    department: [string]
+    department: string[]
   }
 }

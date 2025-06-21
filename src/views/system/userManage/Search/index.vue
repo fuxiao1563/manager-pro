@@ -60,11 +60,11 @@
             clearable
           >
             <el-option
-              v-for="item in departmentOpts"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
+              v-for="(item, index) in departmentOpts"
+              :key="index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
       </el-col>
@@ -126,31 +126,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs } from 'vue'
+import { ref, reactive, toRefs, computed } from 'vue'
 import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
   validatorPhone,
   validatorEmail,
 } from '@/utils/validator'
-
-import {
-  genderOpts,
-  roleOpts,
-  departmentOpts,
-  statusOpts,
-} from '@/constants/options'
 import useUserManageStore from '@/store/modules/userManage'
 const userManage = useUserManageStore()
 // 搜索所需提交的表单
 const { searchFrom } = toRefs(userManage)
-const porps = defineProps<{
+const props = defineProps<{
   getUserInfoList: any
+  opts: any
 }>()
+const { genderOpts, roleOpts, statusOpts } = props.opts
+const departmentOpts = computed(() => props.opts.departmentOpts || [])
 // 搜索按钮
 const search = async () => {
   try {
-    await porps.getUserInfoList()
+    await props.getUserInfoList()
     ElMessage.success({ message: '搜索成功' })
   } catch (error) {
     ElMessage.error({ message: '搜索失败' })
@@ -162,11 +158,12 @@ const resetForm = async () => {
   try {
     searchFrom.value.username = ''
     searchFrom.value.gender = ''
+    searchFrom.value.role = ''
+    searchFrom.value.department = ''
     searchFrom.value.phone = ''
     searchFrom.value.email = ''
-    searchFrom.value.role = ''
     searchFrom.value.status = ''
-    await porps.getUserInfoList()
+    await props.getUserInfoList()
     ElMessage.success({ message: '重置成功' })
   } catch (error) {
     ElMessage.error({ message: '重置失败' })

@@ -9,7 +9,7 @@ export interface CompanyInfoResult extends ResponseData {
     name: string
     address: string
     introduce: string
-    department: [string]
+    department: string[]
   }
 }
 // 修改公司信息提交的数据
@@ -17,5 +17,5 @@ export interface CompanyInfoSub {
   name: string
   address: string
   introduce: string
-  department: [string]
+  department: string[]
 }
