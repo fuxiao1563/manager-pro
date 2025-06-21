@@ -13,8 +13,9 @@
             新增
           </el-button>
           <el-popconfirm
-            confirm-button-text="Yes"
-            cancel-button-text="No"
+            width="180"
+            confirm-button-text="是"
+            cancel-button-text="否"
             title="你确定要删除吗？"
             @confirm="deleteUserInfoList"
           >
@@ -63,7 +64,12 @@
       style="width: 100%"
     >
       <!-- 选择框 -->
-      <el-table-column v-if="colSetting.check" type="selection" width="40" />
+      <el-table-column
+        v-if="colSetting.check"
+        type="selection"
+        width="40"
+        align="center"
+      />
       <!-- 序号 -->
       <el-table-column
         v-if="colSetting.index"
@@ -85,7 +91,7 @@
         v-if="colSetting.gender"
         prop="gender"
         label="性别"
-        width="70"
+        min-width="80"
         align="center"
       >
         <template #default="item">
@@ -102,6 +108,22 @@
           <el-tag v-else type="info" size="small">{{ item.row.gender }}</el-tag>
         </template>
       </el-table-column>
+      <!-- 角色 -->
+      <el-table-column
+        v-if="colSetting.role"
+        prop="role"
+        label="角色"
+        min-width="100"
+        align="center"
+      />
+      <!-- 部门 -->
+      <el-table-column
+        v-if="colSetting.department"
+        prop="department"
+        label="部门"
+        min-width="100"
+        align="center"
+      />
       <!-- 手机号 -->
       <el-table-column
         v-if="colSetting.phone"
@@ -118,31 +140,19 @@
         min-width="180"
         align="center"
       />
-      <!-- 角色 -->
-      <el-table-column
-        v-if="colSetting.role"
-        prop="role"
-        label="角色"
-        min-width="100"
-        align="center"
-      />
       <!-- 用户状态 -->
       <el-table-column
         v-if="colSetting.status"
         label="用户状态"
-        width="100"
+        min-width="100"
         align="center"
       >
         <template #default="item">
-          <el-tag
-            v-if="item.row.status === 'online'"
-            type="success"
-            size="small"
-          >
+          <el-tag v-if="item.row.status === '在线'" type="success" size="small">
             {{ item.row.status }}
           </el-tag>
           <el-tag
-            v-else-if="item.row.status === 'outline'"
+            v-else-if="item.row.status === '离线'"
             type="danger"
             size="small"
           >
@@ -153,6 +163,7 @@
       </el-table-column>
       <!-- 操作 -->
       <el-table-column
+        fixed="right"
         v-if="colSetting.ctrl"
         prop="_id"
         label="操作"
@@ -171,8 +182,9 @@
           </el-button>
           <!-- 删除 -->
           <el-popconfirm
-            confirm-button-text="Yes"
-            cancel-button-text="No"
+            width="180"
+            confirm-button-text="是"
+            cancel-button-text="否"
             title="你确定要删除吗？"
             @confirm="deleteUserInfo(row._id)"
           >
@@ -250,9 +262,10 @@ const checkboxOptions = ref({
   index: { label: '序号' },
   username: { label: '用户名' },
   gender: { label: '性别' },
+  role: { label: '角色' },
+  department: { label: '部门' },
   phone: { label: '手机号' },
   email: { label: '邮箱' },
-  role: { label: '角色' },
   status: { label: '状态' },
   ctrl: { label: '操作' },
 })

@@ -133,7 +133,7 @@ const constantRoutes = [
       },
     ],
   },
-  // 系统管理
+  // 公司管理
   {
     path: '/system',
     name: 'system',
@@ -144,6 +144,16 @@ const constantRoutes = [
       hidden: false,
     },
     children: [
+      {
+        path: '/system/companyInfo',
+        name: 'companyInfo',
+        component: () => import('@/views/system/companyInfo/index.vue'),
+        meta: {
+          title: '公司信息',
+          icon: 'companyInfo',
+          hidden: false,
+        },
+      },
       {
         path: '/system/userManage',
         name: 'userManage',
@@ -159,18 +169,8 @@ const constantRoutes = [
         name: 'roleManage',
         component: () => import('@/views/system/roleManage/index.vue'),
         meta: {
-          title: '角色管理',
+          title: '角色管理?',
           icon: 'roleManage',
-          hidden: false,
-        },
-      },
-      {
-        path: '/system/companyManage',
-        name: 'companyManage',
-        component: () => import('@/views/system/companyManage/index.vue'),
-        meta: {
-          title: '公司管理？',
-          icon: 'companyManage',
           hidden: false,
         },
       },

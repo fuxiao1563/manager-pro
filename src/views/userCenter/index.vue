@@ -38,7 +38,22 @@
       </el-form-item>
       <!-- 性别  -->
       <el-form-item label="性别" prop="gender">
-        <el-segmented v-model="userInfo.gender" :options="genderOptions" />
+        <el-segmented v-model="userInfo.gender" :options="genderOpts" />
+      </el-form-item>
+      <!-- 角色 -->
+      <el-form-item label="性别" prop="gender">
+        <span>{{ userInfo.role }}</span>
+      </el-form-item>
+      <!-- 部门 -->
+      <el-form-item label="部门" prop="department" required>
+        <el-select v-model="userInfo.department" placeholder="请选择所在部门">
+          <el-option
+            v-for="item in departmentOpts"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
       </el-form-item>
       <!-- 手机号 -->
       <el-form-item label="手机号" prop="phone" required>
@@ -51,18 +66,21 @@
       <!-- 状态 -->
       <el-form-item label="状态" prop="status">
         <el-select v-model="userInfo.status" placeholder="请选择在线状态">
-          <el-option label="在线" value="online" />
-          <el-option label="离线" value="outline" />
-          <el-option label="隐身" value="hidden" />
+          <el-option
+            v-for="item in statusOpts"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
         </el-select>
       </el-form-item>
       <!-- 个性签名 -->
       <el-form-item label="个性签名" prop="signature">
         <el-input v-model="userInfo.signature" show-word-limit maxlength="20" />
       </el-form-item>
-      <!-- 重置和提交按钮 -->
+      <!-- 重置和保存按钮 -->
       <el-form-item>
-        <el-button type="primary" @click="submitForm">提交</el-button>
+        <el-button type="primary" @click="submitForm">保存</el-button>
         <el-button type="danger" @click="">修改密码???</el-button>
         <el-button @click="resetForm">重置???</el-button>
         <el-button @click="clearForm">清空</el-button>
@@ -75,6 +93,7 @@
 import { onMounted, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
+import { genderOpts, departmentOpts, statusOpts } from '@/constants/options'
 import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
@@ -110,13 +129,11 @@ onMounted(async () => {
   }
 })
 // 修改密码
-const changePassword = ref('')
+// const changePassword = ref('')
 // 用户信息列表
 const { userInfo } = toRefs(userCenterStore)
 // 获取表单ref
 const formRef = ref()
-// 性别选项
-const genderOptions = ['男', '女', '未知']
 // 提交按钮
 const submitForm = async () => {
   try {
@@ -135,10 +152,12 @@ const clearForm = () => {
   userInfo.value = {
     _id: userInfo.value._id,
     username: '',
-    status: '',
+    gender: '',
+    role: userInfo.value.role,
+    department: '',
     phone: '',
     email: '',
-    gender: '',
+    status: '',
     signature: '',
   }
 }

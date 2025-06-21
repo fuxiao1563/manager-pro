@@ -13,8 +13,9 @@
             新增
           </el-button>
           <el-popconfirm
-            confirm-button-text="Yes"
-            cancel-button-text="No"
+            width="180"
+            confirm-button-text="是"
+            cancel-button-text="否"
             title="你确定要删除吗？"
             @confirm="deleteUserInfoList"
           >
@@ -63,7 +64,12 @@
       style="width: 100%"
     >
       <!-- 选择框 -->
-      <el-table-column v-if="colSetting.check" type="selection" width="40" />
+      <el-table-column
+        v-if="colSetting.check"
+        type="selection"
+        width="40"
+        align="center"
+      />
       <!-- 序号 -->
       <el-table-column
         v-if="colSetting.index"
@@ -92,7 +98,7 @@
       <el-table-column
         v-if="colSetting.status"
         label="角色状态"
-        width="100"
+        min-width="100"
         align="center"
       >
         <template #default="item">
@@ -114,7 +120,7 @@
         v-if="colSetting.ctrl"
         prop="_id"
         label="操作"
-        width="150"
+        min-width="150"
         align="center"
       >
         <template #="{ row }">
@@ -129,8 +135,9 @@
           </el-button>
           <!-- 删除 -->
           <el-popconfirm
-            confirm-button-text="Yes"
-            cancel-button-text="No"
+            width="180"
+            confirm-button-text="是"
+            cancel-button-text="否"
             title="你确定要删除吗？"
             @confirm="deleteUserInfo(row._id)"
           >

@@ -32,6 +32,7 @@ const getUserInfoList = async () => {
   try {
     await userManage.searchUserInfo(searchFrom)
   } catch (error) {
+    console.log(error)
     ElMessage.error({ message: '获取用户信息失败' })
   }
 }
@@ -41,9 +42,10 @@ const colSetting = ref({
   index: true,
   username: true,
   gender: true,
+  role: true,
+  department: true,
   phone: true,
   email: true,
-  role: true,
   status: true,
   ctrl: true,
 })

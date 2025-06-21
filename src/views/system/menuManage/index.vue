@@ -72,7 +72,18 @@
       <el-table-column prop="ctrl" label="操作" min-width="200" align="center">
         <el-button type="success" size="small" plain @click="">新增</el-button>
         <el-button type="primary" size="small" plain @click="">编辑</el-button>
-        <el-button type="danger" size="small" plain @click="">删除</el-button>
+        <el-popconfirm
+          width="180"
+          confirm-button-text="是"
+          cancel-button-text="否"
+          title="你确定要删除吗？"
+        >
+          <template #reference>
+            <el-button type="danger" size="small" plain @click="">
+              删除
+            </el-button>
+          </template>
+        </el-popconfirm>
       </el-table-column>
     </el-table>
   </el-card>

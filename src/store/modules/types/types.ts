@@ -4,6 +4,7 @@ import type {
   SubDetailUserInfo,
 } from '@/api/userManage/type'
 import type { DetailUserCenterInfo } from '@/api/userCenter/type'
+// 登录
 export interface UserState {
   userInfo: {
     username: string
@@ -12,7 +13,7 @@ export interface UserState {
   token: string | null
   menuRoutes: RouteRecordRaw[]
 }
-
+// 首页
 export interface HomeState {
   userInfo: {
     username: string
@@ -20,13 +21,13 @@ export interface HomeState {
   }
   avatar: string
 }
-
+// 用户中心
 export interface UserCenterState {
   userInfo: DetailUserCenterInfo
   avatar: string
   token: string | null
 }
-
+// 用户管理
 export interface ManageState {
   userInfoList: DetailUserInfoResponseData[]
   userInfo: SubDetailUserInfo
@@ -36,10 +37,11 @@ export interface ManageState {
   searchSwitch: Boolean
   searchFrom: {
     username: string
+    role: string
     gender: string
+    department: string
     phone: string
     email: string
-    role: string
     status: string
     skip: number
     limit: number
@@ -50,4 +52,13 @@ export interface ManageState {
         username: string
       }[]
     | null
+}
+// 公司信息
+export interface CompanyInfoState {
+  companyInfoList: {
+    name: string
+    address: string
+    introduce: string
+    department: [string]
+  }
 }

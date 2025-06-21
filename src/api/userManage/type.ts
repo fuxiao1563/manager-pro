@@ -8,9 +8,10 @@ export interface ResponseData {
 export interface SubDetailUserInfo {
   username: string
   gender: string
+  role: string
+  department: string
   phone: string
   email: string
-  role: string
   status: string
 }
 // 返回的完整用户信息类型

@@ -30,6 +30,8 @@
       @selection-change=""
       style="width: 100%"
     >
+      <!-- 序号 -->
+      <el-table-column type="index" label="序号" width="60" align="center" />
       <!-- 登录用户 -->
       <el-table-column
         prop="logUser"

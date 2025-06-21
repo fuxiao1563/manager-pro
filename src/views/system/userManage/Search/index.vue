@@ -34,6 +34,40 @@
           </el-select>
         </el-form-item>
       </el-col>
+      <!-- 角色 -->
+      <el-col :span="6">
+        <el-form-item label="角色" prop="role">
+          <el-select
+            v-model="searchFrom.role"
+            placeholder="请选择角色"
+            clearable
+          >
+            <el-option
+              v-for="item in roleOpts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
+      <!-- 部门 -->
+      <el-col :span="6">
+        <el-form-item label="部门" prop="department">
+          <el-select
+            v-model="searchFrom.department"
+            placeholder="请选择部门"
+            clearable
+          >
+            <el-option
+              v-for="item in departmentOpts"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-col>
       <!-- 手机号 -->
       <el-col :span="6">
         <el-form-item label="手机号" prop="phone">
@@ -55,24 +89,6 @@
           />
         </el-form-item>
       </el-col>
-
-      <!-- 角色 -->
-      <el-col :span="6">
-        <el-form-item label="角色" prop="role">
-          <el-select
-            v-model="searchFrom.role"
-            placeholder="请选择角色"
-            clearable
-          >
-            <el-option
-              v-for="item in roleOpts"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
       <!-- 用户状态 -->
       <el-col :span="6">
         <el-form-item label="用户状态" prop="status">
@@ -90,7 +106,6 @@
           </el-select>
         </el-form-item>
       </el-col>
-      <el-col :span="6"></el-col>
       <!-- 重置和搜索按钮 -->
       <el-col :span="6">
         <el-button plain @click="resetForm">
@@ -118,6 +133,13 @@ import {
   validatorPhone,
   validatorEmail,
 } from '@/utils/validator'
+
+import {
+  genderOpts,
+  roleOpts,
+  departmentOpts,
+  statusOpts,
+} from '@/constants/options'
 import useUserManageStore from '@/store/modules/userManage'
 const userManage = useUserManageStore()
 // 搜索所需提交的表单
@@ -168,52 +190,6 @@ const rules = reactive<FormRules<typeof searchFrom>>({
     },
   ],
 })
-
-// 性别选项
-const genderOpts = [
-  {
-    value: '男',
-    label: '男',
-  },
-  {
-    value: '女',
-    label: '女',
-  },
-  {
-    value: '未知',
-    label: '未知',
-  },
-]
-// 状态选项
-const statusOpts = [
-  {
-    label: 'online',
-    value: 'online',
-  },
-  {
-    label: 'outline',
-    value: 'outline',
-  },
-  {
-    label: 'hidden',
-    value: 'hidden',
-  },
-]
-// 角色选项
-const roleOpts = [
-  {
-    label: 'common',
-    value: 'common',
-  },
-  {
-    label: 'admin',
-    value: 'admin',
-  },
-  {
-    label: 'super',
-    value: 'super',
-  },
-]
 </script>
 
 <style scoped lang="scss"></style>

@@ -26,10 +26,11 @@ const useUserManageStore = defineStore('UserManage', {
       searchFrom: {
         username: '',
         role: '',
-        status: '',
+        gender: '',
+        department: '',
         phone: '',
         email: '',
-        gender: '',
+        status: '',
         skip: 0,
         limit: 5,
       },
@@ -38,6 +39,7 @@ const useUserManageStore = defineStore('UserManage', {
       userInfo: {
         username: '',
         role: '',
+        department: '',
         status: '',
         phone: '',
         email: '',

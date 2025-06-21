@@ -11,10 +11,26 @@
         <span>操作日志</span>
       </div>
     </template>
-    <div>
-      <el-button style="margin-bottom: 16px" type="danger" @click="">
-        清空操作日志
-      </el-button>
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 16px"
+    >
+      <div>
+        <el-input placeholder="输入用户名进行搜索" style="width: 240px">
+          <template #append>
+            <el-button>搜索</el-button>
+          </template>
+        </el-input>
+        <el-radio-group v-model="search.level" style="margin-left: 20px">
+          <el-radio
+            v-for="item in ['所有', '低级', '中级', '高级']"
+            :key="item"
+            :value="item"
+          >
+            {{ item }}
+          </el-radio>
+        </el-radio-group>
+      </div>
+      <el-button type="danger" @click="">清空操作日志</el-button>
     </div>
     <el-table
       ref="multipleTableRef"
@@ -76,6 +92,7 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue'
 const ctrlLogInfoList = [
   {
     ctrlName: 'user',
@@ -96,6 +113,9 @@ const ctrlLogInfoList = [
     ctrlTime: '2021-01-01 00:00:00',
   },
 ]
+const search = reactive({
+  level: '',
+})
 </script>
 
 <style scoped lang="scss"></style>

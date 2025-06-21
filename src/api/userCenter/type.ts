@@ -7,9 +7,11 @@ export interface ResponseData {
 export interface DetailUserCenterInfo {
   _id: string
   username: string
+  gender: string
+  role: string
+  department: string
   phone: string
   email: string
-  gender: string
   status: string
   signature: string
 }

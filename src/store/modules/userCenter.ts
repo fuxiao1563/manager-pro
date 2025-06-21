@@ -24,6 +24,8 @@ const useUserCenterStore = defineStore('userCenter', {
         username: '',
         phone: '',
         gender: '',
+        role: '',
+        department: '',
         email: '',
         status: '',
         signature: '',

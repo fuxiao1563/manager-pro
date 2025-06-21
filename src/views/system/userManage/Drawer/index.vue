@@ -12,11 +12,25 @@
           </el-form-item>
           <!-- 角色 -->
           <el-form-item label="角色" prop="role">
-            <el-segmented v-model="userInfo.role" :options="roleOptions" />
+            <el-segmented v-model="userInfo.role" :options="roleOpts" />
           </el-form-item>
           <!-- 性别  -->
           <el-form-item label="性别" prop="gender">
-            <el-segmented v-model="userInfo.gender" :options="genderOptions" />
+            <el-segmented v-model="userInfo.gender" :options="genderOpts" />
+          </el-form-item>
+          <!-- 部门 -->
+          <el-form-item label="部门" prop="department" required>
+            <el-select
+              v-model="userInfo.department"
+              placeholder="请选择所在部门"
+            >
+              <el-option
+                v-for="item in departmentOpts"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
           </el-form-item>
           <!-- 手机号 -->
           <el-form-item label="手机号" prop="phone" required>
@@ -28,7 +42,7 @@
           </el-form-item>
           <!-- 状态 -->
           <el-form-item label="状态" prop="status">
-            <el-segmented v-model="userInfo.status" :options="statusOptions" />
+            <el-segmented v-model="userInfo.status" :options="statusOpts" />
           </el-form-item>
         </el-form>
       </div>
@@ -45,6 +59,12 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
+import {
+  genderOpts,
+  roleOpts,
+  departmentOpts,
+  statusOpts,
+} from '@/constants/options'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
 // 表单数据
@@ -82,10 +102,6 @@ function cancelClick() {
 
 // 获取表单ref
 const formRef = ref()
-// 选项
-const genderOptions = ['男', '女', '未知']
-const roleOptions = ['common', 'admin', 'super']
-const statusOptions = ['online', 'outline', 'hidden']
 </script>
 
 <style scoped lang="scss"></style>
