@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-// 用户登录信息
-const userSchema = new mongoose.Schema({
+// 用户信息
+const userInfoSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -9,11 +9,20 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },    
+    gender: {
+        type: String,
+        enum: ['男', '女', '保密'],
+        default: '保密' 
     },
     role: {
         type: String,
-        enum: ['common', 'admin', 'super'],
-        default: 'common'
+        enum: ['普通用户', '管理员', '超级管理员'],
+        default: '普通用户'
+    },
+    department: {
+        type: String,
+        default: '未知'
     },
     phone: {
         type: String,
@@ -25,20 +34,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: '未知'
     },
-    gender: {
-        type: String,
-        enum: ['男', '女', '未知'],
-        default: '未知'
-    },
     status: {
         type: String,
-        enum: ['online', 'outline', 'hidden'],
-        default: 'outline'
+        enum: ['在线', '离线', '隐身'],
+        default: '离线'
     },
     signature: {
         type: String,
         default: '这个人很懒，什么都没有留下。'
     }
 })
-let UserModel = mongoose.model('User', userSchema)
-module.exports = UserModel
+let UserInfoModel = mongoose.model('UserInfo', userInfoSchema)
+module.exports = UserInfoModel

@@ -48,8 +48,10 @@ app.use((req, res, next) => {
   next();
 });
 // 路由
-var indexRouter = require('./routes/index');
+const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+const systemRouter = require('./routes/system.js');
+app.use('/system', systemRouter);
 
 
 

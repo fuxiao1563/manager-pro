@@ -1,8 +1,8 @@
-const UserModel = require('../models/UserModel');
-const UserAvatarModel = require('../models/UserAvatarModel');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../jwtConfig/index');
+const UserInfoModel = require('../models/UserInfoModel');
+const UserAvatarModel = require('../models/UserAvatarModel');
 
 
 /**
@@ -13,10 +13,10 @@ exports.userLogin = async (req, res) => {
     const { username, password } = req.body
     if (!username || !password) return res.err('账号或密码不能为空')
     try {
-        let data = await UserModel.findOneAndUpdate(
+        let data = await UserInfoModel.findOneAndUpdate(
             { username },
-            { status: 'online' },
-            { new: true, projection: { username: 1, password: 1, role: 1 } })
+            { status: '在线' },
+            { new: true, runValidators:true, projection: { username: 1, password: 1, role: 1 } })
         if (data === null) return res.err('账号不存在')
         const passwordValid = bcryptjs.compareSync(password, data.password);
         if (!passwordValid) return res.err('密码错误')
@@ -48,9 +48,9 @@ exports.userRegist = async (req, res) => {
     if (!username || !password) return res.err('账号或密码不能为空')
     password = bcryptjs.hashSync(password, 10)
     try {
-        const data = await UserModel.findOne({ username })
+        const data = await UserInfoModel.findOne({ username })
         if (data) return res.err('账号已存在')
-        await UserModel.create({ username, password })
+        await UserInfoModel.create({ username, password })
         res.json({ code: 200, message: '账号注册成功' });
     } catch (error) {
         res.err('服务器内部错误')
@@ -64,7 +64,7 @@ exports.userLogout = async (req, res) => {
     const { username } = decoded
     if (!username) return res.err('无效的认证信息')
     try {
-        const data = await UserModel.findOneAndUpdate({ username }, { status: 'outline' })
+        const data = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' },{runValidators: true})
         if (data === null) return res.err('账号不存在')
         // if (data.status === 'outline') return res.err('账号已退出')
         res.json({ code: 200, message: '账号退出成功' })
@@ -101,7 +101,7 @@ exports.getUserHome = async (req, res) => {
     const { username } = decoded
     if (!username) return res.err('无效的认证信息')
     try {
-        const data = await UserModel
+        const data = await UserInfoModel
             .findOne({ username })
             .select({ username: 1, signature: 1 })
         if (data === null) return res.err('账号不存在')

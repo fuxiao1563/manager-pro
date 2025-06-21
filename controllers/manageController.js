@@ -1,11 +1,10 @@
 const fs = require('fs');
-const UserModel = require('../models/UserModel');
-const UserAvatarModel = require('../models/UserAvatarModel');
 const { Types } = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../jwtConfig/index');
-const { console } = require('inspector');
+const UserInfoModel = require('../models/UserInfoModel');
+const UserAvatarModel = require('../models/UserAvatarModel');
 
 
 
@@ -20,9 +19,9 @@ exports.userInfo = async (req, res) => {
     const { username } = decoded
     if (!username) return res.err('无效的认证信息')
     try {
-        const data = await UserModel
+        const data = await UserInfoModel
             .findOne({ username })
-            .select({ username: 1, phone: 1, email: 1, gender: 1, status: 1, signature: 1 })
+            .select({ username: 1, gender: 1, role: 1, department: 1, phone: 1, email: 1, status: 1, signature: 1 })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
@@ -34,7 +33,6 @@ exports.userInfo = async (req, res) => {
  * @returns data token
  */
 exports.updataUserInfo = async (req, res) => {
-    console.log(req.body)
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
@@ -42,10 +40,10 @@ exports.updataUserInfo = async (req, res) => {
     if (!oldUsername) return res.err('无效的认证信息')
     const { username: newUsername, gender, phone, email, status, signature } = req.body
     try {
-        const data = await UserModel.findOneAndUpdate(
+        const data = await UserInfoModel.findOneAndUpdate(
             { username: oldUsername },
             { username: newUsername, gender, phone, email, status, signature },
-            { new: true })
+            { new: true, runValidators: true })
         if (data === null) return res.err('账号不存在')
         const tokenStr = jwt.sign(data.toObject(), jwtConfig.jwtSecretKey);
         res.json({
@@ -68,7 +66,7 @@ exports.updataPassword = async (req, res) => {
     if (!password || !newPassword) return res.err('密码不能为空')
     newPassword = bcryptjs.hashSync(newPassword, 10)
     try {
-        const data = await UserModel.findOneAndUpdate({ username }, { password: newPassword })
+        const data = await UserInfoModel.findOneAndUpdate({ username }, { password: newPassword }, { runValidators: true })
         if (data === null) return res.err('账号不存在')
         const passwordValid = bcryptjs.compareSync(password, data.password);
         if (!passwordValid) return res.err('旧密码错误')
@@ -97,7 +95,7 @@ exports.uploadUserAvatar = async (req, res) => {
                 .findOneAndUpdate(
                     { username },
                     { avatarUrl, avatarId },
-                    { new: true })
+                    { new: true, runValidators: true })
         } else {
             data = await UserAvatarModel.create({ username, avatarUrl, avatarId })
         }
@@ -113,26 +111,27 @@ exports.uploadUserAvatar = async (req, res) => {
  * 用户管理
  * @returns data
  */
-// 搜索用户
+// 用户管理 + 搜索用户
 exports.searchUserInfo = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { role: CtrlRole } = decoded
-    if (CtrlRole !== 'super' && CtrlRole !== 'admin' && CtrlRole !== 'common') return res.err('角色无权限')
-    let { username, phone, email, gender, role, status, skip, limit } = req.body
+    if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
+    let { username, gender, role, department, phone, email, status, skip, limit } = req.body
     skip = typeof skip === 'number' ? skip : 0
     limit = typeof limit === 'number' ? limit : 5
     const query = {}
     if (username) query.username = username
-    if (phone) query.phone = phone
-    if (email) query.email = email
     if (gender) query.gender = gender
     if (role) query.role = role
+    if (department) query.department = department
+    if (phone) query.phone = phone
+    if (email) query.email = email
     if (status) query.status = status
     try {
-        const userInfoList = await UserModel.find(query).skip(skip).limit(limit)
-        const total = await UserModel.find().countDocuments()
+        const userInfoList = await UserInfoModel.find(query).skip(skip).limit(limit)
+        const total = await UserInfoModel.find().countDocuments()
         const data = {
             userInfoList,
             total
@@ -148,7 +147,7 @@ exports.addUserInfo = async (req, res) => {
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { role: CtrlRole } = decoded
-    if (CtrlRole !== 'super' && CtrlRole !== 'admin' && CtrlRole !== 'common') return res.err('角色无权限')
+    if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
     let { username, role, status, phone, email, gender } = req.body
     if (!username) return res.err('账号不能为空')
     const query = {}
@@ -159,10 +158,10 @@ exports.addUserInfo = async (req, res) => {
     if (email) query.email = email
     if (gender) query.gender = gender
     try {
-        const result = await UserModel.findOne({ username })
+        const result = await UserInfoModel.findOne({ username }, { runValidators: true })
         if (result) return res.err('账号已存在')
         query.password = bcryptjs.hashSync('admin', 10)
-        await UserModel.create(query)
+        await UserInfoModel.create(query)
         res.json({ code: 200, message: '用户添加成功, 默认密码为admin' })
     } catch (error) {
         res.err('服务器内部错误')
@@ -173,15 +172,15 @@ exports.editUserInfo = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { role: ctrlRole } = decoded
-    if (ctrlRole !== 'super' && ctrlRole !== 'admin' && ctrlRole !== 'common') return res.err('角色无权限')
-    let { _id, username, role, status, phone, email, gender } = req.body
+    const { role: CtrlRole } = decoded
+    if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
+    let { _id, username, gender, role, department, status, phone, email, } = req.body
     if (!_id) return res.err('账号ID不能为空')
     try {
-        const data = await UserModel.findOneAndUpdate(
+        const data = await UserInfoModel.findOneAndUpdate(
             { _id },
-            { username, role, status, phone, email, gender },
-            { new: true })
+            { username, gender, role, department, status, phone, email, },
+            { new: true, runValidators: true })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '修改成功' })
     } catch (error) {
@@ -194,15 +193,14 @@ exports.deleteUserInfo = async (req, res) => {
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { role: CtrlRole } = decoded
-    if (CtrlRole !== 'super' && CtrlRole !== 'admin' && CtrlRole !== 'common') return res.err('角色无权限')
+    if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
     let { _id } = req.params
     _id = new Types.ObjectId(_id);
     try {
-        const data = await UserModel.findOneAndDelete({ _id })
+        const data = await UserInfoModel.findOneAndDelete({ _id })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '删除成功' });
     } catch (error) {
-        console.log(error);
         res.err('服务器内部错误')
     }
 }
@@ -215,14 +213,14 @@ exports.deleteUserInfoList = async (req, res) => {
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { role: CtrlRole } = decoded
-    if (CtrlRole !== 'super' && CtrlRole !== 'admin' && CtrlRole !== 'common') return res.err('角色无权限')
+    if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
     let ids = req.body
     try {
         const deleteResults = []
         for (const item of ids) {
             if (!Types.ObjectId.isValid(item._id)) return res.err('ID 无效')
             const _id = new Types.ObjectId(item._id)
-            const data = await UserModel
+            const data = await UserInfoModel
                 .findOneAndDelete(
                     { _id },
                     { new: true, projection: { username: 1 } })
