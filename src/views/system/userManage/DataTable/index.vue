@@ -6,7 +6,7 @@
           <span>用户管理</span>
         </div>
         <div>
-          <el-button type="primary" plain @click="handleAddUserInfo">
+          <el-button type="primary" plain @click="handleAddUser">
             <el-icon>
               <svg-icon name="add"></svg-icon>
             </el-icon>
@@ -17,7 +17,7 @@
             confirm-button-text="是"
             cancel-button-text="否"
             title="你确定要删除吗？"
-            @confirm="deleteUserInfoList"
+            @confirm="handleBatchDeleteUser"
           >
             <template #reference>
               <el-button type="danger" plain>
@@ -28,7 +28,7 @@
               </el-button>
             </template>
           </el-popconfirm>
-          <el-button plain @click="refresh">
+          <el-button plain @click="handleRefresh">
             <el-icon>
               <svg-icon name="refresh"></svg-icon>
             </el-icon>
@@ -56,7 +56,7 @@
     <el-table
       v-if="flag"
       ref="multipleTableRef"
-      :data="userInfoList"
+      :data="users"
       stripe
       border
       row-key="_id"
@@ -176,7 +176,7 @@
             type="primary"
             size="small"
             plain
-            @click="handleUpdataUserInfo(row)"
+            @click="handleUpdataUser(row)"
           >
             编辑
           </el-button>
@@ -186,7 +186,7 @@
             confirm-button-text="是"
             cancel-button-text="否"
             title="你确定要删除吗？"
-            @confirm="deleteUserInfo(row._id)"
+            @confirm="handleDeleteUser(row._id)"
           >
             <template #reference>
               <el-button type="danger" size="small" plain>删除</el-button>
@@ -202,57 +202,55 @@
 <script setup lang="ts">
 import { ElMessage, type TableInstance } from 'element-plus'
 import { ref, nextTick, toRefs } from 'vue'
-import type {
-  DetailUserInfoResponseData,
-  SubDetailUserInfo,
-} from '@/api/userManage/type'
+import type { User } from '@/types/domain/system/userManage'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
-const { userInfoList } = toRefs(userManage)
+const { users } = toRefs(userManage)
 // 表格ref
 const flag = ref(true)
 // 多选框ref
 const multipleTableRef = ref<TableInstance>()
-// 全选状态
-const multipleSelection = ref<DetailUserInfoResponseData[]>([])
-const handleSelectionChange = (val: DetailUserInfoResponseData[]) => {
+// 全选按钮
+const multipleSelection = ref<User[]>([])
+const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val
 }
 const props = defineProps<{
   colSetting: any
-  getUserInfoList: () => void
+  getUser: () => void
 }>()
 // 新增用户按钮
-const handleAddUserInfo = () => {
-  userManage.drawerSwitch = true
+const handleAddUser = () => {
+  userManage.isDrawer = true
   userManage.drawerTitle = '新增用户'
-  Object.assign(userManage.userInfo, {
-    username: '',
-    role: '',
+  Object.assign(userManage.user, {
     avatar: '',
+    username: '',
+    gender: '',
+    role: '',
+    department: '',
     status: '',
     phone: '',
     email: '',
-    gender: '',
   })
 }
 // 批量删除按钮
-const deleteUserInfoList = async () => {
+const handleBatchDeleteUser = async () => {
   const ids = multipleSelection.value.map((item: any) => ({ _id: item._id }))
   try {
-    await userManage.deleteUserInfoList(ids as any)
-    await props.getUserInfoList()
+    await userManage.batchDeleteUser(ids as any)
+    await props.getUser()
     ElMessage.success({ message: '删除成功' })
   } catch (error) {
     ElMessage.error({ message: '删除失败' })
   }
 }
 // 刷新按钮
-const refresh = async () => {
+const handleRefresh = async () => {
   flag.value = false
   nextTick(async () => {
     flag.value = true
-    await props.getUserInfoList()
+    await props.getUser()
     ElMessage.success({ message: '刷新成功' })
   })
 }
@@ -270,16 +268,16 @@ const checkboxOptions = ref({
   ctrl: { label: '操作' },
 })
 // 编辑用户按钮
-const handleUpdataUserInfo = (row: SubDetailUserInfo) => {
+const handleUpdataUser = (row: User) => {
   userManage.drawerTitle = '编辑用户'
-  userManage.drawerSwitch = true
-  Object.assign(userManage.userInfo, row)
+  userManage.isDrawer = true
+  Object.assign(userManage.user, row)
 }
 // 删除的确认按钮
-const deleteUserInfo = async (_id: string) => {
+const handleDeleteUser = async (_id: string) => {
   try {
-    await userManage.deleteUserInfo(_id)
-    await props.getUserInfoList()
+    await userManage.deleteUser(_id)
+    await props.getUser()
     ElMessage.success({ message: '删除成功' })
   } catch (error) {
     ElMessage.error({ message: '删除失败' })

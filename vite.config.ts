@@ -41,7 +41,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       // }),
       createSvgIconsPlugin({
         // Specify the icon folder to be cached
-        iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
+        iconDirs: [path.resolve(process.cwd(), 'src/shared/assets/icons')],
         // Specify symbolId format
         symbolId: 'icon-[dir]-[name]',
       }),
@@ -55,7 +55,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: '@use "@/styles/variable.scss" as *;',
+          additionalData: '@use "@/shared/assets/styles/variable.scss" as *;',
         },
       },
     },

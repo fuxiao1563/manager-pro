@@ -1,16 +1,14 @@
 <template>
-  <el-card>
-    <!-- 搜索 -->
-    <Search :getUserInfoList :opts />
-  </el-card>
+  <!-- 搜索 -->
+  <Search :getUser :opts />
   <!-- 管理表格 -->
-  <DataTabel :getUserInfoList :colSetting>
+  <DataTabel :getUser :colSetting>
     <!-- 分页器 -->
     <template #pagination>
-      <Pagenation class="pagination" :getUserInfoList />
+      <Pagenation class="pagination" :getUser />
     </template>
   </DataTabel>
-  <Drawer :getUserInfoList :opts />
+  <Drawer :getUser :opts />
 </template>
 
 <script setup lang="ts">
@@ -21,38 +19,30 @@ import Drawer from './Drawer/index.vue'
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
+const userManage = useUserManage()
 import {
   genderOpts,
   roleOpts,
-  getDepartmentOpts,
+  deptOpts,
   statusOpts,
-} from '@/constants/options'
-
-const userManage = useUserManage()
+} from '@/shared/constants/options'
 // 所有选项
 const opts = reactive({
   genderOpts,
   roleOpts,
-  departmentOpts: [] as string[],
+  deptOpts,
   statusOpts,
 })
 
+// 初始化获取用户信息列表
 onMounted(async () => {
-  try {
-    const result = await getDepartmentOpts()
-    opts.departmentOpts = result as string[]
-  } catch (error) {
-    ElMessage.error({ message: '获取部门信息失败' })
-  }
-
-  // 初始化获取用户信息列表
-  getUserInfoList()
+  getUser()
 })
 // 获取用户信息列表
-const getUserInfoList = async () => {
-  const { searchFrom } = userManage
+const getUser = async () => {
+  const { searchParams } = userManage
   try {
-    await userManage.searchUserInfo(searchFrom)
+    await userManage.searchUser(searchParams)
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })
   }
@@ -76,6 +66,7 @@ const colSetting = ref({
 :deep(.el-form-item) {
   width: 100%;
 }
+
 .userManage-card {
   margin-top: 15px;
 

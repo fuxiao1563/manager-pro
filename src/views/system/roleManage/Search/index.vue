@@ -9,18 +9,10 @@
       <!-- 角色名称 -->
       <el-col :span="6">
         <el-form-item label="角色名称" prop="role">
-          <el-select
+          <el-input
             v-model="searchFrom.role"
-            placeholder="请选择角色名称"
-            clearable
-          >
-            <el-option
-              v-for="item in roleOpts"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
+            placeholder="请输入关键词"
+          ></el-input>
         </el-form-item>
       </el-col>
       <!-- 角色状态 -->
@@ -32,7 +24,7 @@
             clearable
           >
             <el-option
-              v-for="item in statusOpts"
+              v-for="item in roleStatusOpts"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -63,6 +55,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { roleStatusOpts } from '@/shared/constants/options'
 // 搜索所需提交的表单
 let searchFrom = ref({
   role: '',
@@ -88,33 +81,6 @@ const resetForm = async () => {
     ElMessage.error({ message: '重置失败' })
   }
 }
-
-// 角色状态选项
-const statusOpts = [
-  {
-    label: 'on',
-    value: 'on',
-  },
-  {
-    label: 'off',
-    value: 'off',
-  },
-]
-// 角色名称选项
-const roleOpts = [
-  {
-    label: 'common',
-    value: 'common',
-  },
-  {
-    label: 'admin',
-    value: 'admin',
-  },
-  {
-    label: 'super',
-    value: 'super',
-  },
-]
 </script>
 
 <style scoped lang="scss"></style>

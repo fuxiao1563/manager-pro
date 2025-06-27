@@ -1,8 +1,7 @@
 import { createApp } from 'vue'
-import './style.css'
 import App from './App.vue'
 // 引入全局样式
-import '@/styles/index.scss'
+import './shared/assets/styles/index.scss'
 //引入element-plus插件与样式
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -12,7 +11,7 @@ import router from './router'
 // @ts-expect-error
 import 'virtual:svg-icons-register'
 // 引入组件库
-import globalComponent from './components/index.ts'
+import globalComponent from './shared/components/index.ts'
 // 引入store
 import pinia from './store'
 import { zhCn } from 'element-plus/es/locales.mjs'

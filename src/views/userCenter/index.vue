@@ -48,7 +48,7 @@
       <el-form-item label="部门" prop="department" required>
         <el-select v-model="userInfo.department" placeholder="请选择所在部门">
           <el-option
-            v-for="(item, index) in departmentOpts"
+            v-for="(item, index) in deptOpts"
             :key="index"
             :label="item"
             :value="item"
@@ -93,32 +93,23 @@
 import { onMounted, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { genderOpts, getDepartmentOpts, statusOpts } from '@/constants/options'
+import { genderOpts, deptOpts, statusOpts } from '@/shared/constants/options'
 import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()
-import { GET_TOKEN } from '@/utils/token'
+import { GET_TOKEN } from '@/shared/utils/token'
 
 onMounted(async () => {
   try {
     await Promise.all([
-      userCenterStore.getUserCenterInfo(),
-      userCenterStore.getUserAvatar(),
+      userCenterStore.getUserCenter(),
+      userCenterStore.getAvatar(),
     ])
     ElMessage.success({ message: '获取用户信息成功' })
   } catch (error) {
     ElMessage.error({ message: '获取用户信息失败' })
   }
-  try {
-    const result = await getDepartmentOpts()
-    departmentOpts.value = result
-  } catch (error) {
-    ElMessage.error({ message: '获取部门列表失败' })
-  }
 })
-
-// 部门选项
-const departmentOpts = ref<string[]>([])
 
 // 处理头像上传成功的回调函数
 const headerAuthor = ref({ Authorization: GET_TOKEN() })
@@ -154,8 +145,8 @@ const formRef = ref()
 // 提交按钮
 const submitForm = async () => {
   try {
-    await userCenterStore.updateUserCenterInfo(userInfo.value)
-    await userCenterStore.getUserCenterInfo()
+    await userCenterStore.updateUserCenter(userInfo.value)
+    await userCenterStore.getUserCenter()
     ElMessage.success({ message: '修改成功' })
   } catch (error) {
     ElMessage.error('修改失败，请稍后重试')

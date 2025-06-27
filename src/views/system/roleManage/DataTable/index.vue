@@ -89,7 +89,7 @@
       <!-- 角色描述 -->
       <el-table-column
         v-if="colSetting.role"
-        prop="role"
+        prop="descripte"
         label="角色描述"
         min-width="100"
         align="center"
@@ -102,11 +102,11 @@
         align="center"
       >
         <template #default="item">
-          <el-tag v-if="item.row.status === 'on'" type="success" size="small">
+          <el-tag v-if="item.row.status === '启用'" type="success" size="small">
             {{ item.row.status }}
           </el-tag>
           <el-tag
-            v-else-if="item.row.status === 'off'"
+            v-else-if="item.row.status === '禁用'"
             type="danger"
             size="small"
           >
@@ -158,25 +158,30 @@ import { ref, nextTick } from 'vue'
 import type {
   DetailUserInfoResponseData,
   SubDetailUserInfo,
-} from '@/api/userManage/type'
+} from '@/api/modules/system/userManage/type'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
 // const { userInfoList } = toRefs(userManage)
 let userInfoList = ref([
   {
-    role: 'admin',
+    role: '管理员',
     descripte: '这是角色描述',
-    status: 'on',
+    status: '启用',
   },
   {
-    role: 'common',
+    role: '普通用户',
     descripte: '这是角色描述',
-    status: 'off',
+    status: '启用',
   },
   {
-    role: 'super',
+    role: '超级管理员',
     descripte: '这是角色描述',
-    status: 'on',
+    status: '启用',
+  },
+  {
+    role: '究极管理员',
+    descripte: '这是角色描述',
+    status: '禁用',
   },
 ])
 // 表格ref

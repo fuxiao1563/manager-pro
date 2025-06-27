@@ -1,8 +1,9 @@
 <template>
   <el-button type="danger" size="small" @click="">主题??</el-button>
   <el-button type="danger" size="small" @click="">语言??</el-button>
+  <!-- 全部公告 -->
   <el-badge :is-dot="true" class="item" style="margin: 0 12px">
-    <el-button type="danger" size="small" @click="">
+    <el-button type="danger" size="small" @click="handleAllBoard()">
       <el-icon>
         <Message />
       </el-icon>
@@ -13,7 +14,7 @@
   <el-dropdown class="tabbar_admin">
     <template #default>
       <el-avatar :size="30">
-        <img :src="avatar" />
+        <img :src="layoutStore.avatar" />
       </el-avatar>
     </template>
     <template #dropdown>
@@ -35,20 +36,22 @@
       </el-dropdown-menu>
     </template>
   </el-dropdown>
+  <!-- 全部公告对话框 -->
+  <AllBoard v-model="allBoardSwitch" />
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
 import useLayoutStore from '@/store/modules/layout'
 const layoutStore = useLayoutStore()
 import { useRouter } from 'vue-router'
 const $router = useRouter()
-import { ElMessage } from 'element-plus'
-import useUserStore from '@/store/modules/user'
+import useUserStore from '@/store/modules/auth'
 const userStore = useUserStore()
-import useUserCenterStore from '@/store/modules/userCenter'
-import { toRefs } from 'vue'
-const userCenterStore = useUserCenterStore()
-const { avatar } = toRefs(userCenterStore)
+onMounted(() => {
+  layoutStore.getAvatar()
+})
 // 刷新页面按钮的回调
 const handleRefresh = () => {
   layoutStore.refresh = !layoutStore.refresh
@@ -61,7 +64,7 @@ const handleFullScreen = () => {
 // 退出登录按钮的回调
 const logout = async () => {
   try {
-    await userStore.userLogout()
+    await userStore.logout()
     $router.push('/user/login')
     ElMessage.success({ message: '退出登录成功' })
   } catch (error) {
@@ -71,6 +74,11 @@ const logout = async () => {
 // 个人中心按钮的回调
 const toForward = () => {
   $router.push('/userCenter')
+}
+// 全部公告按钮的回调
+const allBoardSwitch = ref(false)
+const handleAllBoard = () => {
+  allBoardSwitch.value = true
 }
 </script>
 

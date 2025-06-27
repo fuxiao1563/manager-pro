@@ -1,6 +1,6 @@
 <template>
   <el-card class="item-content">
-    <img src="@/assets/images/下载.png" alt="" />
+    <img src="@/shared/assets/images/下载.png" alt="" />
   </el-card>
 </template>
 

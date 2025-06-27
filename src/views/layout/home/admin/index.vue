@@ -2,10 +2,10 @@
   <el-row class="admin-content" :gutter="20">
     <el-col class="card-admin-left" :span="18">
       <el-avatar :size="70">
-        <img :src="avatar" alt="" />
+        <img :src="layoutStore.avatar" alt="" />
       </el-avatar>
       <div class="left-item">
-        <h3 class="left-title">{{ userInfo.signature }}</h3>
+        <h3 class="left-title">{{ user.signature }}</h3>
         <p class="left-subtitle">{{ adminTitleForm.subTitle }}</p>
       </div>
     </el-col>
@@ -30,11 +30,12 @@ import useHomeStore from '@/store/modules/home'
 const homeStore = useHomeStore()
 import { onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-const { userInfo, avatar } = toRefs(homeStore)
+const { user } = toRefs(homeStore)
+import useLayoutStore from '@/store/modules/layout'
+const layoutStore = useLayoutStore()
 onMounted(async () => {
   try {
-    await homeStore.getUserHome()
-    await homeStore.getUserAvatar()
+    await homeStore.getHome()
   } catch (error) {
     ElMessage.error({ message: '用户信息获取失败' })
   }

@@ -8,18 +8,27 @@
         <el-form ref="formRef" :model="userInfo" label-width="auto" status-icon>
           <!-- 角色名称 -->
           <el-form-item label="角色名称" prop="role">
-            <el-segmented v-model="userInfo.role" :options="roleOpts" />
+            <el-input
+              v-model="userInfo.role"
+              placeholder="请输入角色名称"
+            ></el-input>
           </el-form-item>
           <!-- 角色描述 -->
           <el-form-item label="角色描述" prop="descript">
-            <el-input
-              v-model="userInfo.descript"
-              placeholder="请输入角色描述"
+            <el-input v-model="userInfo.desc" placeholder="请输入角色描述" />
+          </el-form-item>
+          <!-- 角色权限 -->
+          <el-form-item label="角色权限" prop="permissionTree">
+            <el-tree
+              :data="data"
+              show-checkbox
+              node-key="id"
+              default-expand-all
             />
           </el-form-item>
           <!-- 角色状态 -->
           <el-form-item label="角色状态" prop="status">
-            <el-segmented v-model="userInfo.status" :options="statusOpts" />
+            <el-segmented v-model="userInfo.status" :options="roleStatusOpts" />
           </el-form-item>
         </el-form>
       </div>
@@ -38,10 +47,14 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
+import { roleStatusOpts } from '@/shared/constants/options'
+// 获取表单ref
+const formRef = ref()
 // 表单数据
 const userInfo = ref({
   role: '',
-  descript: '',
+  desc: '',
+  permissionTree: {},
   status: '',
 })
 
@@ -66,37 +79,58 @@ const confirmClick = async () => {
     })
   }
 }
+
 // 抽屉取消按钮
 function cancelClick() {
   userManage.drawerSwitch = false
 }
-
-// 获取表单ref
-const formRef = ref()
-// 角色名称选项
-const roleOpts = [
+// mock数据
+const data = [
   {
-    label: 'common',
-    value: 'common',
+    id: 1,
+    label: '认证授权',
+    children: [
+      {
+        id: 4,
+        label: '登录页',
+      },
+    ],
   },
   {
-    label: 'admin',
-    value: 'admin',
+    id: 2,
+    label: '公告管理',
+    children: [
+      {
+        id: 5,
+        label: '公告栏',
+      },
+      {
+        id: 6,
+        label: '回收站',
+      },
+    ],
   },
   {
-    label: 'super',
-    value: 'super',
-  },
-]
-// 角色状态选项
-const statusOpts = [
-  {
-    label: '启用',
-    value: 'on',
-  },
-  {
-    label: '禁用',
-    value: 'off',
+    id: 3,
+    label: '系统管理',
+    children: [
+      {
+        id: 7,
+        label: '公司信息',
+      },
+      {
+        id: 8,
+        label: '用户管理',
+      },
+      {
+        id: 9,
+        label: '角色管理',
+      },
+      {
+        id: 10,
+        label: '菜单管理',
+      },
+    ],
   },
 ]
 </script>

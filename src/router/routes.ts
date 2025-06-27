@@ -24,21 +24,21 @@ const constantRoutes = [
       },
     ],
   },
-  // 用户页
+  // 认证授权页
   {
-    path: '/user',
-    name: 'user',
+    path: '/auth',
+    name: 'auth',
     component: () => import('@/views/layout/index.vue'),
     meta: {
-      title: '用户页',
+      title: '认证授权页',
       icon: 'admin',
       hidden: false,
     },
     children: [
       {
-        path: '/user/login',
+        path: '/auth/login',
         name: 'login',
-        component: () => import('@/views/user/login/index.vue'),
+        component: () => import('@/views/auth/login/index.vue'),
         meta: {
           title: '登录页',
           icon: 'login',
@@ -46,19 +46,19 @@ const constantRoutes = [
         },
       },
       {
-        path: '/user/regist',
-        name: 'regist',
-        component: () => import('@/views/user/regist/index.vue'),
+        path: '/auth/register',
+        name: 'register',
+        component: () => import('@/views/auth/register/index.vue'),
         meta: {
           title: '注册页',
-          icon: 'regist',
+          icon: 'register',
           hidden: false,
         },
       },
       {
-        path: '/user/authcode',
+        path: '/auth/authcode',
         name: 'authcode',
-        component: () => import('@/views/user/authcode/index.vue'),
+        component: () => import('@/views/auth/authcode/index.vue'),
         meta: {
           title: '验证登录页???',
           icon: 'authcode',
@@ -66,9 +66,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/user/reset',
+        path: '/auth/reset',
         name: 'reset',
-        component: () => import('@/views/user/reset/index.vue'),
+        component: () => import('@/views/auth/reset/index.vue'),
         meta: {
           title: '重置页???',
           icon: 'reset',
@@ -133,7 +133,7 @@ const constantRoutes = [
       },
     ],
   },
-  // 公司管理
+  // 系统管理
   {
     path: '/system',
     name: 'system',
@@ -147,7 +147,7 @@ const constantRoutes = [
       {
         path: '/system/companyInfo',
         name: 'companyInfo',
-        component: () => import('@/views/system/companyInfo/index.vue'),
+        component: () => import('@/views/system/company/index.vue'),
         meta: {
           title: '公司信息',
           icon: 'companyInfo',

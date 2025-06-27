@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { TableInstance } from 'element-plus'
-import useUserStore from '@/store/modules/user'
+import useUserStore from '@/store/modules/auth'
 const userStore = useUserStore()
 const menuList = userStore.menuRoutes
 // 表格数据
