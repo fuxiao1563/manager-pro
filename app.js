@@ -36,22 +36,25 @@ app.use(jwt({
 }).unless({
   path: ['/user/login', '/user/regist']
 }))
-// 引入处理错误中间件
-app.use((req, res, next) => {
-  res.err = (err, code = 400) => {
-    res.send({
-      code,
-      // 判断err是对象还是字符串
-      message: err instanceof Error ? err.message : err
-    })
-  }
-  next();
-});
+// 全局引入处理错误中间件
+const errorMiddleware = require('./middlewares/errorMiddleware');
+app.use(errorMiddleware());
+
 // 路由
-const indexRouter = require('./routes/index');
-app.use('/', indexRouter);
-const systemRouter = require('./routes/system.js');
-app.use('/system', systemRouter);
+const authRouter = require('./routes/auth');
+app.use('/auth', authRouter);
+const homeRouter = require('./routes/home');
+app.use('/home', homeRouter);
+const layoutRouter = require('./routes/layout');
+app.use('/layout', layoutRouter);
+const boardRouter = require('./routes/notice/board');
+app.use('/notice/board', boardRouter);
+const userCenterRouter = require('./routes/userCenter');
+app.use('/userCenter', userCenterRouter);
+const companyRouter = require('./routes/system/company');
+app.use('/system/company', companyRouter);
+const userManageRouter = require('./routes/system/userManage');
+app.use('/system/userManage', userManageRouter);
 
 
 

@@ -1,14 +1,13 @@
-const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../jwtConfig/index');
-const CompanyInfoModel = require('../models/CompanyInfoModel');
+const jwtConfig = require('../../jwtConfig/index');
+const CompanyInfoModel = require('../../models/company/CompanyInfoModel');
 
 
 /**
  * 公司管理
  * @returns data
  */
-exports.companyInfoList = async (req, res) => {
+exports.company = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
@@ -24,7 +23,7 @@ exports.companyInfoList = async (req, res) => {
 
 
 // 修改公司信息
-exports.editCompanyInfo = async (req, res) => {
+exports.updateCompany = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
     if (!token) return res.err('token不存在')
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)

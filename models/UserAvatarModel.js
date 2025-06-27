@@ -21,6 +21,8 @@ const userAvatarSchema = new mongoose.Schema({
         required: [true, '图像ID是必需的'],
         unique: true
     }
+},{
+    timestamps: true
 })
 let UserAvatarModel = mongoose.model('UserAvatar', userAvatarSchema)
 module.exports = UserAvatarModel

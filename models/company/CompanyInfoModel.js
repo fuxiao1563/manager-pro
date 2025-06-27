@@ -17,6 +17,8 @@ const companyInfoSchema = new mongoose.Schema({
         type: Array,
         required: [true, '部门是必需的'],
     }
+} ,{
+    timestamps: true
 })
 let CompanyInfoModel = mongoose.model('companyInfo', companyInfoSchema)
 module.exports = CompanyInfoModel
