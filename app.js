@@ -49,6 +49,8 @@ const layoutRouter = require('./routes/layout');
 app.use('/layout', layoutRouter);
 const boardRouter = require('./routes/notice/board');
 app.use('/notice/board', boardRouter);
+const boardBinRouter = require('./routes/notice/boardBin');
+app.use('/notice/boardBin', boardBinRouter);
 const userCenterRouter = require('./routes/userCenter');
 app.use('/userCenter', userCenterRouter);
 const companyRouter = require('./routes/system/company');

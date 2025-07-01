@@ -95,8 +95,8 @@ exports.deleteUser = async (req, res) => {
     const { role: CtrlRole } = decoded
     if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
     let { _id } = req.params
-    _id = new Types.ObjectId(_id);
     try {
+        _id = new Types.ObjectId(_id);
         const data = await UserInfoModel.findOneAndDelete({ _id })
         if (data === null) return res.err('账号不存在')
         res.json({ code: 200, message: '删除成功' });

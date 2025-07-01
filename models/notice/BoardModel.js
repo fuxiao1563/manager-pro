@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const ENUM = Object.freeze({
     LEVEL: [1, 2, 3],
 })
-// 公司信息
+// 公告信息
 const boardSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -17,28 +17,36 @@ const boardSchema = new mongoose.Schema({
         type: String,
         default: null
     },
-    author:{
+    author: {
         type: String,
         required: [true, '发布人是必需的'],
     },
-    target:{
+    target: {
         type: String,
         default: null
     },
-    level:{
+    level: {
         type: Number,
-        enum:ENUM.LEVEL,
-        default:1
+        enum: ENUM.LEVEL,
+        default: 1
     },
-    views:{
-        type:Number,
-        default:0
+    views: {
+        type: Number,
+        default: 0
     },
-    content:{
+    content: {
         type: String,
         required: [true, '公告内容是必需的'],
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
-} ,{
+}, {
     timestamps: true
 })
 let BoardModel = mongoose.model('board', boardSchema)
