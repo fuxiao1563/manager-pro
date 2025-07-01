@@ -99,12 +99,12 @@ const constantRoutes = [
         },
       },
       {
-        path: '/notice/bin',
-        name: 'bin',
-        component: () => import('@/views/notice/bin/index.vue'),
+        path: '/notice/boardBin',
+        name: 'boardBin',
+        component: () => import('@/views/notice/boardBin/index.vue'),
         meta: {
           title: '回收站？',
-          icon: 'bin',
+          icon: 'boardBin',
           hidden: false,
         },
       },

@@ -84,8 +84,8 @@
 import { ref } from 'vue'
 
 const props = defineProps<{
-  boardSwitch: boolean
-  settingSwitch: boolean
+  // boardSwitch: boolean
+  // settingSwitch: boolean
 }>()
 
 // 左侧公告列表

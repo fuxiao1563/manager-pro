@@ -37,7 +37,7 @@
     </template>
   </el-dropdown>
   <!-- 全部公告对话框 -->
-  <AllBoard v-model="allBoardSwitch" />
+  <AllBoard v-model="isAllBoard" />
 </template>
 
 <script setup lang="ts">
@@ -76,9 +76,9 @@ const toForward = () => {
   $router.push('/userCenter')
 }
 // 全部公告按钮的回调
-const allBoardSwitch = ref(false)
+const isAllBoard = ref(false)
 const handleAllBoard = () => {
-  allBoardSwitch.value = true
+  isAllBoard.value = true
 }
 </script>
 

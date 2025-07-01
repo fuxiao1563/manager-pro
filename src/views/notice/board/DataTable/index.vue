@@ -17,7 +17,7 @@
           <el-button type="primary" @click="handleAllBoard()">
             全部公告
           </el-button>
-          <el-button type="primary" plain @click="handleReleaseBoard()">
+          <el-button type="primary" plain @click="handlePublish()">
             <el-icon>
               <svg-icon name="add"></svg-icon>
             </el-icon>
@@ -28,7 +28,7 @@
             confirm-button-text="是"
             cancel-button-text="否"
             title="你确定要删除吗？"
-            @confirm=""
+            @confirm="handleBatchDeleteBoard()"
           >
             <template #reference>
               <el-button type="danger" plain>
@@ -39,7 +39,7 @@
               </el-button>
             </template>
           </el-popconfirm>
-          <el-button plain @click="">
+          <el-button plain @click="handleRefresh()">
             <el-icon>
               <svg-icon name="refresh"></svg-icon>
             </el-icon>
@@ -49,12 +49,13 @@
       </div>
     </template>
     <el-table
+      v-if="flag"
       ref="multipleTableRef"
       :data="boardStore.boards"
       stripe
       border
       row-key="_id"
-      @selection-change=""
+      @selection-change="handleSelectionChange"
       style="width: 100%"
     >
       <!-- 选择框 -->
@@ -105,32 +106,22 @@
       />
       <!-- 公告等级 -->
       <el-table-column prop="level" label="等级" min-width="80" align="center">
-        <template #default="item">
-          <el-tag v-if="item.row.level === '一般'" type="primary" size="small">
-            {{ item.row.level }}
-          </el-tag>
-          <el-tag
-            v-else-if="item.row.level === '重要'"
-            type="warning"
-            size="small"
-          >
-            {{ item.row.level }}
-          </el-tag>
-          <el-tag v-else type="danger" size="small">
-            {{ item.row.level }}
+        <template #default="{ row }">
+          <el-tag :type="getLevelTag(row.level).type" size="small">
+            {{ getLevelTag(row.level).label }}
           </el-tag>
         </template>
       </el-table-column>
       <!-- 发布时间 -->
       <el-table-column
-        prop="publishTime"
+        prop="createdAt"
         label="发布时间"
         min-width="120"
         align="center"
       />
       <!-- 最新编辑时间 -->
       <el-table-column
-        prop="editTime"
+        prop="updatedAt"
         label="最新编辑时间"
         min-width="120"
         align="center"
@@ -166,7 +157,7 @@
             confirm-button-text="是"
             cancel-button-text="否"
             title="你确定要删除吗？"
-            @confirm=""
+            @confirm="handleDeleteBoard(row._id)"
           >
             <template #reference>
               <el-button type="danger" size="small" plain>删除</el-button>
@@ -180,22 +171,32 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
+import { ElMessage, type TableInstance } from 'element-plus'
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
+import { boardLevelOpts } from '@/shared/constants/options'
+import type { BoardsArrayItem } from '@/types/domain/notice'
 onMounted(() => {
   boardStore.getBoard(boardStore.searchParams)
 })
+// 获取等级标签
+const getLevelTag = computed(() => (level: number) => {
+  const found = boardLevelOpts.find((op) => op.value === level)
+  return {
+    type: found?.type || 'info',
+    label: found?.label || '',
+  }
+})
 // 全部公告按钮
 const handleAllBoard = () => {
-  boardStore.allBoardSwitch = true
+  boardStore.isAllBoard = true
 }
 // 发布公告按钮
-const handleReleaseBoard = () => {
-  boardStore.boardDrawerSwitch = true
+const handlePublish = () => {
+  boardStore.isBoardDrawer = true
   boardStore.boardDrawerTitle = '发布公告'
-  // 单独创建一个空对象用于清空数据
-  boardStore.board = {
+  Object.assign(boardStore.board, {
     title: '',
     category: '',
     department: '',
@@ -203,56 +204,60 @@ const handleReleaseBoard = () => {
     target: '',
     level: 1,
     content: '',
-  }
+  })
+}
+// 刷新按钮
+const flag = ref(true)
+const handleRefresh = () => {
+  flag.value = false
+  nextTick(async () => {
+    flag.value = true
+    await boardStore.getBoard(boardStore.searchParams)
+    ElMessage.success({ message: '刷新成功' })
+  })
 }
 // 编辑公告按钮
-const handleEditBoard = (row: any) => {
-  boardStore.boardDrawerSwitch = true
+const handleEditBoard = (row: BoardsArrayItem) => {
+  boardStore.isBoardDrawer = true
   boardStore.boardDrawerTitle = '编辑公告'
-  boardStore.board = row
+  boardStore.board = JSON.parse(JSON.stringify(row))
+}
+// 删除公告按钮
+const handleDeleteBoard = async (_id: string) => {
+  try {
+    await boardStore.deleteBoard(_id)
+    await boardStore.getBoard(boardStore.searchParams)
+    ElMessage.success({ message: '删除公告成功' })
+  } catch (error) {
+    ElMessage.error({ message: '删除公告失败' })
+  }
 }
 
-const boardInfoList = ref([
-  {
-    title: '下班后全体开会',
-    category: '公司公告',
-    department: '行政部',
-    author: '王总',
-    target: '行政部',
-    level: '重要',
-    publishTime: '2021-01-01',
-    editTime: '2021-01-01',
-    views: '7',
-    content: '<p>开会1</p>',
-    _id: '1',
-  },
-  {
-    title: '采购会议',
-    category: '公司公告',
-    department: '研发部',
-    author: '张三',
-    target: '研发部',
-    level: '一般',
-    publishTime: '2021-01-01',
-    editTime: '2021-01-01',
-    views: '7',
-    content: '<p>开会2</p>',
-    _id: '1',
-  },
-  {
-    title: '采购会议',
-    category: '公司公告',
-    department: '研发部',
-    author: '张三',
-    target: '研发部',
-    level: '必要',
-    publishTime: '2021-01-01',
-    editTime: '2021-01-01',
-    views: '7',
-    content: '<p>开会3</p>',
-    _id: '1',
-  },
-])
+// 多选框ref
+const multipleTableRef = ref<TableInstance>()
+// 全选按钮
+const multipleSelection = ref<BoardsArrayItem[]>([])
+const handleSelectionChange = (val: BoardsArrayItem[]) => {
+  multipleSelection.value = val
+  console.log(val)
+}
+
+// 批量删除公告按钮
+const handleBatchDeleteBoard = async () => {
+  const ids = multipleSelection.value.map((item: BoardsArrayItem) => ({
+    _id: item._id,
+  }))
+  console.log(ids)
+  try {
+    await boardStore.batchDeleteBoard(ids as any)
+    await boardStore.getBoard(boardStore.searchParams)
+    ElMessage.success({ message: '批量删除公告成功' })
+    multipleSelection.value = [] // 清空选择
+    multipleTableRef.value?.clearSelection() // 清除表格选中状态
+  } catch (error) {
+    ElMessage.error({ message: '批量删除公告失败' })
+  }
+}
 </script>
 
 <style scoped lang="scss"></style>

@@ -72,22 +72,11 @@ const getDeptOpts = async () => {
     ElMessage.error({ message: '获取部门信息失败' })
   }
 })()
-
 const boardLevelOpts = [
-  {
-    label: '一般',
-    value: '一般',
-  },
-  {
-    label: '重要',
-    value: '重要',
-  },
-  {
-    label: '必要',
-    value: '必要',
-  },
+  { label: '一般', value: 1, type: 'primary' },
+  { label: '重要', value: 2, type: 'success' },
+  { label: '紧急', value: 3, type: 'danger' },
 ]
-
 export {
   genderOpts,
   roleOpts,

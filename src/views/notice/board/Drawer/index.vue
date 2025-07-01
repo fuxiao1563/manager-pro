@@ -1,7 +1,7 @@
 <template>
   <!-- 发布 / 编辑公告 -->
   <el-dialog
-    v-model="boardStore.boardDrawerSwitch"
+    v-model="boardStore.isBoardDrawer"
     :title="boardStore.boardDrawerTitle"
     width="800"
     align-center
@@ -25,7 +25,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="发布人">
-        <el-input v-model="board.title" placeholder="请输入发布人" />
+        <el-input v-model="board.author" placeholder="请输入发布人" />
       </el-form-item>
       <el-form-item label="接收部门">
         <el-select v-model="board.target" placeholder="请选择接收部门">
@@ -68,9 +68,7 @@
     </el-form>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="boardStore.boardDrawerSwitch = false">
-          取消
-        </el-button>
+        <el-button @click="boardStore.isBoardDrawer = false">取消</el-button>
         <el-button type="primary" @click="handleConfirm()">确定</el-button>
       </div>
     </template>
@@ -78,19 +76,34 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs, onBeforeUnmount, shallowRef } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { onBeforeUnmount, shallowRef, toRefs } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-// import type { IEditorConfig } from '@wangeditor/editor/dist/types/esm/config/index.d.ts'
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
 import { deptOpts, boardLevelOpts } from '@/shared/constants/options'
 // 表单数据
-const { board } = toRefs(boardStore)
+const board = toRefs(boardStore).board
 // 确定按钮
-const handleConfirm = () => {
-  boardStore.boardDrawerSwitch = false
+const handleConfirm = async () => {
+  const {
+    boardDrawerTitle,
+    board,
+    searchParams,
+    getBoard,
+    addBoard,
+    updateBoard,
+  } = boardStore
+  try {
+    if (boardDrawerTitle === '发布公告') await addBoard(board)
+    if (boardDrawerTitle === '编辑公告') await updateBoard(board)
+    await getBoard(searchParams)
+    boardStore.isBoardDrawer = false
+    ElMessage.success({ message: `${boardDrawerTitle}成功` })
+  } catch (error) {
+    ElMessage.error({ message: `${boardDrawerTitle}失败` })
+  }
 }
 // 取消按钮
 const handleClose = (done: () => void) => {

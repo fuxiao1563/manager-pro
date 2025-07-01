@@ -31,7 +31,7 @@
           </el-icon>
           重置
         </el-button>
-        <el-button type="primary" plain @click="subForm">
+        <el-button type="primary" plain @click="subForm()">
           <el-icon>
             <svg-icon name="search"></svg-icon>
           </el-icon>
@@ -43,21 +43,30 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ElMessage } from 'element-plus'
 import { deptOpts, boardLevelOpts } from '@/shared/constants/options'
-// 搜索表单
-const searchParams = reactive<{ target: string; level: string }>({
-  target: '',
-  level: '',
-})
+import useBoardStore from '@/store/modules/board'
+const boardStore = useBoardStore()
+const { searchParams, getBoard } = boardStore
 // 重置按钮
-const resetForm = () => {
-  Object.keys(searchParams).forEach((key) => {
-    searchParams[key as keyof typeof searchParams] = ''
-  })
+const resetForm = async () => {
+  Object.assign(searchParams, { target: '', level: '' })
+  try {
+    await getBoard(searchParams)
+    ElMessage.success({ message: '重置成功' })
+  } catch (error) {
+    ElMessage.error({ message: '重置失败' })
+  }
 }
 // 搜索按钮
-const subForm = () => {}
+const subForm = async () => {
+  try {
+    await getBoard(searchParams)
+    ElMessage.success({ message: '搜索公告成功' })
+  } catch (error) {
+    ElMessage.error({ message: '搜索公告失败' })
+  }
+}
 </script>
 
 <style scoped lang="scss"></style>

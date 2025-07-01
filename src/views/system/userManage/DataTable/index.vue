@@ -206,15 +206,6 @@ import type { User } from '@/types/domain/system/userManage'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
 const { users } = toRefs(userManage)
-// 表格ref
-const flag = ref(true)
-// 多选框ref
-const multipleTableRef = ref<TableInstance>()
-// 全选按钮
-const multipleSelection = ref<User[]>([])
-const handleSelectionChange = (val: User[]) => {
-  multipleSelection.value = val
-}
 const props = defineProps<{
   colSetting: any
   getUser: () => void
@@ -234,6 +225,14 @@ const handleAddUser = () => {
     email: '',
   })
 }
+
+// 多选框ref
+const multipleTableRef = ref<TableInstance>()
+// 全选按钮
+const multipleSelection = ref<User[]>([])
+const handleSelectionChange = (val: User[]) => {
+  multipleSelection.value = val
+}
 // 批量删除按钮
 const handleBatchDeleteUser = async () => {
   const ids = multipleSelection.value.map((item: any) => ({ _id: item._id }))
@@ -241,11 +240,14 @@ const handleBatchDeleteUser = async () => {
     await userManage.batchDeleteUser(ids as any)
     await props.getUser()
     ElMessage.success({ message: '删除成功' })
+    multipleSelection.value = [] // 清空选择
+    multipleTableRef.value?.clearSelection() // 清除表格选中状态
   } catch (error) {
     ElMessage.error({ message: '删除失败' })
   }
 }
 // 刷新按钮
+const flag = ref(true)
 const handleRefresh = async () => {
   flag.value = false
   nextTick(async () => {
