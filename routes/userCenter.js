@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const multer = require('multer');
-const upload = multer({ dest: './public/upload' });
 const userCenterController = require('../controllers/userCenterController')
 
 
-
+const upload = multer({ dest: './public/upload/avatar' });
 // 查询用户信息
 router.get('/', userCenterController.userCenter)
 // 修改用户信息

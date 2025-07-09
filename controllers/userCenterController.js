@@ -82,25 +82,31 @@ exports.uploadAvatar = async (req, res) => {
     const { username } = decoded
     if (!username) return res.err('无效的认证信息')
     if (!req.file) return res.err('头像未上传')
-    const { filename: oldName, originalname: newName } = req.file
-    fs.renameSync(`./public/upload/${oldName}`, `./public/upload/${username}-${newName}`)
+
     try {
+        const { filename: oldName, originalname: newName } = req.file
+        const uploadAvatarDir = './public/upload/avatar'
+        await fs.promises.rename(`${uploadAvatarDir}/${oldName}`, `${uploadAvatarDir}/${username}-${newName}`)
         const avatarId = crypto.randomUUID()
-        const avatarUrl = `http://localhost:27017/upload/${username}-${newName}`
-        const reuslt = await UserAvatarModel.findOne({ username })
+        const avatarUrl = `http://localhost:27017/upload/avatar/${username}-${newName}`
+        const result = await UserAvatarModel.findOne({ username })
         let data;
-        if (reuslt) {
+        if (result) {
+            const oldFileName = result.avatarUrl.split('/').pop();
+            const oldFilePath = `${uploadAvatarDir}/${oldFileName}`;
+            await fs.promises.unlink(oldFilePath)
             data = await UserAvatarModel
                 .findOneAndUpdate(
                     { username },
                     { avatarUrl, avatarId },
                     { new: true, runValidators: true })
+
         } else {
             data = await UserAvatarModel.create({ username, avatarUrl, avatarId })
         }
         if (data === null) return res.err('上传失败')
         res.json({ code: 200, message: '上传成功', data })
     } catch (error) {
-        res.err(error)
+        console.error('上传头像失败:', error);
     }
 }

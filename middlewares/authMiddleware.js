@@ -24,7 +24,20 @@ module.exports = (options = {}) => {
             const { role: CtrlRole } = decoded
             if (!allowedRoles.includes(CtrlRole)) return res.err('角色无权限')
 
-            // req.user = decoded
+            // const user = await User.findById(req.user.id).populate('roles');
+
+            // const hasPermission = user.roles.some(role =>
+            //     role.permissions.some(perm =>
+            //         perm.module === module &&
+            //         (!action || perm.actions.includes(action))
+            //     )
+            // );
+
+            // if (!hasPermission) {
+            //     return res.status(403).json({ message: '无权访问该模块' });
+            // }
+
+            req.user = decoded
             next()
         } catch (error) {
             if (error.name === 'TokenExpiredError') return res.err('token已过期')

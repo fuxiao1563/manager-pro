@@ -38,6 +38,10 @@ const boardSchema = new mongoose.Schema({
         type: String,
         required: [true, '公告内容是必需的'],
     },
+    isRead:{
+        type: Boolean,
+        default: false
+    },    
     isDeleted: {
         type: Boolean,
         default: false

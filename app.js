@@ -41,16 +41,18 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 app.use(errorMiddleware());
 
 // 路由
+const layoutRouter = require('./routes/layout');
+app.use('/layout', layoutRouter);
 const authRouter = require('./routes/auth');
 app.use('/auth', authRouter);
 const homeRouter = require('./routes/home');
 app.use('/home', homeRouter);
-const layoutRouter = require('./routes/layout');
-app.use('/layout', layoutRouter);
 const boardRouter = require('./routes/notice/board');
 app.use('/notice/board', boardRouter);
 const boardBinRouter = require('./routes/notice/boardBin');
 app.use('/notice/boardBin', boardBinRouter);
+const fileRouter = require('./routes/file');
+app.use('/file', fileRouter);
 const userCenterRouter = require('./routes/userCenter');
 app.use('/userCenter', userCenterRouter);
 const companyRouter = require('./routes/system/company');

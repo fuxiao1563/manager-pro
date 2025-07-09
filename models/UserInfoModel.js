@@ -34,7 +34,9 @@ const userInfoSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ENUM.ROLE,
-        default: '普通用户'
+        default: '普通用户',
+        //  type: mongoose.Schema.Types.ObjectId,
+        // ref: 'Role'
     },
     department: {
         type: String,
@@ -69,7 +71,7 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         default: '这个人很懒，什么都没有留下。'
     }
-},{
+}, {
     timestamps: true
 })
 let UserInfoModel = mongoose.model('UserInfo', userInfoSchema)

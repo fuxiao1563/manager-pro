@@ -25,11 +25,8 @@ exports.getHome = async (req, res) => {
     }
 }
 // 获取头像
-exports.getAvatar = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username } = decoded
+exports.getAvatar = async (req, res) => {    
+    const { username } = req.user
     if (!username) return res.err('无效的认证信息')
     try {
         const data = await UserAvatarModel
@@ -37,7 +34,6 @@ exports.getAvatar = async (req, res) => {
             .select({ avatarUrl: 1 })
         res.json({ code: 200, message: '获取头像成功', data });
     } catch (error) {
-        console.log(error)
         res.err('服务器内部错误')
     }
 }

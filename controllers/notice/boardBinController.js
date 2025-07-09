@@ -6,6 +6,7 @@ const BoardModel = require('../../models/notice/BoardModel');
 exports.getBoardBin = async (req, res) => {
     try {
         const data = await BoardModel.find({ isDeleted: true })
+            .select({ title: 1, category: 1, department: 1, author: 1, target: 1, level: 1, deletedAt: 1 })
             .sort({ createdAt: -1 })
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
