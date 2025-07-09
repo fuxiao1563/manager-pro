@@ -27,6 +27,7 @@ const boardStore = defineStore('Board', {
         author: '',
         target: '',
         level: 1,
+        isRead: false,
         views: 0,
         content: '',
       },

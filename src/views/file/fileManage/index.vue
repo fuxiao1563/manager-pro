@@ -9,19 +9,40 @@
         "
       >
         <span>文件管理</span>
-        <el-button type="primary" @click="">上传文件</el-button>
+        <el-upload
+          style="display: flex"
+          action="http://localhost:27017/file/upload"
+          :headers="headerAuthor"
+          :on-success="handleFileSuccess"
+          :before-upload="beforeFileUpload"
+          :show-file-list="false"
+          multiple
+        >
+          <el-button type="primary">上传文件</el-button>
+        </el-upload>
       </div>
     </template>
-    <el-table :data="tableData" style="width: 100%" height="250" border stripe>
+    <el-table
+      :data="fileStore.fileList"
+      style="width: 100%"
+      height="250"
+      border
+      stripe
+    >
       <el-table-column
-        fixed
+        type="index"
+        label="序号"
+        min-width="60"
+        align="center"
+      />
+      <el-table-column
         prop="fileName"
         label="文件名"
         min-width="120"
         align="center"
       />
       <el-table-column
-        prop="userName"
+        prop="username"
         label="上传者"
         min-width="120"
         align="center"
@@ -44,18 +65,22 @@
         min-width="120"
         align="center"
       />
-      <el-table-column fixed="right" label="操作" width="150" align="center">
+      <el-table-column
+        fixed="right"
+        label="操作"
+        min-width="120"
+        align="center"
+      >
         <template #="{ row }">
           <!-- 编辑 -->
-          <!-- <el-button type="primary" size="small" plain @click="">
-                        编辑
-                    </el-button> -->
+          <el-button type="success" size="small" @click="">下载?</el-button>
           <!-- 删除 -->
           <el-popconfirm
-            confirm-button-text="Yes"
-            cancel-button-text="No"
+            confirm-button-text="是"
+            cancel-button-text="否"
             title="你确定要删除吗？"
-            @confirm=""
+            @confirm="handleDeleteFile(row._id)"
+            width="160"
           >
             <template #reference>
               <el-button type="danger" size="small">删除文件</el-button>
@@ -67,22 +92,51 @@
   </el-card>
 </template>
 <script setup lang="ts">
-const tableData = [
-  {
-    fileName: 'file.zip',
-    userName: 'Tom',
-    uploadTime: '2016-05-03',
-    downloadCount: '10',
-    fileSize: '100kb',
-  },
-  {
-    fileName: 'file.zip',
-    userName: 'Tom',
-    uploadTime: '2016-05-03',
-    downloadCount: '10',
-    fileSize: '100kb',
-  },
-]
+import { ref, onMounted } from 'vue'
+import { ElMessage } from 'element-plus'
+import { GET_TOKEN } from '@/shared/utils/token'
+import type { UploadProps } from 'element-plus'
+import useFileStore from '@/store/modules/file'
+const fileStore = useFileStore()
+onMounted(() => {
+  getFile()
+})
+// 获取文件信息
+const getFile = async () => {
+  try {
+    await fileStore.getFile()
+    ElMessage.success('获取文件信息成功')
+  } catch (error) {
+    ElMessage.error('获取文件信息失败')
+  }
+}
+
+// 处理文件上传成功的回调函数
+const headerAuthor = ref({ Authorization: GET_TOKEN() })
+const handleFileSuccess: UploadProps['onSuccess'] = () => {
+  getFile()
+}
+
+// 在文件上传之前的钩子函数
+const beforeFileUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (rawFile.size > 1024 * 1024 * 10) {
+    ElMessage.error('文件大小不能超过10MB')
+    return false
+  }
+  return true
+}
+
+// 删除文件
+const handleDeleteFile = async (_id: string) => {
+  console.log(_id)
+  try {
+    await fileStore.deleteFile(_id)
+    await getFile()
+    ElMessage.success('删除文件成功')
+  } catch (error) {
+    ElMessage.error('删除文件失败')
+  }
+}
 </script>
 
 <style scoped lang="scss"></style>

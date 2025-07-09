@@ -1,4 +1,5 @@
 // store - layout 相关的类型
+import type { AllBoard } from '@/types/domain/layout'
 
 // layout
 export interface LayoutState {
@@ -6,4 +7,6 @@ export interface LayoutState {
   isCollapse: boolean
   isCollapse_title: boolean
   avatar: string
+  allBoard: AllBoard[]
+  dotCount: number
 }

@@ -93,7 +93,7 @@ const constantRoutes = [
         name: 'board',
         component: () => import('@/views/notice/board/index.vue'),
         meta: {
-          title: '公告栏？',
+          title: '公告栏',
           icon: 'board',
           hidden: false,
         },
@@ -103,7 +103,7 @@ const constantRoutes = [
         name: 'boardBin',
         component: () => import('@/views/notice/boardBin/index.vue'),
         meta: {
-          title: '回收站？',
+          title: '回收站',
           icon: 'boardBin',
           hidden: false,
         },
@@ -202,7 +202,7 @@ const constantRoutes = [
         name: 'fileManage',
         component: () => import('@/views/file/fileManage/index.vue'),
         meta: {
-          title: '文件管理？',
+          title: '文件管理',
           icon: 'file',
           hidden: false,
         },

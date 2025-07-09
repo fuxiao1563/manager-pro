@@ -116,14 +116,14 @@
       <el-table-column
         prop="createdAt"
         label="发布时间"
-        min-width="120"
+        min-width="180"
         align="center"
       />
       <!-- 最新编辑时间 -->
       <el-table-column
         prop="updatedAt"
         label="最新编辑时间"
-        min-width="120"
+        min-width="180"
         align="center"
       />
       <!-- 阅读人数 -->
@@ -138,10 +138,14 @@
         fixed="right"
         prop="_id"
         label="操作"
-        width="150"
+        min-width="200"
         align="center"
       >
         <template #="{ row }">
+          <!-- 查看 -->
+          <el-button type="success" size="small" plain @click="">
+            查看?
+          </el-button>
           <!-- 编辑 -->
           <el-button
             type="primary"

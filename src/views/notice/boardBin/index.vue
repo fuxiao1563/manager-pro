@@ -76,7 +76,7 @@
         <el-table-column
           prop="deletedAt"
           label="删除时间"
-          min-width="120"
+          min-width="180"
           align="center"
         />
         <!-- 操作 -->
@@ -84,10 +84,14 @@
           fixed="right"
           prop="_id"
           label="操作"
-          min-width="150"
+          min-width="200"
           align="center"
         >
           <template #="{ row }">
+            <!-- 查看 -->
+            <el-button type="success" size="small" plain @click="">
+              查看?
+            </el-button>
             <!-- 还原 -->
             <el-button
               type="primary"

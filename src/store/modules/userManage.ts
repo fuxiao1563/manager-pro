@@ -86,6 +86,5 @@ const useUserManageStore = defineStore('UserManage', {
       } else return Promise.reject(new Error(result.message))
     },
   },
-  // persist: true,
 })
 export default useUserManageStore

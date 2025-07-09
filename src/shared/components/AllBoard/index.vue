@@ -12,12 +12,12 @@
       <el-container>
         <el-aside width="400px">
           <el-table
-            :data="tableData"
+            :data="layoutStore.allBoard"
             stripe
             border
             style="width: 100%"
             highlight-current-row
-            @row-click="messageClick"
+            @row-click="handleMessage"
             :row-style="rowStyle"
           >
             <!-- 序号 -->
@@ -37,34 +37,20 @@
             />
             <!-- 等级 -->
             <el-table-column
-              prop="boardLevel"
+              prop="level"
               label="等级"
               min-width="80"
               align="center"
             >
-              <template #default="item">
-                <el-tag
-                  v-if="item.row.boardLevel === '一般'"
-                  type="primary"
-                  size="small"
-                >
-                  {{ item.row.boardLevel }}
-                </el-tag>
-                <el-tag
-                  v-else-if="item.row.boardLevel === '重要'"
-                  type="warning"
-                  size="small"
-                >
-                  {{ item.row.boardLevel }}
-                </el-tag>
-                <el-tag v-else type="danger" size="small">
-                  {{ item.row.boardLevel }}
+              <template #default="{ row }">
+                <el-tag :type="getLevelTag(row.level).type" size="small">
+                  {{ getLevelTag(row.level).label }}
                 </el-tag>
               </template>
             </el-table-column>
             <!-- 发布日期 -->
             <el-table-column
-              prop="releaseTime"
+              prop="createdAt"
               label="发布日期"
               min-width="120"
               align="center"
@@ -72,7 +58,8 @@
           </el-table>
         </el-aside>
         <el-main>
-          <div v-if="messageInfo.title !== ''">{{ messageInfo.title }}</div>
+          <div v-if="currentRow" v-html="currentRow.title"></div>
+          <div v-if="currentRow" v-html="currentRow.content"></div>
           <div v-else>请点击列表中的消息进行查看</div>
         </el-main>
       </el-container>
@@ -81,52 +68,48 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const props = defineProps<{
-  // boardSwitch: boolean
-  // settingSwitch: boolean
-}>()
-
-// 左侧公告列表
-const tableData = [
-  {
-    title: '上午开会',
-    boardLevel: '一般',
-    releaseTime: '2021-01-01',
-  },
-  {
-    title: '中午开会',
-    boardLevel: '重要',
-    releaseTime: '2021-01-01',
-  },
-  {
-    title: '下午开会',
-    boardLevel: '必要',
-    releaseTime: '2021-01-01',
-  },
-]
-const messageInfo = ref({
-  title: '',
-  content: '',
+import { onMounted, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { getLevelTag } from '@/shared/utils/getLevelTag.ts'
+import useLayoutStore from '@/store/modules/layout.ts'
+const layoutStore = useLayoutStore()
+onMounted(async () => {
+  getAllBoard()
 })
-// 点击列表
-const messageClick = (row: any) => {
-  messageInfo.value.title = row.title
+/// 获取全部公告
+const getAllBoard = async () => {
+  try {
+    await layoutStore.getAllBoard()
+    ElMessage.success({ message: '获取全部公告成功' })
+  } catch (error) {
+    ElMessage.error({ message: '获取全部公告失败' })
+  }
 }
-// 表格样式
-const rowStyle = (data: { row: any; rowIndex: number }) => {
-  if (data.rowIndex === 0) {
-    return 'color:#909399;'
-  } else {
-    return 'font-weight: bold;'
+// 点击列表
+const currentRow = ref<(typeof layoutStore.allBoard)[0] | null>(null)
+const handleMessage = async (row: any) => {
+  currentRow.value = row
+  if (row.isRead === true) return
+  try {
+    await layoutStore.addRead(row._id)
+    await getAllBoard()
+    ElMessage.success({ message: '添加已读成功' })
+  } catch (error) {
+    ElMessage.error({ message: '添加已读失败' })
   }
 }
 // 全部公告关闭
 const handleClose = (done: () => void) => {
   done()
-  messageInfo.value.title = ''
-  messageInfo.value.content = ''
+}
+
+// 表格样式
+const rowStyle = (data: { row: any; rowIndex: number }) => {
+  if (data.row.isRead === true) {
+    return 'color:#909399;'
+  } else {
+    return 'font-weight: bold;'
+  }
 }
 </script>
 

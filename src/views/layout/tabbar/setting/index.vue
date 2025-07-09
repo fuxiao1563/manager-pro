@@ -2,8 +2,8 @@
   <el-button type="danger" size="small" @click="">主题??</el-button>
   <el-button type="danger" size="small" @click="">语言??</el-button>
   <!-- 全部公告 -->
-  <el-badge :is-dot="true" class="item" style="margin: 0 12px">
-    <el-button type="danger" size="small" @click="handleAllBoard()">
+  <el-badge :is-dot="layoutStore.dotCount" class="item" style="margin: 0 12px">
+    <el-button type="primary" size="small" plain @click="handleAllBoard()">
       <el-icon>
         <Message />
       </el-icon>
@@ -37,7 +37,7 @@
     </template>
   </el-dropdown>
   <!-- 全部公告对话框 -->
-  <AllBoard v-model="isAllBoard" />
+  <AllBoard v-if="isAllBoard" v-model="isAllBoard" />
 </template>
 
 <script setup lang="ts">
@@ -51,6 +51,7 @@ import useUserStore from '@/store/modules/auth'
 const userStore = useUserStore()
 onMounted(() => {
   layoutStore.getAvatar()
+  layoutStore.getDotCount()
 })
 // 刷新页面按钮的回调
 const handleRefresh = () => {

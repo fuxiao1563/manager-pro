@@ -9,6 +9,7 @@ export interface Board {
   author: string
   target: string
   level: number
+  isRead: boolean
   views: number
   content: string
 }
@@ -29,7 +30,5 @@ export interface BoardsArrayItem extends Board {
 
 // 公告回收站的数据类型
 export interface BoardBin extends Board {
-  createdAt: string
-  updatedAt: string
   deletedAt: string
 }

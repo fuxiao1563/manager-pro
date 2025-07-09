@@ -11,7 +11,7 @@
   <!-- 发布 / 编辑公告对话框 -->
   <Drawer />
   <!-- 全部公告对话框 -->
-  <AllBoard v-model="boardStore.isAllBoard" />
+  <AllBoard v-if="boardStore.isAllBoard" v-model="boardStore.isAllBoard" />
 </template>
 
 <script setup lang="ts">
