@@ -12,7 +12,15 @@
         <el-input v-model="board.title" placeholder="请输入公告主题" />
       </el-form-item>
       <el-form-item label="消息类别">
-        <el-input v-model="board.category" placeholder="请输入消息类别" />
+        <!-- <el-input v-model="board.category" placeholder="请输入消息类别" /> -->
+        <el-select v-model="board.category" placeholder="请选择发布部门">
+          <el-option
+            v-for="item in categoryOpts"
+            :key="item.value"
+            :label="item.label"
+            :value="item.label"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="发布部门">
         <el-select v-model="board.department" placeholder="请选择发布部门">
@@ -41,7 +49,7 @@
       <el-form-item label="公告等级">
         <el-select v-model="board.level" placeholder="请选择公告等级">
           <el-option
-            v-for="item in boardLevelOpts"
+            v-for="item in levelOpts"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -82,7 +90,8 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
-import { deptOpts, boardLevelOpts } from '@/shared/constants/options'
+import { BOARD } from '@/shared/constants/options'
+const { deptOpts, categoryOpts, levelOpts } = BOARD
 // 表单数据
 const board = toRefs(boardStore).board
 // 确定按钮

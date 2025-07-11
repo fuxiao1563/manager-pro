@@ -59,6 +59,7 @@ const boardStore = defineStore('Board', {
     // 发布公告
     async addBoard(data: Board) {
       const result = await reqAddBoard(data)
+      console.log(result)
       if (result.code === 200) return 'ok'
       else return Promise.reject(new Error(result.message))
     },

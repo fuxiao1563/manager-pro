@@ -8,5 +8,5 @@ export interface LayoutState {
   isCollapse_title: boolean
   avatar: string
   allBoard: AllBoard[]
-  dotCount: number
+  isDot: boolean
 }

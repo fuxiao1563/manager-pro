@@ -13,7 +13,7 @@ const useLayoutStore = defineStore('layout', {
       isCollapse_title: true,
       avatar: '',
       allBoard: [],
-      dotCount: 0,
+      isDot: false,
     }
   },
   actions: {
@@ -40,9 +40,10 @@ const useLayoutStore = defineStore('layout', {
     async getDotCount() {
       const result: AllBoardRes = await reqAllBoard()
       if (result.code === 200) {
-        this.dotCount = result.data.filter(
+        const dotCount = result.data.filter(
           (item) => item.isRead === false,
         ).length
+        this.isDot = dotCount > 0 ? true : false
         return 'ok'
       } else return Promise.reject(new Error(result.message))
     },

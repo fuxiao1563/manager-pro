@@ -2,7 +2,7 @@
   <el-button type="danger" size="small" @click="">主题??</el-button>
   <el-button type="danger" size="small" @click="">语言??</el-button>
   <!-- 全部公告 -->
-  <el-badge :is-dot="layoutStore.dotCount" class="item" style="margin: 0 12px">
+  <el-badge :is-dot="layoutStore.isDot" class="item" style="margin: 0 12px">
     <el-button type="primary" size="small" plain @click="handleAllBoard()">
       <el-icon>
         <Message />

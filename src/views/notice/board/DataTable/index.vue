@@ -175,22 +175,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage, type TableInstance } from 'element-plus'
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
-import { boardLevelOpts } from '@/shared/constants/options'
 import type { BoardsArrayItem } from '@/types/domain/notice'
+import { getLevelTag } from '@/shared/utils/getLevelTag'
 onMounted(() => {
   boardStore.getBoard(boardStore.searchParams)
-})
-// 获取等级标签
-const getLevelTag = computed(() => (level: number) => {
-  const found = boardLevelOpts.find((op) => op.value === level)
-  return {
-    type: found?.type || 'info',
-    label: found?.label || '',
-  }
 })
 // 全部公告按钮
 const handleAllBoard = () => {

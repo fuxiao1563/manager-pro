@@ -93,7 +93,9 @@
 import { onMounted, ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
-import { genderOpts, deptOpts, statusOpts } from '@/shared/constants/options'
+import { USER, COMPANY } from '@/shared/constants/options'
+const { genderOpts, statusOpts } = USER
+const deptOpts = COMPANY
 import type { UploadProps } from 'element-plus'
 import useUserCenterStore from '@/store/modules/userCenter'
 const userCenterStore = useUserCenterStore()

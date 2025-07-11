@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import App from './App.vue'
 // 引入全局样式
 import './shared/assets/styles/index.scss'
+// 引入国际化插件
+import { i18n } from './plugins/i18n'
 //引入element-plus插件与样式
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
@@ -23,4 +25,5 @@ createApp(App)
   .use(globalComponent)
   .use(pinia)
   .use(ElementPlus, { locale: zhCn })
+  .use(i18n)
   .mount('#app')

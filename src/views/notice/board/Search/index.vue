@@ -15,11 +15,7 @@
           />
         </el-select>
         <el-radio-group v-model="searchParams.level" style="margin-left: 50px">
-          <el-radio
-            v-for="item in boardLevelOpts"
-            :key="item"
-            :value="item.value"
-          >
+          <el-radio v-for="item in levelOpts" :key="item" :value="item.value">
             {{ item.label }}
           </el-radio>
         </el-radio-group>
@@ -44,7 +40,8 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import { deptOpts, boardLevelOpts } from '@/shared/constants/options'
+import { BOARD } from '@/shared/constants/options'
+const { deptOpts, levelOpts } = BOARD
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
 const { searchParams, getBoard } = boardStore

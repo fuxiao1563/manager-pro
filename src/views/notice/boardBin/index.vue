@@ -120,7 +120,8 @@
 <script setup lang="ts">
 import { onMounted, computed } from 'vue'
 import { ElMessage } from 'element-plus'
-import { boardLevelOpts } from '@/shared/constants/options'
+import { BOARD } from '@/shared/constants/options'
+const { levelOpts } = BOARD
 import useBoardBinStore from '@/store/modules/boardBin'
 const boardBinStore = useBoardBinStore()
 onMounted(() => {
@@ -128,7 +129,7 @@ onMounted(() => {
 })
 // 获取等级标签
 const getLevelTag = computed(() => (level: number) => {
-  const found = boardLevelOpts.find((op) => op.value === level)
+  const found = levelOpts.find((op) => op.value === level)
   return {
     type: found?.type || 'info',
     label: found?.label || '',

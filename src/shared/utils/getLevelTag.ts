@@ -1,8 +1,9 @@
 import { computed } from 'vue'
-import { boardLevelOpts } from '@/shared/constants/options'
+import { BOARD } from '@/shared/constants/options'
+const { levelOpts } = BOARD
 
 export const getLevelTag = computed(() => (level: number) => {
-  const found = boardLevelOpts.find((op) => op.value === level)
+  const found = levelOpts.find((op) => op.value === level)
   return {
     type: found?.type || 'info',
     label: found?.label || '',
