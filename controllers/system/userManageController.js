@@ -48,15 +48,16 @@ exports.addUser = async (req, res) => {
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { role: CtrlRole } = decoded
     if (CtrlRole !== '超级管理员' && CtrlRole !== '管理员' && CtrlRole !== '普通用户') return res.err('角色无权限')
-    let { username, role, status, phone, email, gender } = req.body
+    let { username, gender, role,  department, status, phone, email } = req.body
     if (!username) return res.err('账号不能为空')
     const query = {}
     if (username) query.username = username
+    if (gender) query.gender = gender
     if (role) query.role = role
+    if (department) query.department = department
     if (status) query.status = status
     if (phone) query.phone = phone
     if (email) query.email = email
-    if (gender) query.gender = gender
     try {
         const result = await UserInfoModel.findOne({ username }, { runValidators: true })
         if (result) return res.err('账号已存在')

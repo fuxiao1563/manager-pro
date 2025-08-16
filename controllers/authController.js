@@ -15,7 +15,7 @@ exports.login = async (req, res) => {
         let data = await UserInfoModel.findOneAndUpdate(
             { username },
             { status: '在线' },
-            { new: true, runValidators:true, projection: { username: 1, password: 1, role: 1 } })
+            { new: true, runValidators: true, projection: { username: 1, password: 1, role: 1 } })
         if (data === null) return res.err('账号不存在')
         const passwordValid = bcryptjs.compareSync(password, data.password);
         if (!passwordValid) return res.err('密码错误')
@@ -49,10 +49,12 @@ exports.register = async (req, res) => {
     try {
         const data = await UserInfoModel.findOne({ username })
         if (data) return res.err('账号已存在')
-        await UserInfoModel.create({ username, password })
+        const newUser = await UserInfoModel.create({ username, password })
+        if (!newUser) return res.err('账号注册失败')
         res.json({ code: 200, message: '账号注册成功' });
     } catch (error) {
-        res.err('服务器内部错误')
+        console.log(error)
+        res.json({ code: 500, message: '服务器内部错误' });
     }
 }
 // 退出登录
@@ -63,7 +65,7 @@ exports.logout = async (req, res) => {
     const { username } = decoded
     if (!username) return res.err('无效的认证信息')
     try {
-        const data = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' },{runValidators: true})
+        const data = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' }, { runValidators: true })
         if (data === null) return res.err('账号不存在')
         // if (data.status === 'outline') return res.err('账号已退出')
         res.json({ code: 200, message: '账号退出成功' })

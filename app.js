@@ -34,7 +34,7 @@ app.use(jwt({
   secret: jwtconfig.jwtSecretKey,
   algorithms: ['HS256']
 }).unless({
-  path: ['/user/login', '/user/regist']
+  path: ['/auth/login', '/auth/register']
 }))
 // 全局引入处理错误中间件
 const errorMiddleware = require('./middlewares/errorMiddleware');

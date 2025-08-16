@@ -37,8 +37,9 @@ exports.updateCompany = async (req, res) => {
         const data = await CompanyInfoModel.findOneAndUpdate(
             {},
             { name, address, introduce, department },
-            { new: true, runValidators: true }
+            { new: true, runValidators: true, upsert: true }
         )
+        if (!data) return res.err('修改失败')
         res.json({ code: 200, message: '修改成功', data })
     } catch (error) {
         res.err(error)

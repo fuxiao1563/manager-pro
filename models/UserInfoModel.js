@@ -46,7 +46,7 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         validate: {
             validator: function (v) {
-                return /^1[3-9]\d{9}$/.test(v);
+                return /^1[3-9]\d{9}$/.test(v) || v === null;
             },
             message: props => `${props.value} 不是有效的手机号码!`
         },
@@ -56,7 +56,7 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         validate: {
             validator: function (v) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || v === null;
             },
             message: props => `${props.value} 不是有效的邮箱地址!`
         },
