@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, computed } from 'vue'
+import { ref, toRefs } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
@@ -65,8 +65,7 @@ const props = defineProps<{
   getUser: () => void
   opts: any
 }>()
-const { genderOpts, roleOpts, statusOpts } = props.opts
-const deptOpts = computed(() => props.opts.deptOpts || [])
+const { genderOpts, roleOpts, statusOpts, deptOpts } = props.opts
 // 抽屉确认按钮
 const handleConfirm = async () => {
   try {

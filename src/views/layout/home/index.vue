@@ -22,12 +22,12 @@
 </template>
 
 <script lang="ts" setup>
-import Admin from './Admin/index.vue'
-import Data from './Data/index.vue'
-import LineChart from './CardGroup/LineChart/index.vue'
-import PieChart from './CardGroup/PieChart/index.vue'
-import Project from './CardGroup/Project/index.vue'
-import Creative from './CardGroup/Creative/index.vue'
+import Admin from './admin/index.vue'
+import Data from './data/index.vue'
+import LineChart from './cardgroup/linechart/index.vue'
+import PieChart from './cardgroup/piechart/index.vue'
+import Project from './cardgroup/project/index.vue'
+import Creative from './cardgroup/creative/index.vue'
 </script>
 
 <style scoped lang="scss">

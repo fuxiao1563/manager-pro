@@ -16,23 +16,15 @@ import Search from './Search/index.vue'
 import DataTabel from './DataTable/index.vue'
 import Pagenation from './Pagenation/index.vue'
 import Drawer from './Drawer/index.vue'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import useUserManage from '@/store/modules/userManage'
 const userManage = useUserManage()
-import {
-  genderOpts,
-  roleOpts,
-  deptOpts,
-  statusOpts,
-} from '@/shared/constants/options'
-// 所有选项
-const opts = reactive({
-  genderOpts,
-  roleOpts,
-  deptOpts,
-  statusOpts,
-})
+import { USER, COMPANY } from '@/shared/constants/options'
+const opts = {
+  ...USER,
+  deptOpts: COMPANY.deptOpts,
+}
 
 // 初始化获取用户信息列表
 onMounted(async () => {

@@ -40,8 +40,9 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import { BOARD } from '@/shared/constants/options'
-const { deptOpts, levelOpts } = BOARD
+import { BOARD, COMPANY } from '@/shared/constants/options'
+const { levelOpts } = BOARD
+const { deptOpts } = COMPANY
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
 const { searchParams, getBoard } = boardStore

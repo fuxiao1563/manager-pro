@@ -128,7 +128,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, computed } from 'vue'
+import { ref, reactive, toRefs } from 'vue'
 import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
@@ -143,8 +143,7 @@ const props = defineProps<{
   getUser: () => void
   opts: any
 }>()
-const { genderOpts, roleOpts, statusOpts } = props.opts
-const deptOpts = computed(() => props.opts.deptOpts || [])
+const { genderOpts, roleOpts, statusOpts, deptOpts } = props.opts
 // 搜索按钮
 const search = async () => {
   try {

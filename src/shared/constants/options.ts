@@ -32,11 +32,12 @@ const ROLE = {
   ],
 }
 // 公司相关常量
-const COMPANY = {}
-// 公告相关常量
-const BOARD = {
+const COMPANY = {
   // 部门选项
   deptOpts: ref<string[]>([]),
+}
+// 公告相关常量
+const BOARD = {
   // 公告类别选项
   categoryOpts: [
     { label: '公司公告', value: 1 },
@@ -53,12 +54,13 @@ const BOARD = {
 // 获取部门选项的方法
 const getDeptOpts = async () => {
   const result: CompanyRes = await reqGetCompany()
+  console.log(result)
   if (result.code === 200) return result.data.department || []
   return Promise.reject(new Error(result.message))
 }
 ;(async () => {
   try {
-    BOARD.deptOpts.value = await getDeptOpts()
+    COMPANY.deptOpts.value = await getDeptOpts()
   } catch (error) {
     ElMessage.error({ message: '获取部门信息失败' })
   }

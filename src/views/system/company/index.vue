@@ -70,7 +70,6 @@ onMounted(async () => {
   try {
     await companyStore.getCompany()
   } catch (error) {
-    console.log(error)
     ElMessage.error({ message: '获取用户信息失败' })
   }
 })
@@ -83,7 +82,6 @@ const submitForm = async () => {
     await companyStore.updateCompany(company.value)
     ElMessage.success({ message: '修改成功' })
   } catch (error) {
-    console.log(error)
     ElMessage.error({ message: '修改失败' })
   }
 }

@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item label="消息类别">
         <!-- <el-input v-model="board.category" placeholder="请输入消息类别" /> -->
-        <el-select v-model="board.category" placeholder="请选择发布部门">
+        <el-select v-model="board.category" placeholder="请选择消息类别">
           <el-option
             v-for="item in categoryOpts"
             :key="item.value"
@@ -90,8 +90,9 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import useBoardStore from '@/store/modules/board'
 const boardStore = useBoardStore()
-import { BOARD } from '@/shared/constants/options'
-const { deptOpts, categoryOpts, levelOpts } = BOARD
+import { BOARD, COMPANY } from '@/shared/constants/options'
+const { categoryOpts, levelOpts } = BOARD
+const { deptOpts } = COMPANY
 // 表单数据
 const board = toRefs(boardStore).board
 // 确定按钮

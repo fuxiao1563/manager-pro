@@ -198,7 +198,7 @@ const handlePublish = () => {
     department: '',
     author: '',
     target: '',
-    level: 1,
+    level: '',
     content: '',
   })
 }

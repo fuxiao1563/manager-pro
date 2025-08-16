@@ -121,7 +121,7 @@ const rules = reactive<FormRules<typeof registForm>>({
 const regist = async () => {
   try {
     await authStore.register(registForm)
-    $router.push('/user/login')
+    $router.push('/auth/login')
     ElMessage.success({ message: '注册成功' })
   } catch (error) {
     ElMessage.error({ message: '注册失败' })
