@@ -1,9 +1,9 @@
 const fs = require('fs');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../jwtConfig/index');
-const UserInfoModel = require('../models/UserInfoModel');
-const UserAvatarModel = require('../models/UserAvatarModel');
+const jwtConfig = require('../jwt-config/index');
+const UserInfoModel = require('../models/system/user-model');
+const UserAvatarModel = require('../models/user-avatar-model');
 
 
 

@@ -1,8 +1,8 @@
 const { Types } = require('mongoose');
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../../jwtConfig/index');
-const UserInfoModel = require('../../models/UserInfoModel');
+const jwtConfig = require('../../jwt-config/index');
+const UserInfoModel = require('../../models/system/user-model');
 
 
 

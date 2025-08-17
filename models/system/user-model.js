@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 // 常量
 const ENUM = Object.freeze({
     GENDER: ['男', '女', '保密'],
-    // GENDER_ENUM: [1, 2, 3],
     ROLE: ['普通用户', '管理员', '超级管理员'],
     STATUS: ['在线', '离线', '隐身'],
 })

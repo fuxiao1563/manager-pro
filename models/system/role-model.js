@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 // 角色管理
+
 const roleSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -24,8 +25,8 @@ const roleSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: [1, 2], // 1: 正常 2: 禁用
-        default: 1
+        enum: ['启用', '禁用'],
+        default: '禁用'
     },
 })
 let RoleModel = mongoose.model('Role', roleSchema)

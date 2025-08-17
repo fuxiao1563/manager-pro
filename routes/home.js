@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const homeController = require('../controllers/homeController');
+const homeController = require('../controllers/home-controller');
 
 
 // 获取首页

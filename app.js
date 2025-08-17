@@ -27,7 +27,7 @@ app.use(cors());
 // 静态资源托管
 app.use(express.static('./public'))
 // 引入jwt配置用于加密和解密
-const jwtconfig = require('./jwtConfig/index');
+const jwtconfig = require('./jwt-config/index');
 // 引入jwt中间件，用于生成token
 const {expressjwt:jwt} = require('express-jwt');
 app.use(jwt({
@@ -37,7 +37,7 @@ app.use(jwt({
   path: ['/auth/login', '/auth/register']
 }))
 // 全局引入处理错误中间件
-const errorMiddleware = require('./middlewares/errorMiddleware');
+const errorMiddleware = require('./middlewares/error-middleware');
 app.use(errorMiddleware());
 
 // 路由
@@ -49,16 +49,16 @@ const homeRouter = require('./routes/home');
 app.use('/home', homeRouter);
 const boardRouter = require('./routes/notice/board');
 app.use('/notice/board', boardRouter);
-const boardBinRouter = require('./routes/notice/boardBin');
-app.use('/notice/boardBin', boardBinRouter);
+const boardBinRouter = require('./routes/notice/board-bin');
+app.use('/notice/board-bin', boardBinRouter);
 const fileRouter = require('./routes/file');
 app.use('/file', fileRouter);
-const userCenterRouter = require('./routes/userCenter');
-app.use('/userCenter', userCenterRouter);
+const userCenterRouter = require('./routes/user-center');
+app.use('/user-center', userCenterRouter);
 const companyRouter = require('./routes/system/company');
 app.use('/system/company', companyRouter);
-const userManageRouter = require('./routes/system/userManage');
-app.use('/system/userManage', userManageRouter);
+const userManageRouter = require('./routes/system/user-manage');
+app.use('/system/user-manage', userManageRouter);
 
 
 

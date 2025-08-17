@@ -1,5 +1,5 @@
 const { Types } = require('mongoose');
-const BoardModel = require('../models/notice/BoardModel');
+const BoardModel = require('../models/notice/board-model');
 
 
 // 获取全部公告

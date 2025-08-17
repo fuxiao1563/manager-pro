@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../jwtConfig/index');
+const jwtConfig = require('../jwt-config/index');
 
 
 // token验证

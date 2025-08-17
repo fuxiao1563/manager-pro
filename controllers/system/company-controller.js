@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../../jwtConfig/index');
-const CompanyInfoModel = require('../../models/company/CompanyInfoModel');
+const jwtConfig = require('../../jwt-config/index');
+const CompanyInfoModel = require('../../models/system/company-model');
 
 
 /**

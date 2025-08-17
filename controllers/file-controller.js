@@ -2,9 +2,9 @@ const fs = require('fs');
 const { Types } = require('mongoose');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../jwtConfig/index');
-const FileManageModel = require('../models/FileManageModel');
-const UserInfoModel = require('../models/UserInfoModel');
+const jwtConfig = require('../jwt-config/index');
+const FileManageModel = require('../models/file-model');
+const UserInfoModel = require('../models/system/user-model');
 
 
 const uploadFileDir = './public/upload/file'
@@ -28,8 +28,10 @@ exports.uploadFile = async (req, res) => {
     try {
         const { size, originalname, filename } = req.file
         const username = req.user.username;
-        // 检查上传目录是否存在???????????????????????????????
-        await fs.promises.rename(path.join(uploadFileDir, filename), path.join(uploadFileDir, `${username}-${originalname}`))
+        await fs.promises.rename(
+            path.join(uploadFileDir, filename), 
+            path.join(uploadFileDir, `${username}-${originalname}`)
+        )
         const user = await UserInfoModel.findOne({ username })
         if (!user) return res.status(404).json({ error: '用户不存在' })
         const data = await FileManageModel.create({
@@ -41,7 +43,6 @@ exports.uploadFile = async (req, res) => {
         if (!data) return res.err('文件上传失败')
         res.json({ code: 200, message: '文件上传成功' });
     } catch (error) {
-        console.log(error);
         res.err('服务器内部错误');
     }
 }
