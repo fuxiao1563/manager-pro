@@ -4,7 +4,7 @@ import type { CompanyRes } from '@/types/api/system/company'
 
 enum API {
   getCompany_URL = '/system/company',
-  updateCompany_URL = '/system/company/updateCompany',
+  updateCompany_URL = '/system/company/update',
 }
 
 // 公司信息

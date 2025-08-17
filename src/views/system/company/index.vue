@@ -63,7 +63,7 @@
 import { nextTick, ref, toRefs, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { InputInstance } from 'element-plus'
-import useCompanyStore from '@/store/modules/company'
+import useCompanyStore from '@/store/modules/system/company'
 const companyStore = useCompanyStore()
 const { company } = toRefs(companyStore)
 onMounted(async () => {

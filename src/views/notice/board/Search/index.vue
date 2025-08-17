@@ -43,7 +43,7 @@ import { ElMessage } from 'element-plus'
 import { BOARD, COMPANY } from '@/shared/constants/options'
 const { levelOpts } = BOARD
 const { deptOpts } = COMPANY
-import useBoardStore from '@/store/modules/board'
+import useBoardStore from '@/store/modules/notice/board'
 const boardStore = useBoardStore()
 const { searchParams, getBoard } = boardStore
 // 重置按钮

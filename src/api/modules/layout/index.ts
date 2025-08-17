@@ -3,8 +3,8 @@ import type { AvatarRes, AllBoardRes } from '@/types/api/layout'
 
 enum API {
   getAvatar_URL = '/layout/avatar',
-  getAllBoard_URL = '/layout/allBoard',
-  putAddRead_URL = '/layout/addRead',
+  getAllBoard_URL = '/layout/all-board',
+  putAddRead_URL = '/layout/add-read',
 }
 
 // 获取用户头像

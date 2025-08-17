@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import Search from './Search/index.vue'
-import DataTable from './DataTable/index.vue'
-import Pagenation from './Pagenation/index.vue'
-import Drawer from './Drawer/index.vue'
-import useBoardStore from '@/store/modules/board'
+import Search from './search/index.vue'
+import DataTable from './datatable/index.vue'
+import Pagenation from './pagenation/index.vue'
+import Drawer from './drawer/index.vue'
+import useBoardStore from '@/store/modules/notice/board'
 const boardStore = useBoardStore()
 </script>
 

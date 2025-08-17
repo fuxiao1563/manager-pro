@@ -4,10 +4,10 @@ import type { BoardRes, SearchParams } from '@/types/api/notice'
 
 enum API {
   board_URL = '/notice/board',
-  addboard_URL = '/notice/board/addBoard',
-  updateboard_URL = '/notice/board/updateBoard',
-  deleteboard_URL = '/notice/board/deleteBoard/',
-  batchDeleteboard_URL = '/notice/board/batchDeleteBoard',
+  addboard_URL = '/notice/board/add',
+  updateboard_URL = '/notice/board/update',
+  deleteboard_URL = '/notice/board/delete/',
+  batchDeleteboard_URL = '/notice/board/batch-delete',
 }
 
 // 获取公告列表 + 搜索公告的接口

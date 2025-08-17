@@ -1,5 +1,5 @@
-import SvgIcon from './SvgIcon/index.vue'
-import AllBoard from './AllBoard/index.vue'
+import SvgIcon from './svg-icon/index.vue'
+import AllBoard from './all-board/index.vue'
 // 引入element-plus图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const allGlobalComponents: any = {

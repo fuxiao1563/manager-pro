@@ -177,7 +177,7 @@
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from 'vue'
 import { ElMessage, type TableInstance } from 'element-plus'
-import useBoardStore from '@/store/modules/board'
+import useBoardStore from '@/store/modules/notice/board'
 const boardStore = useBoardStore()
 import type { BoardsArrayItem } from '@/types/domain/notice'
 import { getLevelTag } from '@/shared/utils/getLevelTag'

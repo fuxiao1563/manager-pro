@@ -88,7 +88,7 @@ import { onBeforeUnmount, shallowRef, toRefs } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import useBoardStore from '@/store/modules/board'
+import useBoardStore from '@/store/modules/notice/board'
 const boardStore = useBoardStore()
 import { BOARD, COMPANY } from '@/shared/constants/options'
 const { categoryOpts, levelOpts } = BOARD

@@ -99,9 +99,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/notice/boardBin',
-        name: 'boardBin',
-        component: () => import('@/views/notice/boardBin/index.vue'),
+        path: '/notice/board-bin',
+        name: 'board-bin',
+        component: () => import('@/views/notice/board-bin/index.vue'),
         meta: {
           title: '回收站',
           icon: 'boardBin',
@@ -112,19 +112,19 @@ const constantRoutes = [
   },
   // 用户中心
   {
-    path: '/userCenter_layout',
-    name: 'userCenter_layout',
+    path: '/user-center-layout',
+    name: 'user-center-layout',
     component: () => import('@/views/layout/index.vue'),
     meta: {
-      title: 'userCenter_layout',
+      title: 'user-center-layout',
       icon: 'home',
       hidden: false,
     },
     children: [
       {
-        path: '/userCenter',
-        name: 'userCenter',
-        component: () => import('@/views/userCenter/index.vue'),
+        path: '/user-center',
+        name: 'user-center',
+        component: () => import('@/views/user-center/index.vue'),
         meta: {
           title: '用户中心',
           icon: 'userCenter',
@@ -145,8 +145,8 @@ const constantRoutes = [
     },
     children: [
       {
-        path: '/system/companyInfo',
-        name: 'companyInfo',
+        path: '/system/company',
+        name: 'company',
         component: () => import('@/views/system/company/index.vue'),
         meta: {
           title: '公司信息',
@@ -155,9 +155,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/system/userManage',
-        name: 'userManage',
-        component: () => import('@/views/system/userManage/index.vue'),
+        path: '/system/user-manage',
+        name: 'user-manage',
+        component: () => import('@/views/system/user-manage/index.vue'),
         meta: {
           title: '用户管理',
           icon: 'userManage',
@@ -165,9 +165,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/system/roleManage',
-        name: 'roleManage',
-        component: () => import('@/views/system/roleManage/index.vue'),
+        path: '/system/role-manage',
+        name: 'role-manage',
+        component: () => import('@/views/system/role-manage/index.vue'),
         meta: {
           title: '角色管理?',
           icon: 'roleManage',
@@ -175,9 +175,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/system/menuManage',
-        name: 'menuManage',
-        component: () => import('@/views/system/menuManage/index.vue'),
+        path: '/system/menu-manage',
+        name: 'menu-manage',
+        component: () => import('@/views/system/menu-manage/index.vue'),
         meta: {
           title: '菜单管理',
           icon: 'menuManage',
@@ -198,9 +198,9 @@ const constantRoutes = [
     },
     children: [
       {
-        path: '/file/fileManage',
-        name: 'fileManage',
-        component: () => import('@/views/file/fileManage/index.vue'),
+        path: '/file/file-manage',
+        name: 'file-manage',
+        component: () => import('@/views/file/file-manage/index.vue'),
         meta: {
           title: '文件管理',
           icon: 'file',
@@ -221,9 +221,9 @@ const constantRoutes = [
     },
     children: [
       {
-        path: '/log/ctrLog',
-        name: 'ctrLog',
-        component: () => import('@/views/log/ctrLog/index.vue'),
+        path: '/log/ctrl-log',
+        name: 'ctrl-log',
+        component: () => import('@/views/log/ctrl-log/index.vue'),
         meta: {
           title: '操作日志？',
           icon: 'ctrLog',
@@ -231,9 +231,9 @@ const constantRoutes = [
         },
       },
       {
-        path: '/log/loginLog',
-        name: 'loginLog',
-        component: () => import('@/views/log/loginLog/index.vue'),
+        path: '/log/login-log',
+        name: 'login-log',
+        component: () => import('@/views/log/login-log/index.vue'),
         meta: {
           title: '登录日志？',
           icon: 'loginLog',

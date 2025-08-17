@@ -26,7 +26,7 @@ const USER = {
 // 角色相关常量
 const ROLE = {
   // 角色状态选项
-  roleStatusOpts: [
+  statusOpts: [
     { label: '启用', value: '启用' },
     { label: '禁用', value: '禁用' },
   ],
@@ -54,7 +54,6 @@ const BOARD = {
 // 获取部门选项的方法
 const getDeptOpts = async () => {
   const result: CompanyRes = await reqGetCompany()
-  console.log(result)
   if (result.code === 200) return result.data.department || []
   return Promise.reject(new Error(result.message))
 }
