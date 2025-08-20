@@ -12,19 +12,16 @@ const UserAvatarModel = require('../models/user-avatar-model');
  * @returns data
  */
 exports.userCenter = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username } = decoded
-    if (!username) return res.err('无效的认证信息')
     try {
+        const { username } = req.user
+        if (!username) return res.json({ code: 401, message: '无效的认证信息' })
         const data = await UserInfoModel
             .findOne({ username })
             .select({ username: 1, gender: 1, role: 1, department: 1, phone: 1, email: 1, status: 1, signature: 1 })
-        if (data === null) return res.err('账号不存在')
+        if (data === null) return res.json({ code: 404, message: '账号不存在' })
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
-        res.json({ message: '查询失败', err });
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
 /**
@@ -32,18 +29,15 @@ exports.userCenter = async (req, res) => {
  * @returns data token
  */
 exports.updateUser = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username: oldUsername } = decoded
-    if (!oldUsername) return res.err('无效的认证信息')
-    const { username: newUsername, gender, department, phone, email, status, signature } = req.body
     try {
+        const { username: oldUsername } = req.user
+        if (!oldUsername) return res.json({ code: 401, message: '无效的认证信息' })
+        const { username: newUsername, gender, department, phone, email, status, signature } = req.body
         const data = await UserInfoModel.findOneAndUpdate(
             { username: oldUsername },
             { username: newUsername, gender, department, phone, email, status, signature },
             { new: true, runValidators: true })
-        if (data === null) return res.err('账号不存在')
+        if (data === null) return res.json({ code: 404, message: '账号不存在' })
         const tokenStr = jwt.sign(data.toObject(), jwtConfig.jwtSecretKey);
         res.json({
             code: 200,
@@ -51,39 +45,32 @@ exports.updateUser = async (req, res) => {
             token: 'Bearer ' + tokenStr
         });
     } catch (error) {
-        res.err(error)
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
 // 修改密码
 exports.updatePassword = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username } = decoded
-    if (!username) return res.err('无效的认证信息')
-    let { password, newPassword } = req.body
-    if (!password || !newPassword) return res.err('密码不能为空')
-    newPassword = bcryptjs.hashSync(newPassword, 10)
     try {
+        const { username } = req.user
+        if (!username) return res.json({ code: 401, message: '无效的认证信息' })
+        let { password, newPassword } = req.body
+        if (!password || !newPassword) return res.json({ code: 400, message: '密码不能为空' })
+        newPassword = bcryptjs.hashSync(newPassword, 10)
         const data = await UserInfoModel.findOneAndUpdate({ username }, { password: newPassword }, { runValidators: true })
-        if (data === null) return res.err('账号不存在')
+        if (data === null) return res.json({ code: 404, message: '账号不存在' })
         const passwordValid = bcryptjs.compareSync(password, data.password);
-        if (!passwordValid) return res.err('旧密码错误')
+        if (!passwordValid) return res.json({ code: 400, message: '旧密码错误' })
         res.json({ code: 200, message: '修改成功' })
     } catch (error) {
-        res.err('服务器内部错误')
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
 // 上传头像
 exports.uploadAvatar = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username } = decoded
-    if (!username) return res.err('无效的认证信息')
-    if (!req.file) return res.err('头像未上传')
-
     try {
+        const { username } = req.user
+        if (!username) return res.json({ code: 401, message: '无效的认证信息' })
+        if (!req.file) return res.json({ code: 400, message: '头像未上传' })
         const { filename: oldName, originalname: newName } = req.file
         const uploadAvatarDir = './public/upload/avatar'
         await fs.promises.rename(`${uploadAvatarDir}/${oldName}`, `${uploadAvatarDir}/${username}-${newName}`)
@@ -104,9 +91,9 @@ exports.uploadAvatar = async (req, res) => {
         } else {
             data = await UserAvatarModel.create({ username, avatarUrl, avatarId })
         }
-        if (data === null) return res.err('上传失败')
+        if (data === null) return res.json({ code: 500, message: '上传失败' })
         res.json({ code: 200, message: '上传成功', data })
     } catch (error) {
-        console.error('上传头像失败:', error);
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

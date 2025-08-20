@@ -11,17 +11,17 @@ const loginLogController = require('../controllers/log/login');
  * @returns data token
  */
 exports.login = async (req, res) => {
-    const { username, password } = req.body
-    if (!username || !password) return res.err('账号或密码不能为空')
     try {
+        const { username, password } = req.body
+        if (!username || !password) return res.json({ code: 400, message: '账号或密码不能为空' })
         const data = await UserInfoModel.findOneAndUpdate(
             { username },
             { status: '在线' },
             { new: true, runValidators: true, projection: { username: 1, password: 1, role: 1 } })
-        if (data === null) return res.err('账号不存在')
+        if (data === null) return res.json({ code: 404, message: '账号不存在' })
         const passwordValid = bcryptjs.compareSync(password, data.password);
-        if (!passwordValid) return res.err('密码错误')
-        if (data.status === 'online') return res.err('账号已登录')
+        if (!passwordValid) return res.json({ code: 400, message: '密码错误' })
+        if (data.status === 'online') return res.json({ code: 400, message: '账号已登录' })
         // 返回data
         const newData = {
             username: data.username,
@@ -50,23 +50,23 @@ exports.login = async (req, res) => {
             }
             loginLogController.recordLog(logReq, logRes)
         } catch (error) {
-            return res.err('登录日志记录失败');
+            return res.json({ code: 500, message: '登录日志记录失败' });
         }
     } catch (error) {
-        res.err('服务器内部错误')
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
 
 // 注册
 exports.register = async (req, res) => {
     let { username, password } = req.body
-    if (!username || !password) return res.err('账号或密码不能为空')
+    if (!username || !password) return res.json({ code: 400, message: '账号或密码不能为空' })
     password = bcryptjs.hashSync(password, 10)
     try {
         const data = await UserInfoModel.findOne({ username })
-        if (data) return res.err('账号已存在')
+        if (data) return res.json({ code: 400, message: '账号已存在' })
         const newUser = await UserInfoModel.create({ username, password })
-        if (!newUser) return res.err('账号注册失败')
+        if (!newUser) return res.json({ code: 500, message: '账号注册失败' })
         res.json({ code: 200, message: '账号注册成功' });
     } catch (error) {
         res.json({ code: 500, message: '服务器内部错误' });
@@ -75,24 +75,24 @@ exports.register = async (req, res) => {
 // 退出登录
 exports.logout = async (req, res) => {
     const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.err('token不存在')
+    if (!token) return res.json({ code: 401, message: 'token不存在' })
     const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
     const { username } = decoded
-    if (!username) return res.err('无效的认证信息')
+    if (!username) return res.json({ code: 401, message: '无效的认证信息' })
     try {
         const data = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' }, { runValidators: true })
-        if (data === null) return res.err('账号不存在')
+        if (data === null) return res.json({ code: 404, message: '账号不存在' })
         // if (data.status === 'outline') return res.err('账号已退出')
         res.json({ code: 200, message: '账号退出成功' })
     } catch (error) {
-        res.err('服务器内部错误')
+        res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
 
 // 获取验证码
 exports.sendCode = async (req, res) => {
     const { phone } = req.body
-    if (!phone) return res.err('手机号不能为空')
+    if (!phone) return res.json({ code: 400, message: '手机号不能为空' })
     try {
         // 生成6位随机验证码
         const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -104,14 +104,14 @@ exports.sendCode = async (req, res) => {
         // await sendSMS(phone, code);
         res.json({ code: 200, message: '验证码发送成功', data: code });
     } catch (error) {
-        res.err('验证码发送失败')
+        res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
 
 // 验证码登录
 exports.codeLogin = async (req, res) => {
     const { phone, code } = req.body
-    if (!phone || !code) return res.err('手机号或验证码不能为空')
+    if (!phone || !code) return res.json({ code: 400, message: '手机号或验证码不能为空' })
     try {
         // 从Redis获取验证码
         // const savedCode = await redis.get(`code:${phone}`);
@@ -146,6 +146,6 @@ exports.codeLogin = async (req, res) => {
             token: 'Bearer ' + tokenStr
         });
     } catch (error) {
-        res.err('验证码登录失败')
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

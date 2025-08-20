@@ -13,12 +13,11 @@ const uploadFileDir = './public/upload/file'
  * @returns data
  */
 exports.getFile = async (req, res) => {
-    console.log('获取文件列表')
     try {
         const data = await FileManageModel.find().populate('userId', 'username')
         res.json({ code: 200, message: '文件获取成功', data });
     } catch (error) {
-        res.err(error || '服务器内部错误');
+        res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }
 /**
@@ -40,10 +39,10 @@ exports.uploadFile = async (req, res) => {
             fileName: originalname,
             fileSize: size,
         })
-        if (!data) return res.err('文件上传失败')
+        if (!data) return res.json({ code: 500, message: '文件上传失败' })
         res.json({ code: 200, message: '文件上传成功' });
     } catch (error) {
-        res.err('服务器内部错误');
+        res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }
 /**
@@ -51,10 +50,10 @@ exports.uploadFile = async (req, res) => {
  * @returns data
  */
 exports.deleteFile = async (req, res) => {
-    let { _id } = req.params;
     try {
+        let { _id } = req.params;
         if (!Types.ObjectId.isValid(_id)) {
-            return res.json({ code: 200, message: '无效ID' });
+            return res.json({ code: 400, message: '无效ID' });
         }
         _id = new Types.ObjectId(_id);
         // 删除文件
@@ -64,9 +63,9 @@ exports.deleteFile = async (req, res) => {
         await fs.promises.unlink(path.join(uploadFileDir, fileName));
         // 删除数据库记录
         const data = await FileManageModel.findByIdAndDelete({ _id });
-        if (data === null) return res.err('文件不存在');
+        if (data === null) return res.json({ code: 404, message: '文件不存在' });
         return res.json({ code: 200, message: '文件删除成功' });
     } catch (error) {
-        res.err('服务器内部错误');
+        res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }
