@@ -13,6 +13,7 @@ const uploadFileDir = './public/upload/file'
  * @returns data
  */
 exports.getFile = async (req, res) => {
+    console.log('获取文件列表')
     try {
         const data = await FileManageModel.find().populate('userId', 'username')
         res.json({ code: 200, message: '文件获取成功', data });
@@ -29,7 +30,7 @@ exports.uploadFile = async (req, res) => {
         const { size, originalname, filename } = req.file
         const username = req.user.username;
         await fs.promises.rename(
-            path.join(uploadFileDir, filename), 
+            path.join(uploadFileDir, filename),
             path.join(uploadFileDir, `${username}-${originalname}`)
         )
         const user = await UserInfoModel.findOne({ username })
@@ -39,7 +40,6 @@ exports.uploadFile = async (req, res) => {
             fileName: originalname,
             fileSize: size,
         })
-        console.log(data)
         if (!data) return res.err('文件上传失败')
         res.json({ code: 200, message: '文件上传成功' });
     } catch (error) {

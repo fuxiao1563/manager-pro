@@ -20,5 +20,5 @@ const companyInfoSchema = new mongoose.Schema({
 } ,{
     timestamps: true
 })
-let CompanyInfoModel = mongoose.model('companyInfo', companyInfoSchema)
+let CompanyInfoModel = mongoose.model('company', companyInfoSchema)
 module.exports = CompanyInfoModel

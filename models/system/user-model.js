@@ -49,7 +49,8 @@ const userInfoSchema = new mongoose.Schema({
             },
             message: props => `${props.value} 不是有效的手机号码!`
         },
-        default: null
+        default: null,
+        index: true
     },
     email: {
         type: String,
@@ -59,7 +60,8 @@ const userInfoSchema = new mongoose.Schema({
             },
             message: props => `${props.value} 不是有效的邮箱地址!`
         },
-        default: null
+        default: null,
+        index: true
     },
     status: {
         type: String,
@@ -73,5 +75,5 @@ const userInfoSchema = new mongoose.Schema({
 }, {
     timestamps: true
 })
-let UserInfoModel = mongoose.model('UserInfo', userInfoSchema)
+let UserInfoModel = mongoose.model('user', userInfoSchema)
 module.exports = UserInfoModel

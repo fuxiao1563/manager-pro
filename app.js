@@ -53,6 +53,8 @@ const boardBinRouter = require('./routes/notice/board-bin');
 app.use('/notice/board-bin', boardBinRouter);
 const fileRouter = require('./routes/file');
 app.use('/file', fileRouter);
+const loginLogRouter = require('./routes/log/login');
+app.use('/log/login', loginLogRouter);
 const userCenterRouter = require('./routes/user-center');
 app.use('/user-center', userCenterRouter);
 const companyRouter = require('./routes/system/company');

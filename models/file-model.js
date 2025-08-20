@@ -7,7 +7,7 @@ const FileManageSchema = new mongoose.Schema({
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserInfo',
+        ref: 'user',
         required: true,
     },
     fileSize: {
@@ -24,5 +24,5 @@ const FileManageSchema = new mongoose.Schema({
         updatedAt: 'updateTime'
     }
 })
-let FileManageModel = mongoose.model('FileManage', FileManageSchema)
+let FileManageModel = mongoose.model('file', FileManageSchema)
 module.exports = FileManageModel

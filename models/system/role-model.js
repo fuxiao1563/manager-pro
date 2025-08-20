@@ -29,5 +29,5 @@ const roleSchema = new mongoose.Schema({
         default: '禁用'
     },
 })
-let RoleModel = mongoose.model('Role', roleSchema)
+let RoleModel = mongoose.model('role', roleSchema)
 module.exports = RoleModel

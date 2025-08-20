@@ -24,5 +24,5 @@ const userAvatarSchema = new mongoose.Schema({
 },{
     timestamps: true
 })
-let UserAvatarModel = mongoose.model('UserAvatar', userAvatarSchema)
+let UserAvatarModel = mongoose.model('user-avatar', userAvatarSchema)
 module.exports = UserAvatarModel

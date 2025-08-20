@@ -36,7 +36,6 @@ module.exports = (options = {}) => {
             // if (!hasPermission) {
             //     return res.status(403).json({ message: '无权访问该模块' });
             // }
-
             req.user = decoded
             next()
         } catch (error) {
