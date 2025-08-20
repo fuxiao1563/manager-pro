@@ -26,7 +26,5 @@ const useHomeStore = defineStore('Home', {
       }
     },
   },
-  getters: {},
-  // persist: true,
 })
 export default useHomeStore

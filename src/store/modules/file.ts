@@ -36,6 +36,5 @@ const fileStore = defineStore('File', {
       return Promise.reject(new Error(result.message))
     },
   },
-  getters: {},
 })
 export default fileStore

@@ -82,6 +82,5 @@ const boardStore = defineStore('Board', {
       else return Promise.reject(new Error(result.message))
     },
   },
-  getters: {},
 })
 export default boardStore

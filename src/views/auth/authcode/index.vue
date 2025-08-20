@@ -45,7 +45,7 @@
               type="primary"
               @click="authcodeLogin"
             >
-              确认
+              登录 / 注册
             </el-button>
           </el-form-item>
           <el-form-item>
@@ -119,6 +119,7 @@ const goBack = () => {
     background: white;
     padding: 40px 40px 20px 40px;
     top: 20vh;
+
     h1 {
       display: flex;
       font-size: 30px;

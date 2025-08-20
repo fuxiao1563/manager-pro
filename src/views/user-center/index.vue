@@ -17,7 +17,7 @@
         <el-upload
           class="avatar-uploader"
           :headers="headerAuthor"
-          action="http://localhost:27017/userCenter/uploadAvatar"
+          action="http://localhost:27017/user-center/upload-avatar"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"

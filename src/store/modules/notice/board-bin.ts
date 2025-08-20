@@ -44,6 +44,5 @@ const boardBinStore = defineStore('BoardBin', {
       else return Promise.reject(new Error(result.message))
     },
   },
-  getters: {},
 })
 export default boardBinStore

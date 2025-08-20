@@ -50,7 +50,5 @@ const useAuthStore = defineStore('Auth', {
       } else return Promise.reject(new Error(result.message))
     },
   },
-  getters: {},
-  persist: true,
 })
 export default useAuthStore

@@ -47,6 +47,5 @@ const companyStore = defineStore('Company', {
       }
     },
   },
-  getters: {},
 })
 export default companyStore
