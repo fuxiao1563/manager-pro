@@ -14,3 +14,5 @@ export interface LoginRes
   }> {
   token: string
 }
+// 获取验证码所返回的数据
+export interface SendCodeRes extends BaseRes<string> {}

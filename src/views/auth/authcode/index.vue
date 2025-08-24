@@ -5,10 +5,10 @@
       <el-col :xs="20" :sm="16" :md="12" :lg="8">
         <el-form
           class="regist_form"
-          :model="authcodeForm"
+          :model="code"
           ref="registForms"
-          status-icon
           :rules="rules"
+          status-icon
         >
           <h1>
             <img src="@/shared/assets/images/logo.png" alt="" />
@@ -19,7 +19,7 @@
           <el-form-item prop="phone">
             <el-input
               :prefix-icon="Iphone"
-              v-model="authcodeForm.phone"
+              v-model="code.phone"
               placeholder="请输入手机号"
               :formatter="formatter_number"
             ></el-input>
@@ -28,12 +28,18 @@
           <el-form-item prop="authcode">
             <el-input
               :prefix-icon="ChatDotSquare"
-              v-model="authcodeForm.authcode"
+              v-model="code.authCode"
               placeholder="请输入验证码"
               :formatter="formatter_number"
             >
               <template #append>
-                <el-button type="primary" @click="">发送验证码</el-button>
+                <el-button
+                  type="primary"
+                  @click="handleSendAuthCode"
+                  :disabled="sendLoading"
+                >
+                  {{ sendAuthCode }}
+                </el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -62,7 +68,7 @@
 
 <script setup lang="ts">
 import { Iphone, ChatDotSquare } from '@element-plus/icons-vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
@@ -71,34 +77,65 @@ import {
 } from '@/shared/utils/validator'
 import router from '@/router'
 const $router = router
-// 收集表单数据
-const authcodeForm = reactive({
-  phone: '',
-  authcode: '',
-})
+import useAuthStore from '@/store/modules/auth'
+const authStore = useAuthStore()
+const { sendCode, codeLogin } = authStore
+const { code } = toRefs(authStore)
 // 获取表单元素
 const registForms = ref()
 // 按钮的loading
 const loading = ref(false)
 // 自定义表单校验
-const rules = reactive<FormRules<typeof authcodeForm>>({
+const rules = reactive<FormRules<typeof code>>({
   phone: [
     {
       validator: validatorPhone,
       trigger: 'change',
     },
   ],
-  authcode: [
+  authCode: [
     {
       validator: validatorAuthcode,
       trigger: 'change',
     },
   ],
 })
+// 发送验证码的按钮
+const sendAuthCode = ref('发送验证码')
+let countdownTimer: number | null = null
+let sendLoading = ref(false)
+const handleSendAuthCode = () => {
+  clearInterval(countdownTimer!)
+  sendLoading.value = true
+  if (authStore.code.phone) {
+    sendCode({ phone: authStore.code.phone })
+    ElMessage.success('验证码已发送')
+    // 开始倒计时
+    let count = 3
+    countdownTimer = setInterval(() => {
+      count--
+      if (count > 0) {
+        sendAuthCode.value = `${count}秒后重试`
+      } else {
+        sendAuthCode.value = '发送验证码'
+        clearInterval(countdownTimer!)
+        countdownTimer = null
+        sendLoading.value = false
+      }
+    }, 1000)
+  } else {
+    ElMessage.error('请输入手机号')
+  }
+}
 // 验证码登录
-const authcodeLogin = () => {
-  ElMessage.success('敬请期待')
-  $router.push('/home')
+const authcodeLogin = async () => {
+  try {
+    await codeLogin(code.value)
+    ElMessage.success('登录成功')
+    $router.push('/home')
+  } catch (error) {
+    ElMessage.error('登录失败')
+  }
 }
 // 返回按钮
 const goBack = () => {

@@ -235,7 +235,7 @@ const constantRoutes = [
         name: 'login-log',
         component: () => import('@/views/log/login-log/index.vue'),
         meta: {
-          title: '登录日志？',
+          title: '登录日志',
           icon: 'loginLog',
           hidden: false,
         },
