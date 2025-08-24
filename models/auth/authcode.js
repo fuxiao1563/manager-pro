@@ -12,7 +12,7 @@ const AuthCodeSchema = new mongoose.Schema({
         },
         unique: true
     },
-    code: {
+    authCode: {
         type: String,
         required: true,
     },

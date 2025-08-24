@@ -9,6 +9,9 @@ router.post('/login', authController.login)
 router.post('/register', authController.register)
 // 退出登录
 router.post('/logout',  authController.logout)
-
+// 获取验证码
+router.post('/send-code', authController.sendCode);
+// 验证码登录 / 注册
+router.post('/code-login', authController.codeLogin);
 
 module.exports = router;

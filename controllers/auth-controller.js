@@ -1,6 +1,7 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../jwt-config/index');
+const crypto = require('crypto');
 const UserInfoModel = require('../models/system/user-model');
 const AuthCodeModel = require('../models/auth/authcode');
 const loginLogController = require('../controllers/log/login');
@@ -91,47 +92,54 @@ exports.logout = async (req, res) => {
 
 // 获取验证码
 exports.sendCode = async (req, res) => {
-    const { phone } = req.body
-    if (!phone) return res.json({ code: 400, message: '手机号不能为空' })
     try {
-        // 生成6位随机验证码
-        const code = Math.floor(100000 + Math.random() * 900000).toString();
-
-        // 存储验证码，设置3分钟过期时间
-        AuthCodeModel.create({ phone, code, expireAt: new Date(Date.now() + 3 * 60 * 1000) });
-
-        // 调用短信服务发送验证码(转为直接发送给前端)
-        // await sendSMS(phone, code);
-        res.json({ code: 200, message: '验证码发送成功', data: code });
+        const { phone } = req.body
+        if (!phone) return res.json({ code: 400, message: '手机号不能为空' })
+        // 查询验证码是否已发送
+        const sended = await AuthCodeModel.findOne({ phone })
+        const min = 100000
+        const max = 999999
+        const authCode = crypto.randomInt(min, max + 1).toString();
+        if (!sended) {
+            // 存储验证码，设置3分钟过期时间
+            await AuthCodeModel.create({ phone, authCode, expireAt: new Date(Date.now() + 3 * 60 * 1000) })
+        } else {
+            // 重新生成验证码
+            await AuthCodeModel.updateOne({ phone }, { authCode, expireAt: new Date(Date.now() + 3 * 60 * 1000) })
+        }
+        res.json({ code: 200, message: sended ? '验证码已重新发送' : '验证码发送成功', data: authCode });
     } catch (error) {
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
 
-// 验证码登录
+// 验证码登录 / 注册
 exports.codeLogin = async (req, res) => {
-    const { phone, code } = req.body
-    if (!phone || !code) return res.json({ code: 400, message: '手机号或验证码不能为空' })
     try {
-        // 从Redis获取验证码
-        // const savedCode = await redis.get(`code:${phone}`);
+        const { phone, authCode } = req.body
+        if (!phone || !authCode) return res.json({ code: 400, message: '手机号或验证码不能为空' })
 
         // 验证验证码是否正确
-        // if (!savedCode || savedCode !== code) {
-        //     return res.err('验证码错误或已过期');
-        // }
+        const code = await AuthCodeModel.findOne({ phone });
+        if (!code) return res.json({ code: 400, message: '手机号不存在或验证码已过期' });
+        console.log('code:', code)
+        if (code.authCode !== authCode) return res.json({ code: 400, message: '验证码错误' });
 
-        // 查找或创建用户
+        // 登录或注册账户
         let user = await UserInfoModel.findOne({ phone });
         if (!user) {
+            // 注册新用户，生成随机密码
+            const randomPassword = crypto.randomBytes(16).toString('hex');
             user = await UserInfoModel.create({
                 username: phone,
                 phone,
-                password: bcryptjs.hashSync(Math.random().toString(36).slice(-8), 10) // 随机密码
+                password: bcryptjs.hashSync(randomPassword, 10), // 随机密码
             });
         }
+        // 用户在线状态
+        const onlineStatus = await UserInfoModel.findById(user._id);
+        if (onlineStatus.status === '在线') return res.json({ code: 400, message: '账号已登录' })
         await UserInfoModel.findByIdAndUpdate(user._id, { status: '在线' });
-
         // 生成JWT Token
         const data = {
             username: user.username,
