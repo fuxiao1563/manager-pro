@@ -68,7 +68,7 @@ const logout = async () => {
     await userStore.logout()
     $router.push('/user/login')
     ElMessage.success({ message: '退出登录成功' })
-  } catch (error:any) {
+  } catch (error: any) {
     ElMessage.error({ message: error.message || '退出登录失败' })
   }
 }

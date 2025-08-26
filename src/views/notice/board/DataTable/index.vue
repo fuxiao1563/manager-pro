@@ -224,7 +224,7 @@ const handleDeleteBoard = async (_id: string) => {
     await boardStore.deleteBoard(_id)
     await boardStore.getBoard(boardStore.searchParams)
     ElMessage.success({ message: '删除公告成功' })
-  } catch (error:any) {
+  } catch (error: any) {
     ElMessage.error({ message: error.message || '删除公告失败' })
   }
 }

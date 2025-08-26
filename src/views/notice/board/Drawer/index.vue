@@ -111,7 +111,7 @@ const handleConfirm = async () => {
     await getBoard(searchParams)
     boardStore.isBoardDrawer = false
     ElMessage.success({ message: `${boardDrawerTitle}成功` })
-  } catch (error:any) {
+  } catch (error: any) {
     ElMessage.error({ message: error.message || `${boardDrawerTitle}失败` })
   }
 }

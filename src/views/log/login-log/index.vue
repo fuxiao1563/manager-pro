@@ -100,7 +100,7 @@ const handleResetSearch = async () => {
     await searchLog()
     ElMessage.success({ message: '搜索重置成功' })
   } catch (error: any) {
-      ElMessage.error({ message: error.message || '搜索重置失败' })
+    ElMessage.error({ message: error.message || '搜索重置失败' })
   }
 }
 // 清空登录日志的按钮

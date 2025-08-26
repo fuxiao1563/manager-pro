@@ -7,7 +7,13 @@
       </div>
     </template>
     <el-timeline style="max-width: 600px">
-      <el-timeline-item v-for="(item, index) in proForm" :key="index" center :timestamp="item.time" placement="top">
+      <el-timeline-item
+        v-for="(item, index) in proForm"
+        :key="index"
+        center
+        :timestamp="item.time"
+        placement="top"
+      >
         <div class="pro-content">
           <el-avatar :size="50">
             <img src="../../../../../shared/assets/images/avatar.png" />
@@ -24,8 +30,10 @@ const $router = useRouter()
 import { reactive } from 'vue'
 // 预加载所有头像图片
 const AVATAR_IMAGE_PATH = '../../../../../shared/assets/images/avatar.png'
-const avatarImages: Record<string, { default: string }> =
-  import.meta.glob('../../../../../shared/assets/images/avatar.png', { eager: true })
+const avatarImages: Record<string, { default: string }> = import.meta.glob(
+  '../../../../../shared/assets/images/avatar.png',
+  { eager: true },
+)
 const defaultAvatar = avatarImages[AVATAR_IMAGE_PATH]?.default || ''
 // 项目动态数据
 const proForm = reactive([

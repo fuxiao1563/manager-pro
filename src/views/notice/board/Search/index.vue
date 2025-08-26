@@ -2,8 +2,17 @@
   <el-card style="margin-bottom: 20px">
     <div style="display: flex; justify-content: space-between">
       <div>
-        <el-select v-model="searchParams.target" placeholder="选择接收部门进行筛选" style="width: 240px">
-          <el-option v-for="item in deptOpts" :key="item" :label="item" :value="item" />
+        <el-select
+          v-model="searchParams.target"
+          placeholder="选择接收部门进行筛选"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="item in deptOpts"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
         </el-select>
         <el-radio-group v-model="searchParams.level" style="margin-left: 50px">
           <el-radio v-for="item in levelOpts" :key="item" :value="item.value">

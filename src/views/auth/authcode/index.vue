@@ -3,7 +3,13 @@
     <el-row>
       <el-col :xs="2" :sm="4" :md="6" :lg="8"></el-col>
       <el-col :xs="20" :sm="16" :md="12" :lg="8">
-        <el-form class="regist_form" :model="code" ref="registForms" :rules="rules" status-icon>
+        <el-form
+          class="regist_form"
+          :model="code"
+          ref="registForms"
+          :rules="rules"
+          status-icon
+        >
           <h1>
             <img src="@/shared/assets/images/logo.png" alt="" />
             <span>管理系统</span>
@@ -11,15 +17,27 @@
           <h2>验证码登录</h2>
           <!-- 手机号 -->
           <el-form-item prop="phone">
-            <el-input :prefix-icon="Iphone" v-model="code.phone" placeholder="请输入手机号"
-              :formatter="formatter_number"></el-input>
+            <el-input
+              :prefix-icon="Iphone"
+              v-model="code.phone"
+              placeholder="请输入手机号"
+              :formatter="formatter_number"
+            ></el-input>
           </el-form-item>
           <!-- 验证码 -->
           <el-form-item prop="authcode">
-            <el-input :prefix-icon="ChatDotSquare" v-model="code.authCode" placeholder="请输入验证码"
-              :formatter="formatter_number">
+            <el-input
+              :prefix-icon="ChatDotSquare"
+              v-model="code.authCode"
+              placeholder="请输入验证码"
+              :formatter="formatter_number"
+            >
               <template #append>
-                <el-button type="primary" @click="handleSendAuthCode" :disabled="sendLoading">
+                <el-button
+                  type="primary"
+                  @click="handleSendAuthCode"
+                  :disabled="sendLoading"
+                >
                   {{ sendAuthCode }}
                 </el-button>
               </template>
@@ -27,7 +45,12 @@
           </el-form-item>
           <el-form-item>
             <!-- 确认按钮 -->
-            <el-button class="regist_button" :loading="loading" type="primary" @click="authcodeLogin">
+            <el-button
+              class="regist_button"
+              :loading="loading"
+              type="primary"
+              @click="authcodeLogin"
+            >
               登录 / 注册
             </el-button>
           </el-form-item>
