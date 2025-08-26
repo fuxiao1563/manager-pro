@@ -5,8 +5,8 @@
       <el-col :xs="20" :sm="16" :md="12" :lg="8">
         <el-form
           class="regist_form"
-          :model="registForm"
-          ref="registForms"
+          :model="forgetForm"
+          ref="forgetForms"
           status-icon
           :rules="rules"
         >
@@ -14,26 +14,28 @@
             <img src="@/shared/assets/images/logo.png" alt="" />
             <span>管理系统</span>
           </h1>
-          <h2>重置密码</h2>
+          <h2>忘记密码</h2>
           <!-- 手机号 -->
           <el-form-item prop="phone">
             <el-input
               :prefix-icon="Iphone"
-              v-model="registForm.phone"
+              v-model="forgetForm.phone"
               placeholder="请输入手机号"
               :formatter="formatter_number"
             ></el-input>
           </el-form-item>
           <!-- 验证码 -->
-          <el-form-item prop="authcode">
+          <el-form-item prop="authCode">
             <el-input
               :prefix-icon="ChatDotSquare"
-              v-model="registForm.authcode"
+              v-model="forgetForm.authCode"
               placeholder="请输入验证码"
               :formatter="formatter_number"
             >
               <template #append>
-                <el-button type="primary" @click="">发送验证码</el-button>
+                <el-button type="primary" @click="handleSendAuthCode">
+                  发送验证码
+                </el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -41,17 +43,17 @@
           <el-form-item prop="password">
             <el-input
               :prefix-icon="Lock"
-              v-model="registForm.password"
+              v-model="forgetForm.newPassword"
               placeholder="请输入密码"
               type="password"
               show-password
             ></el-input>
           </el-form-item>
           <!-- 确认密码 -->
-          <el-form-item prop="confir_password">
+          <el-form-item prop="confirmPassword">
             <el-input
               :prefix-icon="Lock"
-              v-model="registForm.confir_password"
+              v-model="forgetForm.confirmPassword"
               placeholder="请输入确认密码"
               type="password"
               show-password
@@ -63,7 +65,7 @@
               class="regist_button"
               :loading="loading"
               type="primary"
-              @click="resetPassword"
+              @click="forgetPassword"
             >
               确认
             </el-button>
@@ -87,27 +89,30 @@ import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
   validatorPhone,
-  validatorAuthcode,
+  validatorAuthCode,
   validatorPassword,
 } from '@/shared/utils/validator'
 import router from '@/router'
 const $router = router
+import useAuthStore from '@/store/modules/auth'
+const authStore = useAuthStore()
+const { sendCode } = authStore
 // 收集表单数据
-const registForm = reactive({
-  phone: '',
-  authcode: '',
-  password: '',
-  confir_password: '',
+const forgetForm = reactive({
+  phone: '15510882253',
+  authCode: '',
+  newPassword: '15510882253',
+  confirmPassword: '15510882253',
 })
 // 获取表单元素
-const registForms = ref()
+const forgetForms = ref()
 // 按钮的loading
 const loading = ref(false)
 // 确认密码的校验规则
-const validatorConfirPassword = (_: any, value: any, callback: any) => {
+const validatorConfirmPassword = (_: any, value: any, callback: any) => {
   if (
     (value.length >= 5 || value.length <= 10) &&
-    value === registForm.password
+    value === forgetForm.newPassword
   ) {
     callback()
   } else {
@@ -115,36 +120,70 @@ const validatorConfirPassword = (_: any, value: any, callback: any) => {
   }
 }
 // 自定义表单校验
-const rules = reactive<FormRules<typeof registForm>>({
+const rules = reactive<FormRules<typeof forgetForm>>({
   phone: [
     {
       validator: validatorPhone,
       trigger: 'change',
     },
   ],
-  authcode: [
+  authCode: [
     {
-      validator: validatorAuthcode,
+      validator: validatorAuthCode,
       trigger: 'change',
     },
   ],
-  password: [
+  newPassword: [
     {
       validator: validatorPassword,
       trigger: 'change',
     },
   ],
-  confir_password: [
+  confirmPassword: [
     {
-      validator: validatorConfirPassword,
+      validator: validatorConfirmPassword,
       trigger: 'change',
     },
   ],
 })
-// 验证码登录
-const resetPassword = () => {
-  ElMessage.success('敬请期待')
-  $router.push('/home')
+// 发送验证码的按钮
+const sendAuthCode = ref('发送验证码')
+let countdownTimer: number | null = null
+let sendLoading = ref(false)
+const handleSendAuthCode = () => {
+  clearInterval(countdownTimer!)
+  sendLoading.value = true
+  if (authStore.code.phone) {
+    sendCode({ phone: authStore.code.phone }).then(() => {
+      forgetForm.authCode = authStore.code.authCode
+    })
+    ElMessage.success('验证码已发送')
+    // 开始倒计时
+    let count = 10
+    countdownTimer = setInterval(() => {
+      count--
+      if (count > 0) {
+        sendAuthCode.value = `${count}秒后重试`
+      } else {
+        sendAuthCode.value = '发送验证码'
+        clearInterval(countdownTimer!)
+        countdownTimer = null
+        sendLoading.value = false
+      }
+    }, 1000)
+  } else {
+    ElMessage.error('验证码发送失败')
+  }
+}
+// 确认按钮
+const forgetPassword = async () => {
+  try {
+    await authStore.forgetPassword(forgetForm)
+    ElMessage.success('重置密码成功')
+    $router.push('/home')
+  } catch (error) {
+    ElMessage.error('重置密码失败')
+  }
 }
 </script>
 

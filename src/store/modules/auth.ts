@@ -7,9 +7,10 @@ import {
   reqLogout,
   reqSendCode,
   reqCodeLogin,
+  reqForgetPassword,
 } from '@/api/modules/auth'
 import type { LoginReq, LoginRes, SendCodeRes } from '@/types/api/auth'
-import type { authLogin } from '@/types/domain/auth'
+import type { AuthLogin, ForgetPassword } from '@/types/domain/auth'
 import type { AuthState } from '@/types/store/auth'
 import constantRoutes from '@/router/routes'
 //创建用户小仓库
@@ -67,7 +68,7 @@ const useAuthStore = defineStore('Auth', {
       } else return Promise.reject(new Error(result.message))
     },
     // 验证码登录
-    async codeLogin(data: authLogin) {
+    async codeLogin(data: AuthLogin) {
       const result = await reqCodeLogin(data)
       console.log(result)
       if (result.code === 200) {
@@ -77,6 +78,13 @@ const useAuthStore = defineStore('Auth', {
         SET_TOKEN(result.token)
         return 'ok'
       } else return Promise.reject(new Error(result.message))
+    },
+    // 忘记密码
+    async forgetPassword(data: ForgetPassword) {
+      const result = await reqForgetPassword(data)
+      console.log(result)
+      if (result.code === 200) return 'ok'
+      return Promise.reject(new Error(result.message))
     },
   },
 })

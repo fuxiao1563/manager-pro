@@ -17,11 +17,11 @@ const validatorPhone = (_: any, value: any, callback: any) => {
   }
 }
 // 验证码的校验规则
-const validatorAuthcode = (_: any, value: any, callback: any) => {
-  if (value.length === 4) {
+const validatorAuthCode = (_: any, value: any, callback: any) => {
+  if (value.length === 6) {
     callback()
   } else {
-    callback(new Error('验证码为4位, 且为数字'))
+    callback(new Error('验证码为6位, 且为数字'))
   }
 }
 // 密码的校验规则
@@ -45,7 +45,7 @@ export {
   formatter_number,
   validatorUsername,
   validatorPhone,
-  validatorAuthcode,
+  validatorAuthCode,
   validatorPassword,
   validatorEmail,
 }

@@ -24,13 +24,13 @@ const constantRoutes = [
       },
     ],
   },
-  // 认证授权页
+  // 认证授权
   {
     path: '/auth',
     name: 'auth',
     component: () => import('@/views/layout/index.vue'),
     meta: {
-      title: '认证授权页',
+      title: '认证授权',
       icon: 'admin',
       hidden: false,
     },
@@ -40,7 +40,7 @@ const constantRoutes = [
         name: 'login',
         component: () => import('@/views/auth/login/index.vue'),
         meta: {
-          title: '登录页',
+          title: '登录',
           icon: 'login',
           hidden: false,
         },
@@ -50,7 +50,7 @@ const constantRoutes = [
         name: 'register',
         component: () => import('@/views/auth/register/index.vue'),
         meta: {
-          title: '注册页',
+          title: '注册',
           icon: 'register',
           hidden: false,
         },
@@ -60,18 +60,18 @@ const constantRoutes = [
         name: 'authcode',
         component: () => import('@/views/auth/authcode/index.vue'),
         meta: {
-          title: '验证登录页???',
+          title: '验证登录',
           icon: 'authcode',
           hidden: false,
         },
       },
       {
-        path: '/auth/reset',
-        name: 'reset',
-        component: () => import('@/views/auth/reset/index.vue'),
+        path: '/auth/forget',
+        name: 'forget',
+        component: () => import('@/views/auth/forget/index.vue'),
         meta: {
-          title: '重置页???',
-          icon: 'reset',
+          title: '忘记密码',
+          icon: 'forget',
           hidden: false,
         },
       },

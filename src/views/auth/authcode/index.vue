@@ -73,7 +73,7 @@ import { ElMessage, type FormRules } from 'element-plus'
 import {
   formatter_number,
   validatorPhone,
-  validatorAuthcode,
+  validatorAuthCode,
 } from '@/shared/utils/validator'
 import router from '@/router'
 const $router = router
@@ -95,7 +95,7 @@ const rules = reactive<FormRules<typeof code>>({
   ],
   authCode: [
     {
-      validator: validatorAuthcode,
+      validator: validatorAuthCode,
       trigger: 'change',
     },
   ],
@@ -111,7 +111,7 @@ const handleSendAuthCode = () => {
     sendCode({ phone: authStore.code.phone })
     ElMessage.success('验证码已发送')
     // 开始倒计时
-    let count = 3
+    let count = 10
     countdownTimer = setInterval(() => {
       count--
       if (count > 0) {
@@ -124,7 +124,7 @@ const handleSendAuthCode = () => {
       }
     }, 1000)
   } else {
-    ElMessage.error('请输入手机号')
+    ElMessage.error('验证码发送失败')
   }
 }
 // 验证码登录
