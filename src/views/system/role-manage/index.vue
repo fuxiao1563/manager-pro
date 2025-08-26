@@ -33,8 +33,8 @@ const searchRole = async () => {
   try {
     await searchRole(searchParams)
     ElMessage.success({ message: '获取角色信息成功' })
-  } catch (error) {
-    ElMessage.error({ message: '获取角色信息失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '获取角色信息失败' })
   }
 }
 </script>

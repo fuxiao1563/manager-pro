@@ -68,8 +68,8 @@ const logout = async () => {
     await userStore.logout()
     $router.push('/user/login')
     ElMessage.success({ message: '退出登录成功' })
-  } catch (error) {
-    ElMessage.error({ message: '退出登录失败' })
+  } catch (error:any) {
+    ElMessage.error({ message: error.message || '退出登录失败' })
   }
 }
 // 个人中心按钮的回调

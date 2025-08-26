@@ -161,7 +161,7 @@ const handleSelectionChange = (val: any[]) => {
 const handleAddRole = () => {
   userManage.isDrawer = true
   userManage.drawerTitle = '新增角色'
-  Object.assign(userManage.userInfo, {
+  Object.assign(userManage.user, {
     role: '',
     descripte: '',
     status: '',
@@ -174,8 +174,8 @@ const deleteUserInfoList = async () => {
     // await userManage.deleteUserInfoList(ids as any)
     // await props.getUserInfoList()
     ElMessage.success({ message: '删除成功' })
-  } catch (error) {
-    ElMessage.error({ message: '删除失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '删除失败' })
   }
 }
 // 刷新按钮
@@ -208,8 +208,8 @@ const deleteUserInfo = async (_id: string) => {
     // await userManage.deleteUserInfo(_id)
     // await props.getUserInfoList()
     ElMessage.success({ message: '删除成功' })
-  } catch (error) {
-    ElMessage.error({ message: '删除失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '删除失败' })
   }
 }
 </script>

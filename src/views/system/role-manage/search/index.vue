@@ -66,10 +66,10 @@ let searchFrom = ref({
 // 搜索按钮
 const search = async () => {
   try {
-    // await porps.getUserInfoList()
+    // await props.getUserInfoList()
     ElMessage.success({ message: '搜索成功' })
-  } catch (error) {
-    ElMessage.error({ message: '搜索失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '搜索失败' })
   }
 }
 
@@ -79,8 +79,8 @@ const resetForm = async () => {
     searchFrom.value.role = ''
     searchFrom.value.status = ''
     ElMessage.success({ message: '重置成功' })
-  } catch (error) {
-    ElMessage.error({ message: '重置失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '重置失败' })
   }
 }
 </script>

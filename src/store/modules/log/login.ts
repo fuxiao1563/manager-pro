@@ -12,8 +12,8 @@ const useLoginLogStore = defineStore('LoginLog', {
     return {
       logs: [
         {
-          userId: '',
           username: '',
+          userId: '',
           phone: null,
           email: '',
           createdAt: '',
@@ -30,9 +30,9 @@ const useLoginLogStore = defineStore('LoginLog', {
       if (result.code === 200) {
         result.data.forEach((item: any) => {
           item.username = item.userId.username
+          item.userId = item.userId._id
           item.phone = item.userId.phone
           item.email = item.userId.email
-          item.userId = item.userId._id
         })
         this.logs = result.data
         return 'ok'

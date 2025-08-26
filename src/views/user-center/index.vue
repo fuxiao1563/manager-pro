@@ -5,28 +5,13 @@
         <span>用户中心</span>
       </div>
     </template>
-    <el-form
-      ref="formRef"
-      style="max-width: 600px"
-      :model="userInfo"
-      label-width="auto"
-      status-icon
-    >
+    <el-form ref="formRef" style="max-width: 600px" :model="userInfo" label-width="auto" status-icon>
       <!-- 上传头像 -->
       <el-form-item label="上传头像" prop="avatar">
-        <el-upload
-          class="avatar-uploader"
-          :headers="headerAuthor"
-          action="http://localhost:27017/user-center/upload-avatar"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-        >
-          <img
-            v-if="userCenterStore.avatar"
-            :src="userCenterStore.avatar"
-            class="avatar"
-          />
+        <el-upload class="avatar-uploader" :headers="headerAuthor"
+          action="http://localhost:27017/user-center/upload-avatar" :show-file-list="false"
+          :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+          <img v-if="userCenterStore.avatar" :src="userCenterStore.avatar" class="avatar" />
           <el-icon v-else class="avatar-uploader-icon">
             <Plus />
           </el-icon>
@@ -47,12 +32,7 @@
       <!-- 部门 -->
       <el-form-item label="部门" prop="department" required>
         <el-select v-model="userInfo.department" placeholder="请选择所在部门">
-          <el-option
-            v-for="(item, index) in deptOpts"
-            :key="index"
-            :label="item"
-            :value="item"
-          />
+          <el-option v-for="(item, index) in deptOpts" :key="index" :label="item" :value="item" />
         </el-select>
       </el-form-item>
       <!-- 手机号 -->
@@ -66,12 +46,7 @@
       <!-- 状态 -->
       <el-form-item label="状态" prop="status">
         <el-select v-model="userInfo.status" placeholder="请选择在线状态">
-          <el-option
-            v-for="item in statusOpts"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in statusOpts" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <!-- 个性签名 -->
@@ -81,8 +56,8 @@
       <!-- 重置和保存按钮 -->
       <el-form-item>
         <el-button type="primary" @click="submitForm">保存</el-button>
-        <el-button type="danger" @click="">修改密码???</el-button>
-        <el-button @click="resetForm">重置???</el-button>
+        <el-button type="danger" @click="$router.push('/auth/reset')">修改密码</el-button>
+        <el-button @click="resetForm">重置</el-button>
         <el-button @click="clearForm">清空</el-button>
       </el-form-item>
     </el-form>
@@ -108,8 +83,8 @@ onMounted(async () => {
       userCenterStore.getAvatar(),
     ])
     ElMessage.success({ message: '获取用户信息成功' })
-  } catch (error) {
-    ElMessage.error({ message: '获取用户信息失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '获取用户信息失败' })
   }
 })
 
@@ -150,8 +125,8 @@ const submitForm = async () => {
     await userCenterStore.updateUserCenter(userInfo.value)
     await userCenterStore.getUserCenter()
     ElMessage.success({ message: '修改成功' })
-  } catch (error) {
-    ElMessage.error('修改失败，请稍后重试')
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '修改失败，请稍后重试' })
   }
 }
 

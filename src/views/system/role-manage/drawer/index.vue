@@ -74,10 +74,10 @@ const confirmClick = async () => {
       message:
         userManage.drawerTitle === '新增角色' ? '新增角色成功' : '修改角色成功',
     })
-  } catch (error) {
+  } catch (error: any) {
     ElMessage.error({
       message:
-        userManage.drawerTitle === '新增角色' ? '新增角色失败' : '修改角色失败',
+        userManage.drawerTitle === '新增角色' ? error.message || '新增角色失败' : error.message || '修改角色失败',
     })
   }
 }

@@ -123,8 +123,8 @@ const regist = async () => {
     await authStore.register(registForm)
     $router.push('/auth/login')
     ElMessage.success({ message: '注册成功' })
-  } catch (error) {
-    ElMessage.error({ message: '注册失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '注册失败' })
   }
 }
 // 返回按钮

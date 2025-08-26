@@ -7,16 +7,10 @@
       </div>
     </template>
     <el-timeline style="max-width: 600px">
-      <el-timeline-item
-        v-for="(item, index) in proForm"
-        :key="index"
-        center
-        :timestamp="item.time"
-        placement="top"
-      >
+      <el-timeline-item v-for="(item, index) in proForm" :key="index" center :timestamp="item.time" placement="top">
         <div class="pro-content">
           <el-avatar :size="50">
-            <img src="../../../../../assets/images/avatar.png" />
+            <img src="../../../../../shared/assets/images/avatar.png" />
           </el-avatar>
           <h4 class="pro-msg">{{ item.content }}</h4>
         </div>
@@ -28,30 +22,35 @@
 import { useRouter } from 'vue-router'
 const $router = useRouter()
 import { reactive } from 'vue'
+// 预加载所有头像图片
+const AVATAR_IMAGE_PATH = '../../../../../shared/assets/images/avatar.png'
+const avatarImages: Record<string, { default: string }> =
+  import.meta.glob('../../../../../shared/assets/images/avatar.png', { eager: true })
+const defaultAvatar = avatarImages[AVATAR_IMAGE_PATH]?.default || ''
 // 项目动态数据
 const proForm = reactive([
   {
-    avatar: '../../../../../assets/images/avator.png',
+    avatar: defaultAvatar,
     content: 'UpdSoybean 在2021年5月28日创建了开源项目 soybean-admin!',
     time: '2018/4/2',
   },
   {
-    avatar: '../../../../../assets/images/avator.png',
+    avatar: defaultAvatar,
     content: 'Yanbowe 向 soybean-admin 提交了一个bug，多标签栏不会自适应。',
     time: '2018/4/2',
   },
   {
-    avatar: '../../../../../assets/images/avator.png',
+    avatar: defaultAvatar,
     content: 'Soybean 准备为 soybean-admin 的发布做充分的准备工作!',
     time: '2018/4/2',
   },
   {
-    avatar: '../../../../../assets/images/avator.png',
+    avatar: defaultAvatar,
     content: 'Soybean 正在忙于为soybean-admin写项目说明文档！',
     time: '2018/4/2',
   },
   {
-    avatar: '../../../../../assets/images/avator.png',
+    avatar: defaultAvatar,
     content: 'Soybean 刚才把工作台页面随便写了一些，凑合能看了！',
     time: '2018/4/2',
   },

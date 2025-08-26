@@ -3,13 +3,7 @@
     <el-row>
       <el-col :xs="2" :sm="4" :md="6" :lg="8"></el-col>
       <el-col :xs="20" :sm="16" :md="12" :lg="8">
-        <el-form
-          class="regist_form"
-          :model="resetForm"
-          ref="resetForms"
-          status-icon
-          :rules="rules"
-        >
+        <el-form class="regist_form" :model="resetForm" ref="resetForms" status-icon :rules="rules">
           <h1>
             <img src="@/shared/assets/images/logo.png" alt="" />
             <span>管理系统</span>
@@ -17,21 +11,13 @@
           <h2>忘记密码</h2>
           <!-- 手机号 -->
           <el-form-item prop="phone">
-            <el-input
-              :prefix-icon="Iphone"
-              v-model="resetForm.phone"
-              placeholder="请输入手机号"
-              :formatter="formatter_number"
-            ></el-input>
+            <el-input :prefix-icon="Iphone" v-model="resetForm.phone" placeholder="请输入手机号"
+              :formatter="formatter_number"></el-input>
           </el-form-item>
           <!-- 验证码 -->
           <el-form-item prop="authCode">
-            <el-input
-              :prefix-icon="ChatDotSquare"
-              v-model="resetForm.authCode"
-              placeholder="请输入验证码"
-              :formatter="formatter_number"
-            >
+            <el-input :prefix-icon="ChatDotSquare" v-model="resetForm.authCode" placeholder="请输入验证码"
+              :formatter="formatter_number">
               <template #append>
                 <el-button type="primary" @click="handleSendAuthCode">
                   发送验证码
@@ -41,32 +27,17 @@
           </el-form-item>
           <!-- 密码 -->
           <el-form-item prop="password">
-            <el-input
-              :prefix-icon="Lock"
-              v-model="resetForm.newPassword"
-              placeholder="请输入密码"
-              type="password"
-              show-password
-            ></el-input>
+            <el-input :prefix-icon="Lock" v-model="resetForm.newPassword" placeholder="请输入密码" type="password"
+              show-password></el-input>
           </el-form-item>
           <!-- 确认密码 -->
           <el-form-item prop="confirmPassword">
-            <el-input
-              :prefix-icon="Lock"
-              v-model="resetForm.confirmPassword"
-              placeholder="请输入确认密码"
-              type="password"
-              show-password
-            ></el-input>
+            <el-input :prefix-icon="Lock" v-model="resetForm.confirmPassword" placeholder="请输入确认密码" type="password"
+              show-password></el-input>
           </el-form-item>
           <el-form-item>
             <!-- 确认按钮 -->
-            <el-button
-              class="regist_button"
-              :loading="loading"
-              type="primary"
-              @click="resetPassword"
-            >
+            <el-button class="regist_button" :loading="loading" type="primary" @click="resetPassword">
               确认
             </el-button>
           </el-form-item>
@@ -154,35 +125,38 @@ const handleSendAuthCode = () => {
   clearInterval(countdownTimer!)
   sendLoading.value = true
   if (authStore.code.phone) {
-    sendCode({ phone: authStore.code.phone }).then(() => {
+    try {
+      sendCode({ phone: authStore.code.phone })
       resetForm.authCode = authStore.code.authCode
-    })
-    ElMessage.success('验证码已发送')
-    // 开始倒计时
-    let count = 10
-    countdownTimer = setInterval(() => {
-      count--
-      if (count > 0) {
-        sendAuthCode.value = `${count}秒后重试`
-      } else {
-        sendAuthCode.value = '发送验证码'
-        clearInterval(countdownTimer!)
-        countdownTimer = null
-        sendLoading.value = false
-      }
-    }, 1000)
+      ElMessage.success({ message: '验证码已发送' })
+      // 开始倒计时
+      let count = 10
+      countdownTimer = setInterval(() => {
+        count--
+        if (count > 0) {
+          sendAuthCode.value = `${count}秒后重试`
+        } else {
+          sendAuthCode.value = '发送验证码'
+          clearInterval(countdownTimer!)
+          countdownTimer = null
+          sendLoading.value = false
+        }
+      }, 1000)
+    } catch (error: any) {
+      ElMessage.error({ message: error.message || '验证码发送失败' })
+    }
   } else {
-    ElMessage.error('验证码发送失败')
+    ElMessage.error({ message: '验证码发送失败' })
   }
 }
 // 确认按钮
 const resetPassword = async () => {
   try {
     await authStore.resetPassword(resetForm)
-    ElMessage.success('重置密码成功')
+    ElMessage.success({ message: '重置密码成功' })
     $router.push('/auth/login')
-  } catch (error) {
-    ElMessage.error('重置密码失败')
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '重置密码失败' })
   }
 }
 </script>

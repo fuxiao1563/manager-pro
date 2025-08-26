@@ -88,9 +88,9 @@ onMounted(() => {
 const handleSearchLog = async () => {
   try {
     await searchLog()
-    ElMessage.success('日志获取成功')
+    ElMessage.success({ message: '日志获取成功' })
   } catch (error: any) {
-    ElMessage.error(error.message || '日志获取失败')
+    ElMessage.error({ message: error.message || '日志获取失败' })
   }
 }
 // 重置按钮
@@ -98,9 +98,9 @@ const handleResetSearch = async () => {
   try {
     loginLogStore.searchParams = ''
     await searchLog()
-    ElMessage.success('搜索重置成功')
+    ElMessage.success({ message: '搜索重置成功' })
   } catch (error: any) {
-    ElMessage.error(error.message || '搜索重置失败')
+      ElMessage.error({ message: error.message || '搜索重置失败' })
   }
 }
 // 清空登录日志的按钮
@@ -117,9 +117,9 @@ const handleClearLog = async () => {
     )
     await clearLog()
     await searchLog()
-    ElMessage.success('日志清空成功')
+    ElMessage.success({ message: '日志清空成功' })
   } catch (error: any) {
-    ElMessage.error(error.message || '日志清空失败')
+    ElMessage.error({ message: error.message || '日志清空失败' })
   }
 }
 </script>

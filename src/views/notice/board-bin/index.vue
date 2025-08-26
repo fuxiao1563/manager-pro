@@ -140,8 +140,8 @@ const getBoardBin = async () => {
   try {
     await boardBinStore.getBoardBin()
     ElMessage.success({ message: '获取公告回收站成功' })
-  } catch (error) {
-    ElMessage.success({ message: '获取公告回收站失败' })
+  } catch (error: any) {
+    ElMessage.success({ message: error.message || '获取公告回收站失败' })
   }
 }
 // 还原按钮
@@ -150,8 +150,8 @@ const handleRestoreBoard = async (_id: string) => {
     await boardBinStore.restoreBoard(_id)
     await getBoardBin()
     ElMessage.success({ message: '还原成功' })
-  } catch (error) {
-    ElMessage.error({ message: '还原失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '还原失败' })
   }
 }
 // 永久删除按钮
@@ -160,8 +160,8 @@ const handleForceDeleteBoard = async (_id: string) => {
     await boardBinStore.forceDeleteBoard(_id)
     await getBoardBin()
     ElMessage.success({ message: '彻底删除成功' })
-  } catch (error) {
-    ElMessage.error({ message: '彻底删除失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '彻底删除失败' })
   }
 }
 </script>

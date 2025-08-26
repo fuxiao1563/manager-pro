@@ -35,8 +35,8 @@ const getUser = async () => {
   const { searchParams } = userManage
   try {
     await userManage.searchUser(searchParams)
-  } catch (error) {
-    ElMessage.error({ message: '获取用户信息失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '获取用户信息失败' })
   }
 }
 // 列设置数值

@@ -83,7 +83,7 @@ import useAuthStore from '@/store/modules/auth'
 const authStore = useAuthStore()
 import { useRouter } from 'vue-router'
 const $router = useRouter()
-import { ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import type { FormRules } from 'element-plus'
 import { getTime } from '@/shared/utils/time'
 import { validatorUsername, validatorPassword } from '@/shared/utils/validator'
@@ -120,17 +120,10 @@ const login = async () => {
     loading.value = true
     await authStore.login(loginForm)
     const timeMessage = getTime() || 'Unknown Time'
-    ElNotification({
-      type: 'success',
-      message: `Hi, ${timeMessage}`,
-    })
+    ElMessage.success({ message: `Hi, ${timeMessage}` })
     $router.push('/home')
   } catch (error: any) {
-    // 捕获登录过程中的错误并显示错误通知
-    ElNotification({
-      type: 'error',
-      message: error.message,
-    })
+    ElMessage.error({ message: error.message || '登录失败' })
   } finally {
     // 无论登录是否成功，都重置加载状态为false
     loading.value = false

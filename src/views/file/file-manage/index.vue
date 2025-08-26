@@ -1,87 +1,32 @@
 <template>
   <el-card>
     <template #header>
-      <div
-        style="
+      <div style="
           display: flex;
           align-items: center;
           justify-content: space-between;
-        "
-      >
+        ">
         <span>文件管理</span>
-        <el-upload
-          style="display: flex"
-          action="http://localhost:27017/file/upload"
-          :headers="headerAuthor"
-          :on-success="handleFileSuccess"
-          :before-upload="beforeFileUpload"
-          :show-file-list="false"
-          multiple
-        >
+        <el-upload style="display: flex" action="http://localhost:27017/file/upload" :headers="headerAuthor"
+          :on-success="handleFileSuccess" :before-upload="beforeFileUpload" :show-file-list="false" multiple>
           <el-button type="primary">上传文件</el-button>
         </el-upload>
       </div>
     </template>
-    <el-table
-      :data="fileStore.fileList"
-      style="width: 100%"
-      height="250"
-      border
-      stripe
-    >
-      <el-table-column
-        type="index"
-        label="序号"
-        min-width="60"
-        align="center"
-      />
-      <el-table-column
-        prop="fileName"
-        label="文件名"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="username"
-        label="上传者"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="uploadTime"
-        label="上传时间"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        prop="downloadCount"
-        label="下载次数"
-        min-width="100"
-        align="center"
-      />
-      <el-table-column
-        prop="fileSize"
-        label="文件大小"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
-        fixed="right"
-        label="操作"
-        min-width="120"
-        align="center"
-      >
+    <el-table :data="fileStore.fileList" style="width: 100%" height="250" border stripe>
+      <el-table-column type="index" label="序号" min-width="60" align="center" />
+      <el-table-column prop="fileName" label="文件名" min-width="120" align="center" />
+      <el-table-column prop="username" label="上传者" min-width="120" align="center" />
+      <el-table-column prop="uploadTime" label="上传时间" min-width="120" align="center" />
+      <el-table-column prop="downloadCount" label="下载次数" min-width="100" align="center" />
+      <el-table-column prop="fileSize" label="文件大小" min-width="120" align="center" />
+      <el-table-column fixed="right" label="操作" min-width="120" align="center">
         <template #="{ row }">
           <!-- 编辑 -->
           <el-button type="success" size="small" @click="">下载?</el-button>
           <!-- 删除 -->
-          <el-popconfirm
-            confirm-button-text="是"
-            cancel-button-text="否"
-            title="你确定要删除吗？"
-            @confirm="handleDeleteFile(row._id)"
-            width="160"
-          >
+          <el-popconfirm confirm-button-text="是" cancel-button-text="否" title="你确定要删除吗？"
+            @confirm="handleDeleteFile(row._id)" width="160">
             <template #reference>
               <el-button type="danger" size="small">删除文件</el-button>
             </template>
@@ -105,9 +50,9 @@ onMounted(() => {
 const getFile = async () => {
   try {
     await fileStore.getFile()
-    ElMessage.success('获取文件信息成功')
-  } catch (error) {
-    ElMessage.error('获取文件信息失败')
+    ElMessage.success({ message: '获取文件信息成功' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '获取文件信息失败' })
   }
 }
 
@@ -120,7 +65,7 @@ const handleFileSuccess: UploadProps['onSuccess'] = () => {
 // 在文件上传之前的钩子函数
 const beforeFileUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.size > 1024 * 1024 * 10) {
-    ElMessage.error('文件大小不能超过10MB')
+    ElMessage.error({ message: '文件大小不能超过10MB' })
     return false
   }
   return true
@@ -128,13 +73,12 @@ const beforeFileUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 // 删除文件
 const handleDeleteFile = async (_id: string) => {
-  console.log(_id)
   try {
     await fileStore.deleteFile(_id)
     await getFile()
-    ElMessage.success('删除文件成功')
+    ElMessage.success({ message: '删除文件成功' })
   } catch (error) {
-    ElMessage.error('删除文件失败')
+    ElMessage.error({ message: '删除文件失败' })
   }
 }
 </script>

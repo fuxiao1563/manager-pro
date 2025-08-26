@@ -242,8 +242,8 @@ const handleBatchDeleteUser = async () => {
     ElMessage.success({ message: '删除成功' })
     multipleSelection.value = [] // 清空选择
     multipleTableRef.value?.clearSelection() // 清除表格选中状态
-  } catch (error) {
-    ElMessage.error({ message: '删除失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '删除失败' })
   }
 }
 // 刷新按钮
@@ -281,8 +281,8 @@ const handleDeleteUser = async (_id: string) => {
     await userManage.deleteUser(_id)
     await props.getUser()
     ElMessage.success({ message: '删除成功' })
-  } catch (error) {
-    ElMessage.error({ message: '删除失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '删除失败' })
   }
 }
 </script>

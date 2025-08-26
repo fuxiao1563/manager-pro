@@ -69,8 +69,8 @@ const { company } = toRefs(companyStore)
 onMounted(async () => {
   try {
     await companyStore.getCompany()
-  } catch (error) {
-    ElMessage.error({ message: '获取用户信息失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '获取用户信息失败' })
   }
 })
 const inputValue = ref('')
@@ -81,8 +81,8 @@ const submitForm = async () => {
   try {
     await companyStore.updateCompany(company.value)
     ElMessage.success({ message: '修改成功' })
-  } catch (error) {
-    ElMessage.error({ message: '修改失败' })
+  } catch (error: any) {
+    ElMessage.error({ message: error.message || '修改失败' })
   }
 }
 // 移除标签按钮

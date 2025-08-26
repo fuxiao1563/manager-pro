@@ -80,10 +80,10 @@ const handleConfirm = async () => {
       message:
         userManage.drawerTitle === '新增用户' ? '新增用户成功' : '修改用户成功',
     })
-  } catch (error) {
+  } catch (error: any) {
     ElMessage.error({
       message:
-        userManage.drawerTitle === '新增用户' ? '新增用户失败' : '修改用户失败',
+        userManage.drawerTitle === '新增用户' ? error.message || '新增用户失败' : error.message || '修改用户失败',
     })
   }
 }
