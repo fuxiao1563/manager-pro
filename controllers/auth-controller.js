@@ -157,8 +157,8 @@ exports.codeLogin = async (req, res) => {
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
-// 忘记密码
-exports.forgetPassword = async (req, res) => {
+// 忘记 / 重置密码
+exports.resetPassword = async (req, res) => {
     try {
         let { phone, authCode, newPassword, confirmPassword } = req.body
         if (newPassword !== confirmPassword) return res.json({ code: 400, message: '新密码与确认密码不一致' })
@@ -174,6 +174,7 @@ exports.forgetPassword = async (req, res) => {
         // const passwordValid = bcryptjs.compareSync(oldPassword, user.password);
         // if (!passwordValid) return res.json({ code: 400, message: '旧密码错误' })
         // 验证旧密码与新密码是否一致
+        if (newPassword === user.password) return res.json({ code: 400, message: '新密码不能与旧密码一致' })
         // 修改密码
         newPassword = bcryptjs.hashSync(newPassword, 10)
         const data = await UserInfoModel.findOneAndUpdate({ phone }, { password: newPassword }, { runValidators: true })
@@ -183,4 +184,3 @@ exports.forgetPassword = async (req, res) => {
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
-// 重置密码

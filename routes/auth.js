@@ -14,6 +14,6 @@ router.post('/send-code', authController.sendCode);
 // 验证码登录 / 注册
 router.post('/code-login', authController.codeLogin);
 // 忘记密码
-router.post('/forget-password', authController.forgetPassword);
+router.post('/reset-password', authController.resetPassword);
 
 module.exports = router;
