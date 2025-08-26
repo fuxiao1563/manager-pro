@@ -1,13 +1,13 @@
 import request from '@/shared/utils/request'
 import type { LoginReq, LoginRes, SendCodeRes } from '@/types/api/auth'
-import type { AuthLogin, ForgetPassword } from '@/types/domain/auth'
+import type { AuthLogin, ResetPassword } from '@/types/domain/auth'
 enum API {
   login_URL = '/auth/login',
   register_URL = '/auth/register',
   logout_URL = '/auth/logout/',
   sendCode_URL = '/auth/send-code',
   codeLogin_URL = '/auth/code-login',
-  forgetPassword_URL = '/auth/forget-password',
+  resetPassword_URL = '/auth/reset-password',
 }
 
 // 登录接口
@@ -25,5 +25,5 @@ export const reqSendCode = (data: { phone: string }) =>
 export const reqCodeLogin = (data: AuthLogin) =>
   request.post<any, LoginRes>(API.codeLogin_URL, data)
 // 忘记密码
-export const reqForgetPassword = (data: ForgetPassword) =>
-  request.post<any, any>(API.forgetPassword_URL, data)
+export const reqResetPassword = (data: ResetPassword) =>
+  request.post<any, any>(API.resetPassword_URL, data)

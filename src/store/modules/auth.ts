@@ -7,10 +7,10 @@ import {
   reqLogout,
   reqSendCode,
   reqCodeLogin,
-  reqForgetPassword,
+  reqResetPassword,
 } from '@/api/modules/auth'
 import type { LoginReq, LoginRes, SendCodeRes } from '@/types/api/auth'
-import type { AuthLogin, ForgetPassword } from '@/types/domain/auth'
+import type { AuthLogin, ResetPassword } from '@/types/domain/auth'
 import type { AuthState } from '@/types/store/auth'
 import constantRoutes from '@/router/routes'
 //创建用户小仓库
@@ -70,7 +70,6 @@ const useAuthStore = defineStore('Auth', {
     // 验证码登录
     async codeLogin(data: AuthLogin) {
       const result = await reqCodeLogin(data)
-      console.log(result)
       if (result.code === 200) {
         this.authInfo.username = result.data.username
         this.authInfo.role = result.data.role
@@ -79,10 +78,9 @@ const useAuthStore = defineStore('Auth', {
         return 'ok'
       } else return Promise.reject(new Error(result.message))
     },
-    // 忘记密码
-    async forgetPassword(data: ForgetPassword) {
-      const result = await reqForgetPassword(data)
-      console.log(result)
+    // 重置 / 忘记密码
+    async resetPassword(data: ResetPassword) {
+      const result = await reqResetPassword(data)
       if (result.code === 200) return 'ok'
       return Promise.reject(new Error(result.message))
     },

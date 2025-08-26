@@ -66,12 +66,12 @@ const constantRoutes = [
         },
       },
       {
-        path: '/auth/forget',
-        name: 'forget',
-        component: () => import('@/views/auth/forget/index.vue'),
+        path: '/auth/reset',
+        name: 'reset',
+        component: () => import('@/views/auth/reset/index.vue'),
         meta: {
-          title: '忘记密码',
-          icon: 'forget',
+          title: '重置 / 忘记密码',
+          icon: 'reset',
           hidden: false,
         },
       },

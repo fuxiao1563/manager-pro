@@ -7,7 +7,7 @@ export interface AuthLogin {
 }
 
 // 忘记密码
-export interface ForgetPassword extends AuthLogin {
+export interface ResetPassword extends AuthLogin {
   newPassword: string
   confirmPassword: string
 }

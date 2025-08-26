@@ -5,8 +5,8 @@
       <el-col :xs="20" :sm="16" :md="12" :lg="8">
         <el-form
           class="regist_form"
-          :model="forgetForm"
-          ref="forgetForms"
+          :model="resetForm"
+          ref="resetForms"
           status-icon
           :rules="rules"
         >
@@ -19,7 +19,7 @@
           <el-form-item prop="phone">
             <el-input
               :prefix-icon="Iphone"
-              v-model="forgetForm.phone"
+              v-model="resetForm.phone"
               placeholder="请输入手机号"
               :formatter="formatter_number"
             ></el-input>
@@ -28,7 +28,7 @@
           <el-form-item prop="authCode">
             <el-input
               :prefix-icon="ChatDotSquare"
-              v-model="forgetForm.authCode"
+              v-model="resetForm.authCode"
               placeholder="请输入验证码"
               :formatter="formatter_number"
             >
@@ -43,7 +43,7 @@
           <el-form-item prop="password">
             <el-input
               :prefix-icon="Lock"
-              v-model="forgetForm.newPassword"
+              v-model="resetForm.newPassword"
               placeholder="请输入密码"
               type="password"
               show-password
@@ -53,7 +53,7 @@
           <el-form-item prop="confirmPassword">
             <el-input
               :prefix-icon="Lock"
-              v-model="forgetForm.confirmPassword"
+              v-model="resetForm.confirmPassword"
               placeholder="请输入确认密码"
               type="password"
               show-password
@@ -65,7 +65,7 @@
               class="regist_button"
               :loading="loading"
               type="primary"
-              @click="forgetPassword"
+              @click="resetPassword"
             >
               确认
             </el-button>
@@ -98,21 +98,21 @@ import useAuthStore from '@/store/modules/auth'
 const authStore = useAuthStore()
 const { sendCode } = authStore
 // 收集表单数据
-const forgetForm = reactive({
+const resetForm = reactive({
   phone: '15510882253',
   authCode: '',
   newPassword: '15510882253',
   confirmPassword: '15510882253',
 })
 // 获取表单元素
-const forgetForms = ref()
+const resetForms = ref()
 // 按钮的loading
 const loading = ref(false)
 // 确认密码的校验规则
 const validatorConfirmPassword = (_: any, value: any, callback: any) => {
   if (
     (value.length >= 5 || value.length <= 10) &&
-    value === forgetForm.newPassword
+    value === resetForm.newPassword
   ) {
     callback()
   } else {
@@ -120,7 +120,7 @@ const validatorConfirmPassword = (_: any, value: any, callback: any) => {
   }
 }
 // 自定义表单校验
-const rules = reactive<FormRules<typeof forgetForm>>({
+const rules = reactive<FormRules<typeof resetForm>>({
   phone: [
     {
       validator: validatorPhone,
@@ -155,7 +155,7 @@ const handleSendAuthCode = () => {
   sendLoading.value = true
   if (authStore.code.phone) {
     sendCode({ phone: authStore.code.phone }).then(() => {
-      forgetForm.authCode = authStore.code.authCode
+      resetForm.authCode = authStore.code.authCode
     })
     ElMessage.success('验证码已发送')
     // 开始倒计时
@@ -176,11 +176,11 @@ const handleSendAuthCode = () => {
   }
 }
 // 确认按钮
-const forgetPassword = async () => {
+const resetPassword = async () => {
   try {
-    await authStore.forgetPassword(forgetForm)
+    await authStore.resetPassword(resetForm)
     ElMessage.success('重置密码成功')
-    $router.push('/home')
+    $router.push('/auth/login')
   } catch (error) {
     ElMessage.error('重置密码失败')
   }
