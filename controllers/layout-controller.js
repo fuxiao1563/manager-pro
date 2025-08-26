@@ -10,6 +10,7 @@ exports.getAllBoard = async (req, res) => {
             .sort({ createdAt: -1 })
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
+        console.error('getAllBoard error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -25,6 +26,7 @@ exports.addRead = async (req, res) => {
             { $set: { isRead: true } })
         res.json({ code: 200, message: '添加已读成功' })
     } catch (error) {
+        console.error('addRead error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

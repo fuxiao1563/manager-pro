@@ -15,18 +15,18 @@ exports.login = async (req, res) => {
     try {
         const { username, password } = req.body
         if (!username || !password) return res.json({ code: 400, message: '账号或密码不能为空' })
-        const data = await UserInfoModel.findOneAndUpdate(
-            { username },
-            { status: '在线' },
-            { new: true, runValidators: true, projection: { username: 1, password: 1, role: 1, status: 1 } })
+        // 验证账号存在，密码，及登录状态       
+        const data = await UserInfoModel.findOne({ username })
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
         const passwordValid = bcryptjs.compareSync(password, data.password);
         if (!passwordValid) return res.json({ code: 400, message: '密码错误' })
         if (data.status === '在线') return res.json({ code: 400, message: '账号已登录' })
+        // 修改状态为在线
+        const result = await UserInfoModel.findOneAndUpdate({ username }, { status: '在线' }, { runValidators: true })
         // 返回data
         const newData = {
-            username: data.username,
-            role: data.role
+            username: result.username,
+            role: result.role
         }
         const tokenStr = jwt.sign(newData, jwtConfig.jwtSecretKey);
         res.json({
@@ -38,7 +38,7 @@ exports.login = async (req, res) => {
 
         // 记录登录日志
         try {
-            const logReq = { userId: data._id }
+            const logReq = { userId: result._id }
             const logRes = {
                 err: (message) => {
                     console.error('登录日志记录错误:', message);
@@ -54,6 +54,7 @@ exports.login = async (req, res) => {
             return res.json({ code: 500, message: '登录日志记录失败' });
         }
     } catch (error) {
+        console.error('login error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -70,22 +71,24 @@ exports.register = async (req, res) => {
         if (!newUser) return res.json({ code: 500, message: '账号注册失败' })
         res.json({ code: 200, message: '账号注册成功' });
     } catch (error) {
+        console.error('register error:', error);
         res.json({ code: 500, message: '服务器内部错误' });
     }
 }
 // 退出登录
 exports.logout = async (req, res) => {
-    const token = req.headers.authorization?.split(' ')[1]
-    if (!token) return res.json({ code: 401, message: 'token不存在' })
-    const decoded = jwt.verify(token, jwtConfig.jwtSecretKey)
-    const { username } = decoded
-    if (!username) return res.json({ code: 401, message: '无效的认证信息' })
     try {
-        const data = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' }, { runValidators: true })
+        const { username } = req.user
+        // 验证账号存在，及登录状态
+        const data = await UserInfoModel.findOne({ username })
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
-        // if (data.status === 'outline') return res.err('账号已退出')
+        if (data.status === '在线') return res.json({ code: 400, message: '账号已退出' })
+        // 修改状态为离线
+        const result = await UserInfoModel.findOneAndUpdate({ username }, { status: '离线' }, { runValidators: true })
+        if (!result) return res.json({ code: 404, message: '账号退出失败' })
         res.json({ code: 200, message: '账号退出成功' })
     } catch (error) {
+        console.error('Logout error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -109,6 +112,7 @@ exports.sendCode = async (req, res) => {
         }
         res.json({ code: 200, message: sended ? '验证码已重新发送' : '验证码发送成功', data: authCode });
     } catch (error) {
+        console.error('sendCode error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -154,6 +158,7 @@ exports.codeLogin = async (req, res) => {
             token: 'Bearer ' + tokenStr
         });
     } catch (error) {
+        console.error('codeLogin error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -181,6 +186,7 @@ exports.resetPassword = async (req, res) => {
         if (data === null) return res.json({ code: 404, message: '密码重置失败' })
         res.json({ code: 200, message: '密码重置成功' })
     } catch (error) {
+        console.error('resetPassword error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

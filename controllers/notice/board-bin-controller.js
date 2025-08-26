@@ -10,6 +10,7 @@ exports.getBoardBin = async (req, res) => {
             .sort({ createdAt: -1 })
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
+        console.error('getBoardBin error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }
@@ -27,6 +28,7 @@ exports.restoreBoard = async (req, res) => {
         if (!result) return res.json({ code: 200, message: '未找到对应公告' })
         res.json({ code: 200, message: '还原成功' });
     } catch (error) {
+        console.error('restoreBoard error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }
@@ -43,6 +45,7 @@ exports.forceDeleteBoard = async (req, res) => {
         if (!result) return res.json({ code: 200, message: '未找到对应公告' })
         res.json({ code: 200, message: '彻底删除成功' });
     } catch (error) {
+        console.error('forceDeleteBoard error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }

@@ -24,6 +24,7 @@ exports.getBoard = async (req, res) => {
         }
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
+        console.error('getBoard error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -38,6 +39,7 @@ exports.addBoard = async (req, res) => {
         })
         res.json({ code: 201, message: '发布成功' })
     } catch (error) {
+        console.error('addBoard error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -50,6 +52,7 @@ exports.updateBoard = async (req, res) => {
             { new: true, runValidators: true })
         res.json({ code: 200, message: '修改成功' })
     } catch (error) {
+        console.error('updateBoard error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -63,6 +66,7 @@ exports.deleteBoard = async (req, res) => {
         if (data === null) return res.json({ code: 404, message: '公告不存在' })
         res.json({ code: 200, message: '删除成功' })
     } catch (error) {
+        console.error('deleteBoard error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -85,6 +89,7 @@ exports.batchDeleteBoard = async (req, res) => {
         if (result.deletedCount === 0) return res.json({ code: 404, message: '公告不存在' })
         res.json({ code: 200, message: `成功删除${result.deletedCount}条公告` })
     } catch (error) {
+        console.error('batchDeleteBoard error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }

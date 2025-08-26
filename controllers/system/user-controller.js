@@ -33,6 +33,7 @@ exports.searchUser = async (req, res) => {
         }
         res.json({ code: 200, message: '查询成功', data });
     } catch (error) {
+        console.error('searchUser error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -64,7 +65,7 @@ exports.addUser = async (req, res) => {
         if (!result) return res.json({ code: 500, message: '用户添加失败' })
         res.json({ code: 200, message: '用户添加成功, 默认密码为admin' })
     } catch (error) {
-        console.log('用户添加失败:', error)
+        console.log('addUser error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -81,6 +82,7 @@ exports.updateUser = async (req, res) => {
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
         res.json({ code: 200, message: '修改成功' })
     } catch (error) {
+        console.error('updateUser error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -94,6 +96,7 @@ exports.deleteUser = async (req, res) => {
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
         res.json({ code: 200, message: '删除成功' });
     } catch (error) {
+        console.error('deleteUser error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -120,6 +123,7 @@ exports.batchDeleteUser = async (req, res) => {
         }
         res.json({ code: 200, message: '删除完成', data: deleteResults });
     } catch (error) {
+        console.error('batchDeleteUser error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

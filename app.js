@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // 启用所有CORS请求
 const cors = require('cors');
-app.use(cors()); 
+app.use(cors());
 // 或者指定允许的来源
 // app.use(cors({ origin: 'http://localhost:5173' }));
 // 新建一个upload文件夹用于存储上传图片的请求
@@ -29,12 +29,12 @@ app.use(express.static('./public'))
 // 引入jwt配置用于加密和解密
 const jwtconfig = require('./jwt-config/index');
 // 引入jwt中间件，用于生成token
-const {expressjwt:jwt} = require('express-jwt');
+const { expressjwt: jwt } = require('express-jwt');
 app.use(jwt({
   secret: jwtconfig.jwtSecretKey,
   algorithms: ['HS256']
 }).unless({
-  path: ['/auth/login', '/auth/register']
+  path: ['/auth/login', '/auth/register', '/send-code', '/code-login', '/reset-password']
 }))
 // 全局引入处理错误中间件
 const errorMiddleware = require('./middlewares/error-middleware');
@@ -66,12 +66,12 @@ app.use('/system/user-manage', userManageRouter);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

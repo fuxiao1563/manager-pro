@@ -12,6 +12,7 @@ exports.company = async (req, res) => {
         const data = await CompanyInfoModel.findOne()
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
+        console.error('company error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -32,6 +33,7 @@ exports.updateCompany = async (req, res) => {
         if (!data) return res.json({ code: 500, message: '修改失败' })
         res.json({ code: 200, message: '修改成功', data })
     } catch (error) {
+        console.error('updateCompany error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

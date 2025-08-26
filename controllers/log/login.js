@@ -28,6 +28,7 @@ exports.searchLog = async (req, res) => {
             : data;
         res.json({ code: 200, message: '获取日志成功', data: filteredData })
     } catch (error) {
+        console.error('searchLog error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -44,6 +45,7 @@ exports.recordLog = async (req, res) => {
         if (!data) return res.json({ code: 500, message: '日志记录失败' })
         res.json({ code: 201, message: '日志记录成功' })
     } catch (error) {
+        console.error('recordLog error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' })
     }
 }
@@ -56,6 +58,7 @@ exports.clearLog = async (req, res) => {
         await LoginLogModel.deleteMany();
         res.json({ code: 204, message: '清空日志成功' });
     } catch (error) {
+        console.error('clearLog error:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误' });
     }
 }

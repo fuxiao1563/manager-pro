@@ -21,6 +21,7 @@ exports.userCenter = async (req, res) => {
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
         res.json({ code: 200, message: '查询成功', data })
     } catch (error) {
+        console.error('userCenter error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
@@ -45,26 +46,10 @@ exports.updateUser = async (req, res) => {
             token: 'Bearer ' + tokenStr
         });
     } catch (error) {
+        console.error('updateUser error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
-// 修改密码
-// exports.updatePassword = async (req, res) => {
-//     try {
-//         const { _id } = req.user
-//         if (!_id) return res.json({ code: 401, message: '无效的认证信息' })
-//         let { password, newPassword } = req.body
-//         if (!password || !newPassword) return res.json({ code: 400, message: '密码不能为空' })
-//         newPassword = bcryptjs.hashSync(newPassword, 10)
-//         const data = await UserInfoModel.findOneAndUpdate({ _id }, { password: newPassword }, { runValidators: true })
-//         if (data === null) return res.json({ code: 404, message: '账号不存在' })
-//         const passwordValid = bcryptjs.compareSync(password, data.password);
-//         if (!passwordValid) return res.json({ code: 400, message: '旧密码错误' })
-//         res.json({ code: 200, message: '修改成功' })
-//     } catch (error) {
-//         res.json({ code: 500, message: error.message || '服务器内部错误', })
-//     }
-// }
 // 上传头像
 exports.uploadAvatar = async (req, res) => {
     try {
@@ -94,6 +79,7 @@ exports.uploadAvatar = async (req, res) => {
         if (data === null) return res.json({ code: 500, message: '上传失败' })
         res.json({ code: 200, message: '上传成功', data })
     } catch (error) {
+        console.error('uploadAvatar error:', error);
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
