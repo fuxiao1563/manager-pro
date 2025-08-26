@@ -10,8 +10,8 @@ const upload = multer({ dest: './public/upload/avatar' });
 router.get('/', authMiddleware(), userCenterController.userCenter)
 // 修改用户信息
 router.patch('/update', authMiddleware(), userCenterController.updateUser)
-// 修改密码
-router.post('/update-password', authMiddleware(), userCenterController.updatePassword)
+// // 修改密码
+// router.post('/update-password', authMiddleware(), userCenterController.updatePassword)
 // 上传头像
 router.post('/upload-avatar', authMiddleware(), upload.single('file'), userCenterController.uploadAvatar)
 

@@ -18,11 +18,11 @@ exports.login = async (req, res) => {
         const data = await UserInfoModel.findOneAndUpdate(
             { username },
             { status: '在线' },
-            { new: true, runValidators: true, projection: { username: 1, password: 1, role: 1 } })
+            { new: true, runValidators: true, projection: { username: 1, password: 1, role: 1, status: 1 } })
         if (data === null) return res.json({ code: 404, message: '账号不存在' })
         const passwordValid = bcryptjs.compareSync(password, data.password);
         if (!passwordValid) return res.json({ code: 400, message: '密码错误' })
-        if (data.status === 'online') return res.json({ code: 400, message: '账号已登录' })
+        if (data.status === '在线') return res.json({ code: 400, message: '账号已登录' })
         // 返回data
         const newData = {
             username: data.username,
@@ -157,3 +157,30 @@ exports.codeLogin = async (req, res) => {
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }
+// 忘记密码
+exports.forgetPassword = async (req, res) => {
+    try {
+        let { phone, authCode, newPassword, confirmPassword } = req.body
+        if (newPassword !== confirmPassword) return res.json({ code: 400, message: '新密码与确认密码不一致' })
+        if (!phone || !authCode || !newPassword || !confirmPassword) return res.json({ code: 400, message: '所有字段都不能为空' })
+        // 验证用户是否存在
+        const user = await UserInfoModel.findOne({ phone })
+        if (!user) return res.json({ code: 404, message: '账号不存在' })
+        // 验证验证码是否有效
+        const code = await AuthCodeModel.findOne({ phone });
+        if (!code) return res.json({ code: 400, message: '手机号不存在或验证码已过期' });
+        if (code.authCode !== authCode) return res.json({ code: 400, message: '验证码错误' });
+        // 验证旧密码是否正确
+        // const passwordValid = bcryptjs.compareSync(oldPassword, user.password);
+        // if (!passwordValid) return res.json({ code: 400, message: '旧密码错误' })
+        // 验证旧密码与新密码是否一致
+        // 修改密码
+        newPassword = bcryptjs.hashSync(newPassword, 10)
+        const data = await UserInfoModel.findOneAndUpdate({ phone }, { password: newPassword }, { runValidators: true })
+        if (data === null) return res.json({ code: 404, message: '密码重置失败' })
+        res.json({ code: 200, message: '密码重置成功' })
+    } catch (error) {
+        res.json({ code: 500, message: error.message || '服务器内部错误', })
+    }
+}
+// 重置密码

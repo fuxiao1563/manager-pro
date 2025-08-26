@@ -39,23 +39,32 @@ exports.searchUser = async (req, res) => {
 // 添加用户
 exports.addUser = async (req, res) => {
     try {
+        const { username, gender, role, department, status, phone, email } = req.body
+        if (!username || typeof username !== 'string' || username.trim().length === 0) {
+            return res.json({ code: 400, message: '账号不能为空' });
+        }
+        // 检查账号是否已存在
+        const user = await UserInfoModel.findOne({ username })
+        if (user) return res.json({ code: 400, message: '账号已存在' })
+        // 构建用户对象
+        const userData = {
+            username: username.trim(),
+            password: bcryptjs.hashSync('admin', 10)
+        }
+        if (phone) userData.phone = phone
+        if (gender) userData.gender = gender
+        if (role) userData.role = role
+        if (department) userData.department = department
+        if (status) userData.status = status
+        if (email) userData.email = email
 
-        let { username, gender, role, department, status, phone, email } = req.body
-        if (!username) return res.err('账号不能为空')
-        const query = {}
-        if (username) query.username = username
-        if (gender) query.gender = gender
-        if (role) query.role = role
-        if (department) query.department = department
-        if (status) query.status = status
-        if (phone) query.phone = phone
-        if (email) query.email = email
-        const result = await UserInfoModel.findOne({ username }, { runValidators: true })
-        if (result) return res.json({ code: 400, message: '账号已存在' })
-        query.password = bcryptjs.hashSync('admin', 10)
-        await UserInfoModel.create(query)
+        console.log('userData :', userData)
+        const result = await UserInfoModel.create(userData)
+        console.log('result :', result)
+        if (!result) return res.json({ code: 500, message: '用户添加失败' })
         res.json({ code: 200, message: '用户添加成功, 默认密码为admin' })
     } catch (error) {
+        console.log('用户添加失败:', error)
         res.json({ code: 500, message: error.message || '服务器内部错误', })
     }
 }

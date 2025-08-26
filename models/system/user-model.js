@@ -9,16 +9,16 @@ const ENUM = Object.freeze({
 const userInfoSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true,
+        required: [true,'用户名不能为空'],
         unique: true,
-        trim: true,
+        // trim: true,
         minlength: [3, '用户名至少3个字符'],
-        maxlength: [20, '用户名最多10个字符'],
+        maxlength: [20, '用户名最多20个字符'],
         match: [/^[a-zA-Z0-9_]+$/, '只允许字母、数字和下划线']
     },
     password: {
         type: String,
-        required: true,
+        required: [true, '密码不能为空'],
     },
     gender: {
         type: String,
@@ -45,12 +45,20 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         validate: {
             validator: function (v) {
+                // 没有提供手机号时（null、undefined 或空字符串），验证会通过
+                if (v === null || v === undefined || v === '') {
+                    return true;
+                }
                 return /^1[3-9]\d{9}$/.test(v) || v === null;
             },
             message: props => `${props.value} 不是有效的手机号码!`
         },
         default: null,
-        index: true
+        unique: true,
+        index: {
+            unique: true,
+            partialFilterExpression: { phone: { $type: 'string' } }
+        }
     },
     email: {
         type: String,
